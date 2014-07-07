@@ -1,10 +1,11 @@
    <div #showWell>
      $forall Entity wellId wellR <-wellness
                <div #swellR>
+                 
                  <div #swellDateD>
                    Date: #{showtime (wellnessDate wellR)}
                  <div #swellGroomedD>
-                   Groomed: #{wellnessGroomed wellR}
+                   Groomed: #{showgroomed wellR}
                  <div #swellTempD>
                    Temp:
                    $maybe temp<-(wellnessTemp wellR)
@@ -13,6 +14,8 @@
                        &nbsp-                  
                  <div #swellnessWeight>
                       Weight: #{ weightLbs (wellnessWeight  wellR)} lbs.  #{weightOz  ( wellnessWeight wellR)} oz.
+                 <div #swellPerson>
+                       #{wellnessResponsible wellR}
                  <div #swellNoteD>
                    Problem: #{wellnessNotes wellR}
                  <div #swellTreatD>

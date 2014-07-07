@@ -6,7 +6,13 @@
 #wellness > input {
       display:inline;
 }
-                     
+
+#fwellReportingPerson {
+     width:100%;
+}
+##{fvId wellResponsibleView} {
+    width:25em;
+}                     
 #wellDate {
    width:30%;
       }

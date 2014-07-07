@@ -54,7 +54,20 @@ Weight
     lbs Int
     oz  Int
     deriving Show
-    
+
+Vet
+   practice Text
+   doctor   Text
+   telephone Text
+   deriving Show
+   
+VetVist
+   rabbit RabbitId
+   vet VetId
+   date Day
+   procedures Text
+   spay Bool
+   
 Wellness
     rabbit RabbitId
     date Day
@@ -63,6 +76,7 @@ Wellness
     weight Weight
     notes Text
     treatment Text
+    responsible Text
     deriving Show
     
 Rabbit
@@ -148,8 +162,8 @@ initDB = do
         luid<-insert $ lulu 
         chid<-insert $ Rabbit "Chester" "black bunny nice" "08/09/2001"  "Shelter" "West Valley Shelter" "M"  "Neutered" "approx 1 yr" "Died" "07/08/2005" "Unknown Causes"
         jid<-insert $ Rabbit "Joan" "weird ass lop" "07/02/2013" "Other"  "Rescued by Britta Menges-lady to take to kill shelter" "F" "Unknown" "approx 2 yrs" "BunnyLuv" "07/07/1999" "in group 3"
-        insert $ Wellness jid ((doparseTime  "08/07/2013")) False Nothing (Weight 3 4) "Bad JuJu" "vooDoo"
-        insert $ Wellness jid ((doparseTime  "11/10/2013")) True (Just 102.5) (Weight 3 6) "Healthy" "none"
-        insert $ Wellness jid  ( (doparseTime  "12/11/2013")) False Nothing (Weight 3 2) "Stubbed toe" "Vet for stubbed toe"
-        insert $ Wellness jid ((doparseTime  "1/12/2014"))  False (Just 101.2) (Weight 3 1) "none" "none"
+        insert $ Wellness jid ((doparseTime  "08/07/2013")) False Nothing (Weight 3 4) "Bad JuJu" "vooDoo" "Stuart"
+        insert $ Wellness jid ((doparseTime  "11/10/2013")) True (Just 102.5) (Weight 3 6) "Healthy" "none" "Doug"
+        insert $ Wellness jid  ( (doparseTime  "12/11/2013")) False Nothing (Weight 3 2) "Stubbed toe" "Vet for stubbed toe" "Sharon"
+        insert $ Wellness jid ((doparseTime  "1/12/2014"))  False (Just 101.2) (Weight 3 1) "none" "none" "Paul"
         return ()

@@ -38,6 +38,7 @@ headerWidget = $(widgetFileNoReload def "header")
 -- menuWidget = $(widgetFileNoReload def "menu")
 
 
+
 queryWellness rabID = runSqlite "test5.db3" $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. WellnessRabbit ==. val rabID)
@@ -49,8 +50,6 @@ test mrab field = case mrab of
                     Nothing->Nothing
                     Just ri->Just (field ri)
 
---doconvert
---doconvert res = fmap (doparseTime.unpack)
 
 opttest::(Maybe Rabbit)->(Rabbit->Text)->(Maybe Text)
 opttest mrab field= case mrab of
@@ -66,10 +65,12 @@ wellnessForm rabID extra = do
     (wellNoteRes, wellNotesView)<-mreq textField "nope" Nothing
     (wellGroomedRes, wellGroomedView)<-mreq boolField "nope" (Just False)
     (wellTreatmentRes, wellTreatmentView)<-mreq textField "nope" Nothing
+    (wellResponsibleRes, wellResponsibleView)<-mreq textField "nope" Nothing
+    
     let date = fmap (doparseTime.unpack) wellDateRes
     let wellnessRes = Wellness rabID <$> date <*> wellGroomedRes <*>
                         wellTempRes <*> (Weight <$> wellLbsRes <*> wellOzRes) <*>
-                         wellNoteRes <*> wellTreatmentRes
+                         wellNoteRes <*> wellTreatmentRes <*> wellResponsibleRes
     let twid = $(widgetFileNoReload def "wellness")
     return (wellnessRes, twid)
 
@@ -158,6 +159,8 @@ postWellnessR rabID = do
 
 viewRab rab = $(widgetFileNoReload def "viewRabbit")
 
+showgroomed::Wellness->Text
+showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
 
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
@@ -171,13 +174,17 @@ getViewR rabId  = do
          $(widgetFileNoReload def "cancelbutton")
          [whamlet| 
               ^{headerWidget}
-               <div #eTitle style="text-align:center; width=100%; margin:0;">
+               <div #eTitle style="text-align:left; width=100%; margin:0;">
                 <b> View Rabbit </b>
                 <div #vrButD style="float:right; display:inline;">
                   <div .cancelBut #vrEdit style="display:inline; float:right;">
                    <a href=@{EditR rabId}> edit </a>
+                  <div .cancelBut #vrVet  style="display:inline; float:right;">
+                   <a href=@{HomeR}> vet </a>
+                  <div .cancelBut #vrAdopt  style="display:inline; float:right;">
+                   <a href=@{HomeR}> adopt </a>
                   <div .cancelBut #vrHome sytle="display:inline; float:right;">
-                    <a href=@{HomeR}> home </a>
+                   <a href=@{HomeR}> home </a>
               <div #viewRabbitBlock>
               $maybe therab <-rab
                ^{viewRab therab}

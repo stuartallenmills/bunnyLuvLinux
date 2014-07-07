@@ -1,6 +1,8 @@
                    #{extra}
                      <div #wellness>
                       <b>New Wellness
+                      <div #fwellReportingPerson>
+                        Reporting Person: ^{fvInput wellResponsibleView}
                       <div #wellDate>
                         Date:  ^{fvInput wellDateView}
                       <div #wellWeight>

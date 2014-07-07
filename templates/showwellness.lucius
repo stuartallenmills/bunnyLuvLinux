@@ -25,11 +25,19 @@
       width:100%;
 }
 
-#swellDateD, #swellGroomedD, #swellTempD {
-          width:20%;
+#swellDateD {
+  width:20%;
+}
+
+#swellGroomedD, #swellTempD {
+          width:15%;
 }
 #swellnessWeight {
-          width:30%;
+          width:25%;
+}
+
+#swellPerson {
+  width:20%;
 }
 
 #swellnessNoteD, #swellTreatD {
