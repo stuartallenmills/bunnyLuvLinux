@@ -1,0 +1,35 @@
+                 #{extra}
+                  <div style:"float:left;">
+                   <div id="nameF">
+                     Name  ^{fvInput nameView}
+                   <div id="sexF">  
+                      Sex : ^{fvInput sexView}
+                   <div id="alteredF">
+                      Altered: ^{fvInput alteredView}
+                   <div id="descF">
+                      Desc: 
+                     ^{fvInput descView}
+                   <div #ageIntakeF>
+                      Age at intake : ^{fvInput ageIntakeView}
+                   <div #sourceDiv>
+                      <b> Source
+                    <div #sourceTypeF>
+                      Source Type: ^{fvInput sourceTypeView}
+                    <div #dateInF>
+                      Date In: ^{fvInput dateInView}
+                    <div #sourceF>
+                      Source: 
+                     ^{fvInput sourceView}
+                   <div #statusDiv>
+                      <b> Status
+                    <div #statusF>
+                      Status:
+                     ^{fvInput statusView}
+                    <div #statusDateF>   
+                      Status Date: ^{fvInput statusDateView}
+                    <div #statusNoteF>
+                      Status Notes: ^{fvInput statusNoteView}
+
+                  <div .cancelBut>
+                   <a href=@{HomeR}>cancel
+                  <input type=submit value="submit">

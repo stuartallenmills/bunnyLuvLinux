@@ -1,0 +1,18 @@
+                   #{extra}
+                     <div #wellness>
+                      <b>New Wellness
+                      <div #wellDate>
+                        Date:  ^{fvInput wellDateView}
+                      <div #wellWeight>
+                        Weight: ^{fvInput wellLbsView} lbs.&nbsp ^{fvInput wellOzView} oz
+                      <div #wellGroomD>
+                           Groomed: ^{fvInput wellGroomedView}
+                      <div #wellTempD>
+                           Temp: ^{fvInput wellTempView}
+                      <div #wellNotes>
+                        Problems:  ^{fvInput wellNotesView}
+                      <div #wellTreat>
+                        Treatment: ^{fvInput wellTreatmentView}
+                  <div .cancelBut>
+                   <a href=@{HomeR}>cancel
+                  <input  type=submit value="submit">

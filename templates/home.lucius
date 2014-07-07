@@ -1,0 +1,14 @@
+#headimg {
+      float:left;
+      display:block;
+      width:30%;
+      padding:0;
+      border:none;
+}
+#splash {
+    float:left;
+    display:block;
+    width:50%;
+    border:none;
+}
+   

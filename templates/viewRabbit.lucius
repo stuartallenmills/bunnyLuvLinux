@@ -1,0 +1,63 @@
+#vrDiv {
+ background:#fff;
+ width:100%;
+ margin-left:0;
+ float:left;
+}
+
+#vrDiv div {
+  float:left;
+  display:block;
+  text-align:left;
+  margin-top:2px;
+  margin-bottom:2px
+}
+
+#vrCore {
+  border-bottom:thin solid #7f7f7f;
+  border-top:thin solid #7f7f7f;
+  margin:1%;
+}
+
+#vrname {
+  width:30%;
+}
+#vrsex {
+  width:10%;
+}
+
+#vraltered {
+  width:20%;
+}
+#vrdesc {
+  width:60%
+}
+#vragein {
+  width:30%;
+}
+#vrsourcet {
+  width:95%;
+}
+#vrdatein {
+  width:30%;
+}
+
+#vrstatnote{
+  width:99%;
+}
+
+#vrStatusBlk {
+  width:100%;
+}
+
+#vrstatus {
+  width:40%;
+}
+
+#vrstatdate {
+  width:40%;
+}
+
+#vrstatnoe {
+  width:50%
+}

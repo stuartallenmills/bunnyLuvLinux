@@ -1,0 +1,20 @@
+    <div class="rabRow">
+     <div .row1>
+      <div class="nameC">
+             <a href=@{ViewR rabbitid}> #{rabbitName rabbit}
+      <div class="sexC">
+              #{rabbitSex rabbit}
+      <div class="descC">
+               #{rabbitDesc rabbit}
+      <div class="statusC">
+               #{rabbitStatus rabbit}
+     <div .row1>
+      <div .dateInC>
+           Date In:   #{rabbitDateIn rabbit}
+      <div #ageIn>
+              Age then: #{rabbitAgeIntake rabbit}
+      <div class="alteredC">
+          Altered:     #{rabbitAltered rabbit}
+     <div .row1>
+      <div class="sourceC">
+        Source:      #{rabbitSource rabbit}

@@ -1,0 +1,122 @@
+                     div {
+                        float:left;
+                        margin:1%;
+                        width:98%;
+                     }
+                     form input {
+                       display: inline;
+                     }
+                     div input {
+                       display:inline;
+                     }
+                   .cancelBut {
+                     background: none repeat scroll 0 0 #09c;
+                     border: 1pt solid #999;
+                     border-radius: 5pt;
+                     color: #fff;
+                     float: right;
+                     font-size: 80%;
+                     height: 19px;
+                     padding: 0 13px 0 0;
+                     transform: translateY(-5px);
+                     width: 50px;
+                     }
+                                 /* Change color on mouseover */
+                     .cancelBut:hover {
+                                  background:#fff;
+                                  color:#09c;
+                     }
+
+                     .cancelBut a {
+                            text-decoration:none;
+                            color: #fff;
+                            float:right;
+                     }
+
+                     .cancelBut a:hover {
+                             color:#09c;
+                      }
+                     #aTitle {
+                         margin:0;
+                      }
+                     #nameF {
+                        width:40%;
+                     }
+                     #sexF {
+                        width:20%;
+                     }
+                     #ageF {
+                        width:20%;
+                     }
+                     #alteredF {
+                        width:30%;
+                     }
+                     #dateInF {
+                        width:40%;
+                     }
+                     #statusF {
+                        width:40%
+                     }
+                     #statusDateF {
+                        width:40%
+                     }
+                     #statusNoteF {
+                        width:70%;
+                      }
+                     #sourceTypeF {
+                           width:40%;
+                           float:left;
+                      }
+                     #dateInF {
+                           width 40%;
+                           float:left;
+                      }
+                     ##{fvId alteredView} {
+                         width: 7em;
+                         display:inline;
+                     }
+                     ##{fvId sexView} {
+                         width: 3em;
+                         margin-top:3px;
+                     }
+                     ##{fvId nameView} {
+                       
+                         background: #eeeeee;
+                         width: 10em;
+                         display:inline;
+                     }
+                     ##{fvId descView} {
+                         background: #eeeeee;
+                         width: 25em;
+                         display:inline;
+                     }
+                     ##{fvId sourceView} {
+                         background: #eeeeee;
+                         width: 25em;
+                         display:inline;
+                    }
+                     ##{fvId dateInView} {
+                         width: 6em;
+                         display: inline;
+                       }
+                     ##{fvId statusView} {
+                         width: 7em;
+                         display:inline;
+                     }
+                     ##{fvId sourceTypeView} {
+                         width: 7em;
+                         display:inline;
+                      }
+                     ##{fvId statusDateView} {
+                         width: 6em;
+                         display:inline;
+                      }
+                     ##{fvId statusNoteView} {
+                         width: 25em;
+                         display:inline;
+                     }
+                     ##{fvId ageIntakeView} {
+                         display:inline;
+                     }
+
+    

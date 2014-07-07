@@ -1,0 +1,99 @@
+
+div.rabRow {
+        width:100%;
+        background:#fFfeff;
+        margin-right:0%;
+        margin-left:0%;
+        font-size:95%;
+        border-bottom:1px solid #7f7f7f;
+        float:left;
+}
+div.nameC {
+   position: relative;
+   align:middle;
+   width:15%;
+   height:100%;
+   background:#fFfeff;
+   font-weight:bold;
+   float:left;
+}
+
+div.nameC:hover {
+   background:#F8Feef;
+}
+
+div.nameC a {
+   text-decoration:none;
+   color:#1f0000;
+}
+
+div.nameC a:hover {
+   color:#2f1f1f;
+   background:#FFdfdf;
+}
+
+div.sexC {
+  width:5%;
+  text-align:center;
+  background:#fFfeff;
+  float:left;
+}
+
+div.row1, div.row2 {
+  width:100%;
+  border:none;
+  float:left;
+}
+
+div.row1 {
+  border-bottom:none;
+  padding-bottom:0;
+}
+
+div.row2 {
+  border-top:none;
+}
+
+.dateInC {
+   background:#fFfeff;
+   width:30%;
+   float:left;
+}
+div.descC {
+   width:50%;
+   height:100%;
+   background:#fFfeff;
+   border-bottom:none;
+   float:left;
+}
+#ageIn {
+  width:35%;
+  border-bottom:none;
+   background:#fFfeff;
+   float:left;
+}
+
+#sourceType {
+  width:20%;
+   background:#fFfeff;
+}
+
+div.sourceC {
+   width:100%;
+   height:100%;
+   background:#fFfeff;
+}
+div.statusC {
+  width:25%;
+  height:100%;
+  background:#fFfeff;
+  text-align:right;
+  float:left;
+}
+div.alteredC {
+  width:20%;
+  height:100%;
+  text-align:left;
+  float:left;
+  background:#fFfeff;
+}

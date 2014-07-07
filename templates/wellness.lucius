@@ -1,0 +1,58 @@
+                     #wellness {
+                          border: thin solid black;
+                          padding-left:1%;
+                     }
+
+#wellness > input {
+      display:inline;
+}
+                     
+#wellDate {
+   width:30%;
+      }
+
+                     #wellWeight {
+                          width:40%;
+                     }
+
+                     #wellGroomD {
+                          width:40%;
+                     }
+
+                     #wellTempD {
+                          width:30%;
+                     }
+                     #wellGroomD > input {
+                       display:inline;
+                     }
+
+                    ##{fvId wellDateView} {
+                        display: inline;
+                        width:6em;
+                      }
+
+                    ##{fvId wellGroomedView} {
+                        display: inline;
+                       }
+
+                    ##{fvId wellLbsView} {
+                         display:inline;
+                         width:3em;
+                       }
+
+                    ##{fvId wellOzView} {
+                         display:inline;
+                         width:3em;
+                      }
+
+                    ##{fvId wellTempView} {
+                        display:inline;
+                        width:6em;
+                      }
+                    
+                     ##{fvId wellNotesView} {
+                        width:35em;
+                       }
+                     ##{fvId wellTreatmentView} {
+                        width:35em;
+                       }

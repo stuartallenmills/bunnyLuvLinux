@@ -1,0 +1,15 @@
+     <div class="options">
+         <div class="menuBut" >
+               <a href=@{HomeR}>All</a>
+         <div class="menuBut" >
+               <a href=@{QueryR "BunnyLuv"}>BunnyLuv</a>
+         <div class="menuBut" >
+               <a href=@{QueryR "Adopted"}>Adopted</a>
+         <div class="menuBut">
+               <a href=@{QueryR "Died"}>Died</a>
+         <div class="menuBut">
+               <a href=@{SourceR "Shelter"}>Shelter</a>
+         <div class="menuBut">
+               <a href=@{SourceR "Other"}>Other</a>
+         <div class="menuBut" >
+               <a href=@{AddR}>New Rabbit</a>

@@ -1,0 +1,25 @@
+<div #vrDiv>
+  <div #vrCore>
+    <div #vrname>
+       Name: #{rabbitName rab}
+    <div #vrsex>
+       Sex: #{rabbitSex rab}
+    <div #vraltered>
+       Altered: #{rabbitAltered rab} 
+    <div #vrdatein>
+        Date Acq: #{rabbitDateIn rab}
+    <div #vrdesc>
+       Desc: #{rabbitDesc rab}
+    <div #vragein>
+       Age at intake: #{rabbitAgeIntake rab}
+   <div #vrSource>
+     <div #vrsourcet>
+        Source: #{rabbitSource rab}
+    <div #vrStatusBlk>
+     <div #vrstatus>
+         Status: #{rabbitStatus rab}
+     <div #vrstatdate>
+         Date: #{rabbitStatusDate rab}
+     <div #vrstatnote>
+         Notes: #{rabbitStatusNote rab}
+       

@@ -1,0 +1,37 @@
+#showWell {
+  float:left;
+  width:100%;
+  display:block;
+}
+
+#showWell div {
+  float:left;
+  margin:2px;
+}
+
+#swellR div {
+      float:left;
+}
+
+#swellR > div {
+    margin-bottom:0;
+    margin-top:0;
+}
+
+
+
+#swellR {
+      border-bottom:thin solid #7f7f7f;
+      width:100%;
+}
+
+#swellDateD, #swellGroomedD, #swellTempD {
+          width:20%;
+}
+#swellnessWeight {
+          width:30%;
+}
+
+#swellnessNoteD, #swellTreatD {
+   width:100%;
+}

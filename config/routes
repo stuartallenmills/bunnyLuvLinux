@@ -1,0 +1,11 @@
+/                       HomeR    GET POST
+/file/#Text             PreviewR GET
+/add                    AddR     GET 
+/putrab                 PostR    POST
+/edit/#RabbitId         EditR    GET
+/updateRab/#RabbitId    UpdateR  POST
+/query/#Text            QueryR   GET
+/source/#Text           SourceR  GET
+/test                   TestR    GET
+/wellness/#RabbitId     WellnessR POST
+/view/#RabbitId         ViewR     GET

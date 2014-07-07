@@ -1,0 +1,11 @@
+$if null filenames
+    <p>No files have been uploaded yet.
+$else
+    <ul>
+        $forall filename <- filenames
+            <li>
+                <a href=@{PreviewR filename}>#{filename}
+<h2>Submit new file
+<form method=post action=@{HomeR} enctype=#{formEncType}>
+  ^{formWidget}
+  <input type="submit" value="Upload">

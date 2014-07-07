@@ -1,0 +1,26 @@
+                   .cancelBut {
+                     background: none repeat scroll 0 0 #09c;
+                     border: 1pt solid #999;
+                     border-radius: 5pt;
+                     color: #fff;
+                     float: right;
+                     font-size: 80%;
+                     height: 19px;
+                     padding: 1px;
+                     width: 50px;
+                     text-align:center;
+                     }
+                                 /* Change color on mouseover */
+                     .cancelBut:hover {
+                                  background:#fff;
+                                  color:#09c;
+                     }
+
+                     .cancelBut a {
+                            text-decoration:none;
+                            color: #fff;
+                     }
+
+                     .cancelBut a:hover {
+                             color:#09c;
+                      }
