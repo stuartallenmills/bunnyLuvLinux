@@ -10,5 +10,6 @@ import Foundation
 import Handler.Home
 import Handler.Preview
 import Handler.Add
+import Handler.VetVisit
 
 mkYesodDispatch "App" resourcesApp

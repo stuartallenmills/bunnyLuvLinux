@@ -18,7 +18,7 @@ cabal-version:       >=1.10
 
 executable bunnyLuv
   main-is:             Main.hs
-  other-modules:       Handler.Home, Handler.Preview
+  other-modules:       Handler.Home, Handler.Preview, Handler.Add, Handler.VetVisit
   other-extensions:    OverloadedStrings, QuasiQuotes, TemplateHaskell, TypeFamilies, MultiParamTypeClasses
   build-depends:       base >=4.7 && <4.8
                        , bytestring >=0.10 && <0.11

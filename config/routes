@@ -9,3 +9,5 @@
 /test                   TestR    GET
 /wellness/#RabbitId     WellnessR POST
 /view/#RabbitId         ViewR     GET
+/vet/#RabbitId          VetVisitR GET 
+/vetPost/#RabbitId      VetPostR POST

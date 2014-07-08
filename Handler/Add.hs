@@ -56,6 +56,8 @@ opttest mrab field= case mrab of
                    Nothing-> Just ""
                    Just ri-> Just (field ri)
 
+
+    
 wellnessForm::RabbitId->Html-> MForm Handler (FormResult Wellness, Widget)
 wellnessForm rabID extra = do
     (wellDateRes, wellDateView)<-mreq textField "nope" Nothing
@@ -73,7 +75,7 @@ wellnessForm rabID extra = do
                          wellNoteRes <*> wellTreatmentRes <*> wellResponsibleRes
     let twid = $(widgetFileNoReload def "wellness")
     return (wellnessRes, twid)
-
+showWellness::Wellness->Widget
 showWellness wellness =   $(widgetFileNoReload def "showwellness")
 
     
@@ -98,6 +100,9 @@ rabbitForm (mrab, rabID) extra = do
  --   let rabbitRes = rabbitRes1 <*> (FormResult (Just True)) <*> (FormResult Nothing) Nothing
     let awid=  $(widgetFileNoReload def "add")
     return (rabbitUpdateRes, awid)
+
+
+
 
 getAddR ::Handler Html    
 getAddR  = do
@@ -180,7 +185,7 @@ getViewR rabId  = do
                   <div .cancelBut #vrEdit style="display:inline; float:right;">
                    <a href=@{EditR rabId}> edit </a>
                   <div .cancelBut #vrVet  style="display:inline; float:right;">
-                   <a href=@{HomeR}> vet </a>
+                   <a href=@{VetVisitR rabId}> vet </a>
                   <div .cancelBut #vrAdopt  style="display:inline; float:right;">
                    <a href=@{HomeR}> adopt </a>
                   <div .cancelBut #vrHome sytle="display:inline; float:right;">

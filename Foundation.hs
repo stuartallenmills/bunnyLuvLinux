@@ -36,6 +36,10 @@ Person
     firstName String
     lastName String
     phone String
+    street Text
+    city   Text
+    state  Text
+    zip    Text
     PhoneKey phone
     deriving Show
 
@@ -45,9 +49,9 @@ Died
     deriving Show
     
 Adopted
-    date String
+    date Day
     rabbit RabbitId
-    person PersonId
+    person Person
     deriving Show
 
 Weight 
@@ -57,17 +61,21 @@ Weight
 
 Vet
    practice Text
-   doctor   Text
+   doctor   Text 
    telephone Text
    deriving Show
    
-VetVist
+VetVisit
    rabbit RabbitId
-   vet VetId
+   vet Text
    date Day
+   problem Text
    procedures Text
+   notes Text
    spay Bool
-   
+   cost Double
+   deriving Show
+
 Wellness
     rabbit RabbitId
     date Day
@@ -103,7 +111,11 @@ altered::[(Text,Text)]
 altered = [("Spayed", "Spayed"), ("Neutered", "Neutered"), ("No", "No"), ("Unknown", "Unknown")]
 status::[(Text, Text)]
 status = [ ("BunnyLuv", "BunnyLuv"), ("Adopted", "Adopted"), ("Died", "Died"), ("Euthenized", "Euthenized")]
+vets::[(Text, Text)]
+vets = [("Arden", "Arden"), ("PetVet", "PetVet")]
 
+
+                                      
 
 data App = App (TVar [(Text, ByteString)])
 
@@ -124,6 +136,11 @@ doparseTime  st = readTime defaultTimeLocale "%-m/%-d/%-Y" st
 
 showtime time = formatTime defaultTimeLocale "%m/%d/%Y" time
 
+text2date::FormResult Text -> FormResult Day
+text2date tdate =  fmap (doparseTime.unpack) tdate
+
+-- END  TIME ROUTINE
+
 getList :: Handler [Text]
 getList = do
     App tstate <- getYesod
@@ -143,7 +160,7 @@ getById ident = do
       Nothing -> notFound
       Just bytes -> return bytes
 
-sn = Person "Stuart" "Mills" "818-884-5537"
+sn = Person "Stuart" "Mills" "818-884-5537" "23425 Kilty" "West Hills" "CA" "91307"
 lulu = Rabbit "Lulu" "white terrorist" "11/10/2009" "Shelter" "East valley shelter"
        "F" "Spayed" "approx 6 months" "Adopted" "11/11/2011" "Sharon Mills"
 
@@ -157,7 +174,7 @@ initDB = do
   withSqlitePool "test5.db3" openConnectionCount $ \pool -> do
    runResourceT $ runStderrLoggingT $ flip runSqlPool pool $ do
         runMigration migrateAll
-        insert $ Person "Michael" "Snoyman" "818-970-6052"
+        insert $ Person "Michael" "Snoyman" "818-970-6052" "101 welby Way" "paris" "france" "12314"
         stu<-insert sn
         luid<-insert $ lulu 
         chid<-insert $ Rabbit "Chester" "black bunny nice" "08/09/2001"  "Shelter" "West Valley Shelter" "M"  "Neutered" "approx 1 yr" "Died" "07/08/2005" "Unknown Causes"
@@ -166,4 +183,8 @@ initDB = do
         insert $ Wellness jid ((doparseTime  "11/10/2013")) True (Just 102.5) (Weight 3 6) "Healthy" "none" "Doug"
         insert $ Wellness jid  ( (doparseTime  "12/11/2013")) False Nothing (Weight 3 2) "Stubbed toe" "Vet for stubbed toe" "Sharon"
         insert $ Wellness jid ((doparseTime  "1/12/2014"))  False (Just 101.2) (Weight 3 1) "none" "none" "Paul"
+        ard<-insert $ Vet "Arden the Vet" "MisaFit" "818-970-6051"
+        jona<-insert $ Vet "We Like Pets" "Jabba" "310-642-5947"
+        insert $ VetVisit luid "Arden the Vet" (doparseTime "2/12/2014") "Needs to be altered" "Spayed" "Went Well" True 295.45
+        insert $ VetVisit chid "We Like Pet" (doparseTime "3/22/2014") "Acting Sick" "Test indicate Pnenomia" "baytril prres" False 99.66
         return ()
