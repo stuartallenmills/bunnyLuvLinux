@@ -52,6 +52,12 @@ vetVisitForm rabid extra = do
                  float:float;
                  margin:1%;
                 }
+              #fvInline input {
+                   display:inline;
+                }
+               #fvBlock input {
+                   display:block;
+                }
               #fvDate {
                 width:30%;
               }
@@ -85,26 +91,26 @@ vetVisitForm rabid extra = do
                      .cancelBut a:hover {
                              color:#09c;
                     }
-              #fvSpay {width:30%}
-              #fvCost { width:30%}
+              #fvSpay {
+                   width:40%}
+              #fvCost { width:40%}
               #fvProblem, #fvProcedures, vfNotes {width:98%}
                  ##{fvId vvDateView} {display:inline}
-                 ##{fvId vvVetView} {display:inline}
+                 ##{fvId vvVetView} {display:inline; width:15em;}
                  ##{fvId vvCostView} {display:inline; width:15 em;}    
-                 ##{fvId vvSpayView}
-                          {display:inline;}
+                 ##{fvId vvSpayView} {display:inline; }
                  ##{fvId vvProblemView} {
+                     display:block;
                      width:30em;
                  }
-                 ##{fvId vvProceduresView} { width:30em; }
-                 ##{fvId vvNotesView} {width:30em;}
+                 ##{fvId vvProceduresView} { width:30em; display:block; }
+                 ##{fvId vvNotesView} {width:30em; display:block;}
                  
                  |]
          [whamlet|
             #{extra}
-            <div #fvVisit>
-             <div #fvTitle>
-                 VetVisit
+           <div #fvVisit>
+            <div #fvInline>
              <div #fvDate>
                Date:  ^{fvInput vvDateView}
              <div #fvVet>
@@ -113,12 +119,13 @@ vetVisitForm rabid extra = do
               Spay:   ^{fvInput vvSpayView}
              <div #fvCost>
                Cost:  ^{fvInput vvCostView}
-             <div #vfProblem>
-               Problem:   ^{fvInput vvProblemView}
-             <div #vfProcedures>
-              Procedures:   ^{fvInput vvProceduresView}
-             <div #fvNotes>
-               Notes:  ^{fvInput vvNotesView}
+            <div #fvBlock>
+              <div #vfProblem>
+                   Problem:   ^{fvInput vvProblemView}
+              <div #vfProcedures>
+                  Procedures:   ^{fvInput vvProceduresView}
+              <div #fvNotes>
+                  Notes:  ^{fvInput vvNotesView}
              <div .cancelBut>
                    <a href=@{HomeR}>cancel
              <input type=submit value="submit">
@@ -134,7 +141,7 @@ getVetVisitR rabid = do
              ^{headerWidget}
               <div #addCance style="text-align:center">
                  <b> Vet Visit
-              <form method=post action=@{VetVisitR rabid} enctype=#{enctype}>
+              <form method=post action=@{VetPostR rabid} enctype=#{enctype}>
                  ^{formWidget}
           |]
   
