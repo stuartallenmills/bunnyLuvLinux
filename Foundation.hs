@@ -33,9 +33,9 @@ import System.Locale
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Person
-    firstName String
-    lastName String
-    phone String
+    firstName Text
+    lastName Text
+    phone Text
     street Text
     city   Text
     state  Text
@@ -44,13 +44,13 @@ Person
     deriving Show
 
 Died 
-    date String
-    cause String
+    date Text
+    cause Text
     deriving Show
     
 Adopted
-    date Day
     rabbit RabbitId
+    date Day
     person Person
     deriving Show
 
@@ -190,4 +190,5 @@ initDB = do
         jona<-insert $ Vet "We Like Pets" "Jabba" "310-642-5947"
         insert $ VetVisit luid "Arden the Vet" (doparseTime "2/12/2014") "Needs to be altered" "Spayed" "Went Well" "Spade" 295.45
         insert $ VetVisit chid "We Like Pet" (doparseTime "3/22/2014") "Acting Sick" "Test indicate Pnenomia" "baytril prres" "Other" 99.66
+        insert $ Adopted luid (doparseTime "/2/14/2014") sn
         return ()

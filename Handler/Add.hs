@@ -198,7 +198,7 @@ getViewR rabId  = do
                   <div .cancelBut #vrVet  style="display:inline; float:right;">
                    <a href=@{VetVisitR rabId}> vet </a>
                   <div .cancelBut #vrAdopt  style="display:inline; float:right;">
-                   <a href=@{HomeR}> adopt </a>
+                   <a href=@{AdoptedR rabId}> adopt </a>
                   <div .cancelBut #vrHome sytle="display:inline; float:right;">
                    <a href=@{HomeR}> home </a>
               <div #viewRabbitBlock>

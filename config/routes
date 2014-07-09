@@ -11,3 +11,4 @@
 /view/#RabbitId         ViewR     GET
 /vet/#RabbitId          VetVisitR GET 
 /vetPost/#RabbitId      VetPostR POST
+/adopted/#RabbitId      AdoptedR GET POST
