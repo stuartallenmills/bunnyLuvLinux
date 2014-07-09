@@ -45,6 +45,13 @@ queryWellness rabID = runSqlite "test5.db3" $ do
      orderBy [desc (r ^. WellnessDate)]
      return (r)
   return zipt
+
+queryVetVisits rabID = runSqlite "test5.db3" $ do
+  zipt<-select $ from $ \r ->do
+     where_ (r ^. VetVisitRabbit ==. val rabID)
+     orderBy [desc (r ^. VetVisitDate)]
+     return (r)
+  return zipt
   
 test mrab field = case mrab of
                     Nothing->Nothing
@@ -75,7 +82,8 @@ wellnessForm rabID extra = do
                          wellNoteRes <*> wellTreatmentRes <*> wellResponsibleRes
     let twid = $(widgetFileNoReload def "wellness")
     return (wellnessRes, twid)
-showWellness::Wellness->Widget
+    
+
 showWellness wellness =   $(widgetFileNoReload def "showwellness")
 
     
@@ -167,13 +175,16 @@ viewRab rab = $(widgetFileNoReload def "viewRabbit")
 showgroomed::Wellness->Text
 showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
 
+
+showvetvisit vetVisits = $(widgetFileNoReload def "showvetvisit");
+
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
     rab <-runSqlite "test5.db3"  $ do
                   rabt<- get rabId
                   return rabt
     wellRs<-queryWellness rabId
-
+    vetvisits<-queryVetVisits rabId
     defaultLayout $ do
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
@@ -193,8 +204,8 @@ getViewR rabId  = do
               <div #viewRabbitBlock>
               $maybe therab <-rab
                ^{viewRab therab}
-               <div #wellTitle style="border-bottom:thin solid #7f7f7f; width=100%;">
-                  <b> Wellness Reports 
+
+               ^{showvetvisit vetvisits}
                ^{showWellness wellRs}
                 
               $nothing

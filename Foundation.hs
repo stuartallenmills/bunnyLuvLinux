@@ -72,7 +72,7 @@ VetVisit
    problem Text
    procedures Text
    notes Text
-   spay Bool
+   spay Text
    cost Double
    deriving Show
 
@@ -113,6 +113,8 @@ status::[(Text, Text)]
 status = [ ("BunnyLuv", "BunnyLuv"), ("Adopted", "Adopted"), ("Died", "Died"), ("Euthenized", "Euthenized")]
 vets::[(Text, Text)]
 vets = [("Arden", "Arden"), ("PetVet", "PetVet")]
+procedures::[(Text,Text)]
+procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthenized", "Euthenized"), ("Other", "Other")]
 
 
                                       
@@ -138,6 +140,7 @@ showtime time = formatTime defaultTimeLocale "%m/%d/%Y" time
 
 text2date::FormResult Text -> FormResult Day
 text2date tdate =  fmap (doparseTime.unpack) tdate
+
 
 -- END  TIME ROUTINE
 
@@ -185,6 +188,6 @@ initDB = do
         insert $ Wellness jid ((doparseTime  "1/12/2014"))  False (Just 101.2) (Weight 3 1) "none" "none" "Paul"
         ard<-insert $ Vet "Arden the Vet" "MisaFit" "818-970-6051"
         jona<-insert $ Vet "We Like Pets" "Jabba" "310-642-5947"
-        insert $ VetVisit luid "Arden the Vet" (doparseTime "2/12/2014") "Needs to be altered" "Spayed" "Went Well" True 295.45
-        insert $ VetVisit chid "We Like Pet" (doparseTime "3/22/2014") "Acting Sick" "Test indicate Pnenomia" "baytril prres" False 99.66
+        insert $ VetVisit luid "Arden the Vet" (doparseTime "2/12/2014") "Needs to be altered" "Spayed" "Went Well" "Spade" 295.45
+        insert $ VetVisit chid "We Like Pet" (doparseTime "3/22/2014") "Acting Sick" "Test indicate Pnenomia" "baytril prres" "Other" 99.66
         return ()

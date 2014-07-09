@@ -1,0 +1,19 @@
+  <div #showVVTitle>
+     <b> Vet Visits
+  <div #showvv>
+   $forall Entity vetVisitId vvR <- vetVisits
+    <div #svvR>
+     <div #svvDateD>
+       Date: #{showtime (vetVisitDate vvR)}
+     <div #svvVet>
+       Vet: #{vetVisitVet vvR}
+     <div #svvSpay>
+       Alter/Euth: #{vetVisitSpay vvR}
+     <div #svvCost>
+       Cost: #{vetVisitCost vvR}
+     <div #svvProblem>
+       Problem: #{vetVisitProblem vvR}
+     <div #svvProcedure>
+       Procedure: #{vetVisitProcedures vvR}
+     <div #svvNotes>
+       Notes: #{vetVisitNotes vvR}

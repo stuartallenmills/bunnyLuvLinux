@@ -1,3 +1,9 @@
+#swellTitle {
+   width:100%;
+   border-bottom:thin solid #7f7f7f;
+   float:left;
+}
+
 #showWell {
   float:left;
   width:100%;

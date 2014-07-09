@@ -41,7 +41,7 @@ vetVisitForm rabid extra = do
     (vvProblemRes, vvProblemView)<-mreq textField "nopte" Nothing
     (vvProceduresRes, vvProceduresView)<-mreq textField "n" Nothing
     (vvNotesRes, vvNotesView)<-mreq textField "n" Nothing
-    (vvSpayRes, vvSpayView)<-mreq boolField "n" Nothing
+    (vvSpayRes, vvSpayView)<-mreq (selectFieldList procedures) "n" Nothing
     (vvCostRes, vvCostView)<-mreq doubleField "n" Nothing
     let date = text2date vvDateRes
     let vetvisitRes = VetVisit rabid <$> vvVetRes <*> date <*> vvProblemRes <*> vvProceduresRes <*> vvNotesRes <*> vvSpayRes <*> vvCostRes 
@@ -116,7 +116,7 @@ vetVisitForm rabid extra = do
              <div #fvVet>
                Vet:   ^{fvInput vvVetView}
              <div #fvSpay>
-              Spay:   ^{fvInput vvSpayView}
+              Alter/Euthen:   ^{fvInput vvSpayView}
              <div #fvCost>
                Cost:  ^{fvInput vvCostView}
             <div #fvBlock>

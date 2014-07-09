@@ -1,0 +1,35 @@
+
+#showvv div {
+   float:left;
+   margin:2px;
+}
+
+#showVVTitle {
+   width:100%;
+   float:left;
+   border-bottom:thin solid #8f8f8f;
+}
+
+#svvR {
+  border-bottom:thin solid #7f7f7f;
+  width:100%;
+}
+#showvv { 
+   width:100%;
+   border-bottom:thin solid #7f7f7f;
+   float:left;
+   display:block;
+}
+
+#svvVet, 
+#svvDateD, #svvCost {
+    width:23%
+}
+
+ #svvSpay {
+    width:28%;
+}
+#svvProblem, #svvProcedure, #svvNotes {
+   width:95%;
+}
+
