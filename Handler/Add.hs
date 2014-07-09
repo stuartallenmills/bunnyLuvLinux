@@ -194,6 +194,9 @@ getViewR rabId  = do
     wellRs<-queryWellness rabId
     vetvisits<-queryVetVisits rabId
     adopteds<-queryAdopted rabId
+    let was_adopted = (length adopteds > 0)
+    let had_visits = (length vetvisits >0)
+    let had_well = (length wellRs > 0)
     defaultLayout $ do
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
@@ -213,9 +216,18 @@ getViewR rabId  = do
               <div #viewRabbitBlock>
               $maybe therab <-rab
                ^{viewRab therab}
-               ^{showadopted adopteds}
-               ^{showvetvisit vetvisits}
-               ^{showWellness wellRs}
+               $if was_adopted
+                   ^{showadopted adopteds}
+               $else
+                   <span> </span>
+               $if had_visits 
+                   ^{showvetvisit vetvisits}
+               $else
+                  <span> </span>
+               $if had_well
+                   ^{showWellness wellRs}
+               $else
+                  <span> </span>
                 
               $nothing
                   <h3> Rabbit Not Found>
