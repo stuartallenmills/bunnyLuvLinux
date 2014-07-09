@@ -1,0 +1,37 @@
+#showTitleAd {
+   float:left;
+   width:100%;
+   border-bottom:thin solid #8f8f8f;
+}
+
+#showAdopted div {
+   float:left;
+   margin:2px;
+}
+
+#sadRow {
+   width:100%;
+   border-bottom:then solid: #7f7f7f;
+}
+
+#saDate {
+ width:40%;
+}
+
+#saName {
+  width:100%;
+}
+#saLName {
+  width:40%;
+}
+
+#saStreet {
+ width:80%;
+}
+
+#saCity {
+  width:30%;
+}
+#saState, #saZip {
+ width:25%;
+}

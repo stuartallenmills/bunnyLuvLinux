@@ -1,0 +1,24 @@
+<div #showTitleAd>
+ <b> Adopted
+<div #showAdopted>
+  $forall Entity adoptedID adR <-adopteds
+    <div #sadRow>
+      <div #sadDate>
+          Date: #{showtime (adoptedDate adR)}
+      <div #saPhone>
+         Phone: #{personPhone (adoptedPerson adR)}
+      <div #saName>
+        <div #saNameT>
+          Name: 
+        <div #saFName>
+           #{ personFirstName (adoptedPerson adR)} 
+        <div #saLName>
+            #{personLastName (adoptedPerson adR)}
+      <div #saStreet>
+         Street: #{personStreet (adoptedPerson adR)}
+      <div #saCity>
+         City: #{personCity (adoptedPerson adR)}
+      <div #saState>
+         State: #{personState (adoptedPerson adR)}
+      <div #saZip>
+         Zip: #{personZip (adoptedPerson adR)}

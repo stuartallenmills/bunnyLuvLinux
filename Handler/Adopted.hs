@@ -58,7 +58,34 @@ adoptedForm rabID extra = do
                      ##{fvId adoptedLastNameView} {width:20em}
                      ##{fvId adoptedStreetView} {width:25em}
                      ##{fvId adoptedCityView} {width:25em}
-                    |]
+                   .cancelBut {
+                     background: none repeat scroll 0 0 #09c;
+                     border: 1pt solid #999;
+                     border-radius: 5pt;
+                     color: #fff;
+                     float: right;
+                     font-size: 80%;
+                     height: 19px;
+                     padding: 0 13px 0 0;
+                     transform: translateY(-5px);
+                     width: 50px;
+                     }
+                                 /* Change color on mouseover */
+                     .cancelBut:hover {
+                                  background:#fff;
+                                  color:#09c;
+                     }
+
+                     .cancelBut a {
+                            text-decoration:none;
+                            color: #fff;
+                            float:right;
+                     }
+
+                     .cancelBut a:hover {
+                             color:#09c;
+                    }
+                   |]
           [whamlet|
                     #{extra}
                     <div #fadopted>
@@ -129,7 +156,7 @@ getAdoptedR rabid = do
              ^{headerWidget}
               <div #addCance style="text-align:center">
                  <b> Adopted
-              <form method=post action=@{VetPostR rabid} enctype=#{enctype}>
+              <form method=post action=@{AdoptedR rabid} enctype=#{enctype}>
                  ^{formWidget}
           |]
   
