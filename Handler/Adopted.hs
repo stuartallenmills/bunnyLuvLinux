@@ -14,7 +14,7 @@ import Conduit
 import Data.Conduit
 import Data.Conduit.Binary
 import Data.Default
-import Yesod hiding ((!=.), (==.))
+import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
 import Foundation
 
@@ -169,7 +169,10 @@ postAdoptedR  rabID = do
     FormSuccess adopted -> do
       runSqlite "test5.db3" $ do
         _ <-insert  adopted
-        return ()
+        update $ \p -> do
+          set p [RabbitStatus =. val "Adopted", RabbitStatusDate =. val (showtime (adoptedDate adopted))]
+          where_ (p ^. RabbitId ==. val rabID)
+          return ()
     _ -> return ()
 
   redirect HomeR

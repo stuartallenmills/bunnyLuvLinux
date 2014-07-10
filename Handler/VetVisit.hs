@@ -175,6 +175,15 @@ postVetPostR  rabID = do
               return ()
           else
             return ();
+      if ((vetVisitSpay vetVisit) == "Euthenized")
+       then
+        runSqlite "test5.db3" $
+         do  update $ \p -> do 
+              set p [ RabbitStatus =. val (vetVisitSpay vetVisit), RabbitStatusDate =. val (showtime (vetVisitDate vetVisit))]
+              where_ (p ^. RabbitId ==. val rabID)
+              return ()
+        else
+            return ();
             
     _ -> return ()
 

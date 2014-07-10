@@ -10,7 +10,7 @@ import Conduit
 import Control.Concurrent.STM
 import Data.ByteString.Lazy (ByteString)
 import Data.Default
-import Data.Text (Text)
+import Data.Text (Text, pack)
 import qualified Data.Text as Text
 import Text.Hamlet
 import Yesod hiding (parseTime)
@@ -137,7 +137,8 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 doparseTime::String->Day
 doparseTime  st = readTime defaultTimeLocale "%-m/%-d/%-Y" st
 
-showtime time = formatTime defaultTimeLocale "%m/%d/%Y" time
+showtime::Day->Text
+showtime time = pack (formatTime defaultTimeLocale "%m/%d/%Y" time)
 
 text2date::FormResult Text -> FormResult Day
 text2date tdate =  fmap (doparseTime.unpack) tdate
