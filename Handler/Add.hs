@@ -191,7 +191,7 @@ showadopted adopteds = $(widgetFileNoReload def "showadopted");
 
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
-    rab <-runSqlite "test5.db3"  $ do
+    Just rab <-runSqlite "test5.db3"  $ do
                   rabt<- get rabId
                   return rabt
     wellRs<-queryWellness rabId
@@ -200,6 +200,8 @@ getViewR rabId  = do
     let was_adopted = (length adopteds > 0)
     let had_visits = (length vetvisits >0)
     let had_well = (length wellRs > 0)
+    let not_dead = not ((rabbitStatus rab == "Died") || (rabbitStatus rab == "Euthenized"))
+    let not_adopted = not (rabbitStatus rab == "Adopted")
     defaultLayout $ do
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
@@ -210,15 +212,22 @@ getViewR rabId  = do
                 <div #vrButD style="float:right; display:inline;">
                   <div .cancelBut #vrEdit style="display:inline; float:right;">
                    <a href=@{EditR rabId}> edit </a>
-                  <div .cancelBut #vrVet  style="display:inline; float:right;">
-                   <a href=@{VetVisitR rabId}> vet </a>
-                  <div .cancelBut #vrAdopt  style="display:inline; float:right;">
-                   <a href=@{AdoptedR rabId}> adopt </a>
-                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
-                   <a href=@{HomeR}> home </a>
+                  $if not_dead
+                   <div .cancelBut #vrVet  style="display:inline; float:right;">
+                    <a href=@{VetVisitR rabId}> vet </a>
+                   $if not_adopted
+                    <div .cancelBut #vrAdopt  style="display:inline; float:right;">
+                     <a href=@{AdoptedR rabId}> adopt </a>
+                   $else
+                     <span> </span>
+                   <div .cancelBut #vrHome sytle="display:inline; float:right;">
+                    <a href=@{HomeR}> home </a>
+                  $else
+                   <div .cancelBut #vrHome sytle="display:inline; float:right;">
+                    <a href=@{HomeR}> home </a>
+                    
               <div #viewRabbitBlock>
-              $maybe therab <-rab
-               ^{viewRab therab}
+               ^{viewRab rab}
                $if was_adopted
                    ^{showadopted adopteds}
                $else
@@ -232,8 +241,6 @@ getViewR rabId  = do
                $else
                   <span> </span>
                 
-              $nothing
-                  <h3> Rabbit Not Found>
            |]
 
 
