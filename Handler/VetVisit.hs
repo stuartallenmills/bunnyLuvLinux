@@ -42,7 +42,7 @@ vetVisitForm rabid extra = do
     (vvProceduresRes, vvProceduresView)<-mreq textField "n" Nothing
     (vvNotesRes, vvNotesView)<-mreq textField "n" Nothing
     (vvSpayRes, vvSpayView)<-mreq (selectFieldList procedures) "n" Nothing
-    (vvCostRes, vvCostView)<-mreq doubleField "n" Nothing
+    (vvCostRes, vvCostView)<-mopt doubleField "n" Nothing
     let date = text2date vvDateRes
     let vetvisitRes = VetVisit rabid <$> vvVetRes <*> date <*> vvProblemRes <*> vvProceduresRes <*> vvNotesRes <*> vvSpayRes <*> vvCostRes 
     let vwidget = do 

@@ -9,9 +9,14 @@
    margin:2px;
 }
 
+#showAdopted {
+   float:left;
+   border-bottom:thin solid #7f7f7f;
+}
+
 #sadRow {
    width:100%;
-   border-bottom:then solid: #7f7f7f;
+   border-bottom:thin solid: #8f8f8f;
 }
 
 #sadDate {

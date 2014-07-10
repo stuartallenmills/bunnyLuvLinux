@@ -101,16 +101,19 @@ rabbitForm (mrab, rabID) extra = do
           Just rb -> (Just (rabbitName rb))
     (nameRes, nameView) <- mreq textField "this is not used" tname
     (descRes, descView) <- mreq textField "neither is this"  (test mrab rabbitDesc)
-    (dateInRes, dateInView)<-mreq textField "  " (test mrab rabbitDateIn)
+    (dateInRes, dateInView)<-mreq textField "  " Nothing -- (test mrab (doparseTime.rabbitDateIn))
     (sourceRes, sourceView) <- mreq textField "neither is this" (test mrab rabbitSource)
     (sexRes, sexView) <- mreq (selectFieldList sex) "not" (test mrab rabbitSex)
     (alteredRes, alteredView) <- mreq (selectFieldList altered) "not" (test mrab rabbitAltered)
+    (alteredDateRes, alteredDateView)<-mopt textField "this is not" Nothing
     (statusRes, statusView) <- mreq (selectFieldList status) "who" (test mrab rabbitStatus)
     (ageIntakeRes, ageIntakeView) <- mreq textField "zip" (test mrab rabbitAgeIntake)
     (sourceTypeRes, sourceTypeView) <- mreq (selectFieldList sourceType) "zip" (test mrab rabbitSourceType)
     (statusDateRes, statusDateView) <- mreq textField " nope" (opttest mrab rabbitStatusDate)
     (statusNoteRes, statusNoteView) <- mreq textField "nope" (opttest mrab rabbitStatusNote)
-    let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> dateInRes <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> ageIntakeRes <*> statusRes <*> statusDateRes <*> statusNoteRes      
+    let date = text2date dateInRes
+    let alteredDate = text2dateM alteredDateRes 
+    let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> date <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> alteredDate <*> ageIntakeRes <*> statusRes <*> statusDateRes <*> statusNoteRes      
  --   let rabbitRes = rabbitRes1 <*> (FormResult (Just True)) <*> (FormResult Nothing) Nothing
     let awid=  $(widgetFileNoReload def "add")
     return (rabbitUpdateRes, awid)

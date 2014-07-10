@@ -10,7 +10,11 @@
      <div #svvSpay>
        Alter/Euth: #{vetVisitSpay vvR}
      <div #svvCost>
-       Cost: #{vetVisitCost vvR}
+       Cost: 
+        $maybe cost<-(vetVisitCost vvR)
+           #{cost}
+        $nothing 
+           &nbsp;-
      <div #svvProblem>
        Problem: #{vetVisitProblem vvR}
      <div #svvProcedure>

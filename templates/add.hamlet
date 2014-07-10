@@ -6,6 +6,8 @@
                       Sex : ^{fvInput sexView}
                    <div id="alteredF">
                       Altered: ^{fvInput alteredView}
+                   <div id="falteredDate">
+                      Altered Date: ^{fvInput alteredDateView}
                    <div id="descF">
                       Desc: 
                      ^{fvInput descView}

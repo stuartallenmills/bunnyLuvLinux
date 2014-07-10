@@ -7,11 +7,17 @@
     <div #vraltered>
        Altered: #{rabbitAltered rab} 
     <div #vrdatein>
-        Date Acq: #{rabbitDateIn rab}
+        Date Acq: #{showtime (rabbitDateIn rab)}
     <div #vrdesc>
        Desc: #{rabbitDesc rab}
     <div #vragein>
        Age at intake: #{rabbitAgeIntake rab}
+    <div #valteredDate>
+       Altered Date:
+       $maybe date <- rabbitAlteredDate rab
+              #{showtime date}
+       $nothing
+              &nbsp;-
    <div #vrSource>
      <div #vrsourcet>
         Source: #{rabbitSource rab}
