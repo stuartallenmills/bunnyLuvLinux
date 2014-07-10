@@ -15,7 +15,7 @@
               Age then: #{rabbitAgeIntake rabbit}
       <div class="alteredC">
           Altered:     #{rabbitAltered rabbit}
-       <div class="alteredD">
+      <div class="alteredD">
           Altered Date:
            $maybe date <- rabbitAlteredDate rabbit
               #{showtime date}

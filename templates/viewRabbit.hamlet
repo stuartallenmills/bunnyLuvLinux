@@ -7,7 +7,7 @@
     <div #vraltered>
        Altered: #{rabbitAltered rab} 
     <div #vrdatein>
-        Date Acq: #{showtime (rabbitDateIn rab)}
+        Date in: #{showtime (rabbitDateIn rab)}
     <div #vrdesc>
        Desc: #{rabbitDesc rab}
     <div #vragein>

@@ -20,14 +20,14 @@
 }
 
 #vrname {
-  width:30%;
+  width:35%;
 }
 #vrsex {
   width:10%;
 }
 
 #vraltered {
-  width:20%;
+  width:25%;
 }
 #vrdesc {
   width:60%
@@ -44,6 +44,10 @@
 
 #vrstatnote{
   width:99%;
+}
+
+#valteredDate {
+ width:80%;
 }
 
 #vrStatusBlk {

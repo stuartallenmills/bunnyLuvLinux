@@ -14,7 +14,7 @@ import Conduit
 import Data.Conduit
 import Data.Conduit.Binary
 import Data.Default
-import Yesod hiding ((!=.), (==.))
+import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
 import Foundation
 
@@ -28,20 +28,25 @@ import Text.Printf
 import Control.Applicative
 
 
+testAltered::Rabbit->[(Text,Text)]
+testAltered rab | (((rabbitAltered rab)=="Spayed") || ((rabbitAltered rab)=="Neutered")) = []
+                | ((rabbitSex rab)=="F") = [("Spayed", "Spayed")]
+                | otherwise = [("Neutered", "Neutered")]
 
-
+setSources::Rabbit->[(Text,Text)]
+setSources rab = (testAltered rab) ++ [("Other","Other"), ("Euthenized","Euthenized")]
 
 headerWidget::Widget
 headerWidget = $(widgetFileNoReload def "header")
 
-vetVisitForm:: RabbitId->Html-> MForm Handler (FormResult VetVisit, Widget)
-vetVisitForm rabid extra = do
+vetVisitForm::Rabbit-> RabbitId->Html-> MForm Handler (FormResult VetVisit, Widget)
+vetVisitForm rab rabid extra = do
     (vvDateRes, vvDateView)<-mreq textField "nope" Nothing
     (vvVetRes, vvVetView)<-mreq (selectFieldList vets) "nope" Nothing
     (vvProblemRes, vvProblemView)<-mreq textField "nopte" Nothing
     (vvProceduresRes, vvProceduresView)<-mreq textField "n" Nothing
     (vvNotesRes, vvNotesView)<-mreq textField "n" Nothing
-    (vvSpayRes, vvSpayView)<-mreq (selectFieldList procedures) "n" Nothing
+    (vvSpayRes, vvSpayView)<-mreq (selectFieldList (setSources rab)) "n" Nothing
     (vvCostRes, vvCostView)<-mopt doubleField "n" Nothing
     let date = text2date vvDateRes
     let vetvisitRes = VetVisit rabid <$> vvVetRes <*> date <*> vvProblemRes <*> vvProceduresRes <*> vvNotesRes <*> vvSpayRes <*> vvCostRes 
@@ -134,27 +139,43 @@ vetVisitForm rabid extra = do
         
 getVetVisitR ::RabbitId->Handler Html
 getVetVisitR rabid = do
-    (formWidget, enctype) <- generateFormPost (vetVisitForm rabid)
+    Just rab <-runSqlite "test5.db3"  $ do
+                  rabt<- get rabid
+                  return rabt
+    (formWidget, enctype) <- generateFormPost (vetVisitForm rab rabid)
     defaultLayout $ do
          setTitle "Vet Visit"
          [whamlet|
              ^{headerWidget}
               <div #addCance style="text-align:center">
                  <b> Vet Visit
-              <form method=post action=@{VetPostR rabid} enctype=#{enctype}>
+              <form method=post action=@{VetPostR   rabid} enctype=#{enctype}>
                  ^{formWidget}
           |]
   
 
 postVetPostR::RabbitId->Handler Html
 postVetPostR  rabID = do
-  (((result), _), _) <-runFormPost (vetVisitForm rabID)
+  Just rab <-runSqlite "test5.db3"  $ do
+                  rabt<- get rabID
+                  return rabt
+  (((result), _), _) <-runFormPost (vetVisitForm rab rabID)
 
   case result of
     FormSuccess vetVisit -> do
       runSqlite "test5.db3" $ do
         _ <-insert  vetVisit
         return ()
+      if (((vetVisitSpay vetVisit) == "Neutered") || ((vetVisitSpay vetVisit) == "Spayed"))
+       then
+        runSqlite "test5.db3" $
+         do  update $ \p -> do 
+              set p [ RabbitAltered =. val (vetVisitSpay vetVisit), RabbitAlteredDate =. val (Just (vetVisitDate vetVisit))]
+              where_ (p ^. RabbitId ==. val rabID)
+              return ()
+          else
+            return ();
+            
     _ -> return ()
 
   redirect HomeR
