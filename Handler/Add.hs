@@ -92,7 +92,14 @@ wellnessForm rabID extra = do
 
 showWellness wellness =   $(widgetFileNoReload def "showwellness")
 
-    
+testDateIn Nothing = Nothing
+testDateIn (Just rab)  = Just (showtime (rabbitDateIn rab))
+
+testAlteredDate::Maybe Rabbit -> Maybe (Maybe Text)
+testAlteredDate Nothing = Nothing
+testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ Nothing _ _ _ _) ) = Nothing
+testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ (Just da) _ _ _ _) ) = Just (Just (showtime da))
+
 
 rabbitForm ::(Maybe Rabbit, Maybe [Entity Wellness])-> Html -> MForm Handler (FormResult Rabbit, Widget)
 rabbitForm (mrab, rabID) extra = do
@@ -101,11 +108,11 @@ rabbitForm (mrab, rabID) extra = do
           Just rb -> (Just (rabbitName rb))
     (nameRes, nameView) <- mreq textField "this is not used" tname
     (descRes, descView) <- mreq textField "neither is this"  (test mrab rabbitDesc)
-    (dateInRes, dateInView)<-mreq textField "  " Nothing -- (test mrab (doparseTime.rabbitDateIn))
+    (dateInRes, dateInView)<-mreq textField "  " (testDateIn mrab)
     (sourceRes, sourceView) <- mreq textField "neither is this" (test mrab rabbitSource)
     (sexRes, sexView) <- mreq (selectFieldList sex) "not" (test mrab rabbitSex)
     (alteredRes, alteredView) <- mreq (selectFieldList altered) "not" (test mrab rabbitAltered)
-    (alteredDateRes, alteredDateView)<-mopt textField "this is not" Nothing
+    (alteredDateRes, alteredDateView)<-mopt textField "this is not" (testAlteredDate mrab)
     (statusRes, statusView) <- mreq (selectFieldList status) "who" (test mrab rabbitStatus)
     (ageIntakeRes, ageIntakeView) <- mreq textField "zip" (test mrab rabbitAgeIntake)
     (sourceTypeRes, sourceTypeView) <- mreq (selectFieldList sourceType) "zip" (test mrab rabbitSourceType)
