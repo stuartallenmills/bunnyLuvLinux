@@ -1,14 +1,20 @@
-                     div {
-                        float:left;
-                        margin:1%;
-                        width:98%;
-                     }
-                     form input {
+                    form input {
                        display: inline;
                      }
                      div input {
                        display:inline;
                      }
+
+                   #fAdd div {
+                       float:left;
+                       margin-top:3px;
+                       margin-bottom:3px;
+                    }
+
+                    #fAdd {
+                      float:left;
+                      width:100%;
+                    }
                    .cancelBut {
                      background: none repeat scroll 0 0 #09c;
                      border: 1pt solid #999;
@@ -18,7 +24,6 @@
                      font-size: 80%;
                      height: 19px;
                      padding: 0 13px 0 0;
-                     transform: translateY(-5px);
                      width: 50px;
                      }
                                  /* Change color on mouseover */
@@ -54,6 +59,9 @@
                      #dateInF {
                         width:40%;
                      }
+                     #descF {
+                        width:60%;
+                     }
                      #statusF {
                         width:40%
                      }
@@ -71,6 +79,9 @@
                            width 40%;
                            float:left;
                       }
+                     #sourceF {
+                       width:100%;
+                     }
                      ##{fvId alteredView} {
                          width: 7em;
                          display:inline;

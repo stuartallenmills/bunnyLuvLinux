@@ -1,5 +1,5 @@
                  #{extra}
-                  <div style:"float:left;">
+                  <div #fAdd>
                    <div id="nameF">
                      Name  ^{fvInput nameView}
                    <div id="sexF">  
