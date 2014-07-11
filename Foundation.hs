@@ -113,7 +113,7 @@ altered = [("Spayed", "Spayed"), ("Neutered", "Neutered"), ("No", "No"), ("Unkno
 status::[(Text, Text)]
 status = [ ("BunnyLuv", "BunnyLuv"), ("Adopted", "Adopted"), ("Died", "Died"), ("Euthenized", "Euthenized")]
 vets::[(Text, Text)]
-vets = [("Arden", "Arden"), ("PetVet", "PetVet")]
+vets = [("Dr. Misetich", "Dr. Misetich"), ("Dr. Petritz", "Dr. Petritz"), ("Dr. Steele (C.A.R.E)", "Dr. Steele (C.A.R.E)")]
 procedures::[(Text,Text)]
 procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthenized", "Euthenized"), ("Other", "Other")]
 
@@ -146,6 +146,12 @@ text2date tdate =  fmap (doparseTime.unpack) tdate
 text2dateM::FormResult (Maybe Text)->FormResult (Maybe Day)
 text2dateM tdateM= fmap (fmap (doparseTime.unpack)) tdateM
 
+getLocalTime:: IO (LocalTime)
+getLocalTime = do 
+  ct<-getCurrentTime
+  tz<-getCurrentTimeZone
+  let local_time = utcToLocalTime tz ct
+  return (local_time)
 
 -- END  TIME ROUTINE
 
@@ -175,10 +181,13 @@ lulu = Rabbit "Lulu" "white terrorist" (doparseTime "11/10/2009") "Shelter" "Eas
 openConnectionCount :: Int
 openConnectionCount = 10
 
+
+
 initDB::IO ()
 initDB = do
   ct<-getCurrentTime
   tz<-getCurrentTimeZone
+  let local_time = utcToLocalTime tz ct
   withSqlitePool "test5.db3" openConnectionCount $ \pool -> do
    runResourceT $ runStderrLoggingT $ flip runSqlPool pool $ do
         runMigration migrateAll

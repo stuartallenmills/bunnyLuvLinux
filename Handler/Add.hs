@@ -26,6 +26,7 @@ import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Control.Applicative
+import Data.Time.LocalTime
 
 
 
@@ -73,7 +74,9 @@ opttest mrab field= case mrab of
     
 wellnessForm::RabbitId->Html-> MForm Handler (FormResult Wellness, Widget)
 wellnessForm rabID extra = do
-    (wellDateRes, wellDateView)<-mreq textField "nope" Nothing
+    local_time <- liftIO $ getLocalTime
+    let stime = showtime (localDay local_time)
+    (wellDateRes, wellDateView)<-mreq textField "nope" (Just stime)
     (wellLbsRes, wellLbsView)<-mreq intField "nope" Nothing
     (wellOzRes, wellOzView)<-mreq intField "nope" Nothing
     (wellTempRes, wellTempView)<-mopt doubleField "nope" Nothing
@@ -92,8 +95,8 @@ wellnessForm rabID extra = do
 
 showWellness wellness =   $(widgetFileNoReload def "showwellness")
 
-testDateIn Nothing = Nothing
-testDateIn (Just rab)  = Just (showtime (rabbitDateIn rab))
+testDateIn now  Nothing = Just now
+testDateIn now (Just rab)  = Just (showtime (rabbitDateIn rab))
 
 testAlteredDate::Maybe Rabbit -> Maybe (Maybe Text)
 testAlteredDate Nothing = Nothing
@@ -103,12 +106,14 @@ testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ (Just da) _ _ _ _) ) = Just (Just (
 
 rabbitForm ::(Maybe Rabbit, Maybe [Entity Wellness])-> Html -> MForm Handler (FormResult Rabbit, Widget)
 rabbitForm (mrab, rabID) extra = do
+    local_time <- liftIO $ getLocalTime
+    let stime = showtime (localDay local_time)
     let tname = case mrab of
           Nothing -> Nothing
           Just rb -> (Just (rabbitName rb))
     (nameRes, nameView) <- mreq textField "this is not used" tname
     (descRes, descView) <- mreq textField "neither is this"  (test mrab rabbitDesc)
-    (dateInRes, dateInView)<-mreq textField "  " (testDateIn mrab)
+    (dateInRes, dateInView)<-mreq textField "  " (testDateIn stime  mrab)
     (sourceRes, sourceView) <- mreq textField "neither is this" (test mrab rabbitSource)
     (sexRes, sexView) <- mreq (selectFieldList sex) "not" (test mrab rabbitSex)
     (alteredRes, alteredView) <- mreq (selectFieldList altered) "not" (test mrab rabbitAltered)

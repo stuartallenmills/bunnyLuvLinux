@@ -26,6 +26,7 @@ import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Control.Applicative
+import Data.Time.LocalTime
 
 
 
@@ -37,7 +38,9 @@ headerWidget = $(widgetFileNoReload def "header")
 
 adoptedForm::RabbitId->Html-> MForm Handler (FormResult Adopted, Widget)
 adoptedForm rabID extra = do
-    (adoptedDateRes, adoptedDateView)<-mreq textField "nope" Nothing
+    local_time <- liftIO $ getLocalTime
+    let stime = showtime (localDay local_time)
+    (adoptedDateRes, adoptedDateView)<-mreq textField "nope" (Just stime)
     (adoptedFirstNameRes, adoptedFirstNameView)<-mreq textField "nope" Nothing
     (adoptedLastNameRes, adoptedLastNameView)<-mreq textField "nope" Nothing
     (adpotedPhoneRes, adoptedPhoneView)<-mreq textField "nope" Nothing

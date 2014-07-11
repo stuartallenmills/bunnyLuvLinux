@@ -26,6 +26,7 @@ import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Control.Applicative
+import Data.Time.LocalTime
 
 
 testAltered::Rabbit->[(Text,Text)]
@@ -41,7 +42,9 @@ headerWidget = $(widgetFileNoReload def "header")
 
 vetVisitForm::Rabbit-> RabbitId->Html-> MForm Handler (FormResult VetVisit, Widget)
 vetVisitForm rab rabid extra = do
-    (vvDateRes, vvDateView)<-mreq textField "nope" Nothing
+    local_time <- liftIO $ getLocalTime
+    let stime = showtime (localDay local_time)
+    (vvDateRes, vvDateView)<-mreq textField "nope" (Just stime)
     (vvVetRes, vvVetView)<-mreq (selectFieldList vets) "nope" Nothing
     (vvProblemRes, vvProblemView)<-mreq textField "nopte" Nothing
     (vvProceduresRes, vvProceduresView)<-mreq textField "n" Nothing
@@ -139,6 +142,7 @@ vetVisitForm rab rabid extra = do
         
 getVetVisitR ::RabbitId->Handler Html
 getVetVisitR rabid = do
+    local_time <- liftIO $ getLocalTime
     Just rab <-runSqlite "test5.db3"  $ do
                   rabt<- get rabid
                   return rabt
