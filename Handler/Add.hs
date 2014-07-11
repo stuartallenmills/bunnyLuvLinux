@@ -241,10 +241,9 @@ getEditR rabID  = do
          [whamlet|
               ^{headerWidget}
               <div #eTitle .subTitle>
-                <b> View/Edit Rabbit
-                <div #editCan style="float:right; display:inline;">
-                  <div .cancelBut #rabEdCan style="display:inline; float:right;">
-                   <a href=@{HomeR}> cancel </a>
+                <b> Edit Rabbit
+                <div .cancelBut #rabEdCan style="display:inline; float:right;">
+                   <a href=@{ViewR rabID}> cancel </a>
               <form method=post action=@{UpdateR rabID} enctype=#{enctype}>
                  ^{formWidget}
           |]

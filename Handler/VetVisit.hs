@@ -118,18 +118,17 @@ vetVisitForm rab rabid extra = do
         
 getVetVisitR ::RabbitId->Handler Html
 getVetVisitR rabid = do
-    local_time <- liftIO $ getLocalTime
     Just rab <-runSqlite "test5.db3"  $ do
                   rabt<- get rabid
                   return rabt
     (formWidget, enctype) <- generateFormPost (vetVisitForm rab rabid)
     defaultLayout $ do
-         setTitle "Vet Visit"
+         setTitle "Vet Visit" 
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
              ^{headerWidget}
               <div #vvTitle .subTitle>
-                <b> Vet Visit
+                <b> Vet Visit for &nbsp; #{rabbitName rab}
                 <div #vvCan style="float:right; display:inline;">
                   <div .cancelBut #vvEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabid}> cancel </a>

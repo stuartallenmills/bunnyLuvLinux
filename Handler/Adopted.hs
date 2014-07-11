@@ -124,6 +124,9 @@ adoptedForm rabID extra = do
 
 getAdoptedR ::RabbitId->Handler Html
 getAdoptedR rabid = do
+    Just rabbit <-runSqlite "test5.db3"  $ do
+                  rabt<- get rabid
+                  return rabt
     (formWidget, enctype) <- generateFormPost (adoptedForm rabid)
     defaultLayout $ do
          setTitle "Adoption"
@@ -131,7 +134,7 @@ getAdoptedR rabid = do
          [whamlet|
              ^{headerWidget}
               <div #addCance .subTitle>
-                 <b> Adopted
+                 <b> Adoption for &nbsp; #{rabbitName rabbit}
                 <div #adoptCan style="float:right; display:inline;">
                   <div .cancelBut #adoptEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabid }> cancel </a>
