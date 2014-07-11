@@ -61,34 +61,8 @@ adoptedForm rabID extra = do
                      ##{fvId adoptedLastNameView} {width:20em}
                      ##{fvId adoptedStreetView} {width:25em}
                      ##{fvId adoptedCityView} {width:25em}
-                   .cancelBut {
-                     background: none repeat scroll 0 0 #09c;
-                     border: 1pt solid #999;
-                     border-radius: 5pt;
-                     color: #fff;
-                     float: right;
-                     font-size: 80%;
-                     height: 19px;
-                     padding: 0 13px 0 0;
-                     transform: translateY(-5px);
-                     width: 50px;
-                     }
-                                 /* Change color on mouseover */
-                     .cancelBut:hover {
-                                  background:#fff;
-                                  color:#09c;
-                     }
+             |]
 
-                     .cancelBut a {
-                            text-decoration:none;
-                            color: #fff;
-                            float:right;
-                     }
-
-                     .cancelBut a:hover {
-                             color:#09c;
-                    }
-                   |]
           [whamlet|
                     #{extra}
                     <div #fadopted>
@@ -108,8 +82,6 @@ adoptedForm rabID extra = do
                       State : ^{fvInput adoptedStateView}
                      <div #faZip>
                       Zip : ^{fvInput adoptedZipView}
-                    <div .cancelBut>
-                     <a href=@{HomeR}>cancel
                     <input type=submit value="submit">
         |]
 {-
@@ -154,11 +126,15 @@ getAdoptedR ::RabbitId->Handler Html
 getAdoptedR rabid = do
     (formWidget, enctype) <- generateFormPost (adoptedForm rabid)
     defaultLayout $ do
-         setTitle "Vet Visit"
+         setTitle "Adoption"
+         $(widgetFileNoReload def "cancelbutton")
          [whamlet|
              ^{headerWidget}
-              <div #addCance style="text-align:center">
+              <div #addCance .subTitle>
                  <b> Adopted
+                <div #adoptCan style="float:right; display:inline;">
+                  <div .cancelBut #adoptEdCan style="display:inline; float:right;">
+                   <a href=@{ViewR rabid }> cancel </a>
               <form method=post action=@{AdoptedR rabid} enctype=#{enctype}>
                  ^{formWidget}
           |]

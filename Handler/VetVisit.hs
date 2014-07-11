@@ -72,33 +72,7 @@ vetVisitForm rab rabid extra = do
               #fvVet {
                 width:40%;
               }
-                   .cancelBut {
-                     background: none repeat scroll 0 0 #09c;
-                     border: 1pt solid #999;
-                     border-radius: 5pt;
-                     color: #fff;
-                     float: right;
-                     font-size: 80%;
-                     height: 19px;
-                     padding: 0 13px 0 0;
-                     transform: translateY(-5px);
-                     width: 50px;
-                     }
-                                 /* Change color on mouseover */
-                     .cancelBut:hover {
-                                  background:#fff;
-                                  color:#09c;
-                     }
 
-                     .cancelBut a {
-                            text-decoration:none;
-                            color: #fff;
-                            float:right;
-                     }
-
-                     .cancelBut a:hover {
-                             color:#09c;
-                    }
               #fvSpay {
                    width:40%}
               #fvCost { width:40%}
@@ -134,8 +108,6 @@ vetVisitForm rab rabid extra = do
                   Procedures:   ^{fvInput vvProceduresView}
               <div #fvNotes>
                   Notes:  ^{fvInput vvNotesView}
-             <div .cancelBut>
-                   <a href=@{HomeR}>cancel
              <input type=submit value="submit">
             |]
     return (vetvisitRes, vwidget)
@@ -149,10 +121,15 @@ getVetVisitR rabid = do
     (formWidget, enctype) <- generateFormPost (vetVisitForm rab rabid)
     defaultLayout $ do
          setTitle "Vet Visit"
+         $(widgetFileNoReload def "cancelbutton")
          [whamlet|
              ^{headerWidget}
-              <div #addCance style="text-align:center">
-                 <b> Vet Visit
+              <div #vvTitle .subTitle>
+                <b> Vet Visit
+                <div #vvCan style="float:right; display:inline;">
+                  <div .cancelBut #vvEdCan style="display:inline; float:right;">
+                   <a href=@{ViewR rabid}> cancel </a>
+
               <form method=post action=@{VetPostR   rabid} enctype=#{enctype}>
                  ^{formWidget}
           |]

@@ -71,27 +71,6 @@ opttest mrab field= case mrab of
                    Just ri-> Just (field ri)
 
 
-    
-wellnessForm::RabbitId->Html-> MForm Handler (FormResult Wellness, Widget)
-wellnessForm rabID extra = do
-    local_time <- liftIO $ getLocalTime
-    let stime = showtime (localDay local_time)
-    (wellDateRes, wellDateView)<-mreq textField "nope" (Just stime)
-    (wellLbsRes, wellLbsView)<-mreq intField "nope" Nothing
-    (wellOzRes, wellOzView)<-mreq intField "nope" Nothing
-    (wellTempRes, wellTempView)<-mopt doubleField "nope" Nothing
-    (wellNoteRes, wellNotesView)<-mreq textField "nope" Nothing
-    (wellGroomedRes, wellGroomedView)<-mreq boolField "nope" (Just False)
-    (wellTreatmentRes, wellTreatmentView)<-mreq textField "nope" Nothing
-    (wellResponsibleRes, wellResponsibleView)<-mreq textField "nope" Nothing
-    
-    let date = fmap (doparseTime.unpack) wellDateRes
-    let wellnessRes = Wellness rabID <$> date <*> wellGroomedRes <*>
-                        wellTempRes <*> (Weight <$> wellLbsRes <*> wellOzRes) <*>
-                         wellNoteRes <*> wellTreatmentRes <*> wellResponsibleRes
-    let twid = $(widgetFileNoReload def "wellness")
-    return (wellnessRes, twid)
-    
 
 showWellness wellness =   $(widgetFileNoReload def "showwellness")
 
@@ -172,16 +151,7 @@ postUpdateR rabID = do
 
   redirect HomeR
 
-postWellnessR::RabbitId->Handler Html
-postWellnessR rabID = do
-  (((result), _), _) <-runFormPost (wellnessForm rabID)
-  case result of
-    FormSuccess wup -> do
-      runSqlite "test5.db3" $ do
-        insert wup
-        return ()
-    _ -> return ()
-  redirect HomeR
+
 {-
               ^{headerWidget}
               <div #eTitle style="text-align:center; width=100%; margin:0;">
@@ -219,7 +189,7 @@ getViewR rabId  = do
          $(widgetFileNoReload def "cancelbutton")
          [whamlet| 
               ^{headerWidget}
-               <div #eTitle style="text-align:left; width=100%; margin:0;">
+               <div #eTitle .subTitle >
                 <b> View Rabbit </b>
                 <div #vrButD style="float:right; display:inline;">
                   <div .cancelBut #vrEdit style="display:inline; float:right;">
@@ -230,6 +200,8 @@ getViewR rabId  = do
                    $if not_adopted
                     <div .cancelBut #vrAdopt  style="display:inline; float:right;">
                      <a href=@{AdoptedR rabId}> adopt </a>
+                    <div .cancelBut #vrWell style="display:inline; float:right;">
+                     <a href=@{WellnessR rabId}>wellness </a>
                    $else
                      <span> </span>
                    <div .cancelBut #vrHome sytle="display:inline; float:right;">
@@ -263,17 +235,17 @@ getEditR rabID  = do
                   return rabt
     wellRs<-queryWellness rabID
     (formWidget, enctype) <- generateFormPost (rabbitForm (rabbit, (Just wellRs)))
-    (wellnessWidget, enctype) <-generateFormPost (wellnessForm rabID)
     defaultLayout $ do
          setTitle "Edit Rabbit"
+         $(widgetFileNoReload def "cancelbutton")
          [whamlet|
               ^{headerWidget}
-              <div #eTitle style="text-align:center; width=100%; margin:0;">
+              <div #eTitle .subTitle>
                 <b> View/Edit Rabbit
+                <div #editCan style="float:right; display:inline;">
+                  <div .cancelBut #rabEdCan style="display:inline; float:right;">
+                   <a href=@{HomeR}> cancel </a>
               <form method=post action=@{UpdateR rabID} enctype=#{enctype}>
                  ^{formWidget}
-              <form method=post action=@{WellnessR rabID} enctype=#{enctype}>
-                 ^{wellnessWidget}
-              ^{showWellness wellRs}
           |]
 

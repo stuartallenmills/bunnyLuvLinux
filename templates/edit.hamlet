@@ -29,6 +29,4 @@
                       Status Date: ^{fvInput statusDateView}
                     <div #statusNoteF>
                       Status Notes: ^{fvInput statusNoteView}
-                  <div #cancelBut>
-                   <a href=@{HomeR}>cancel
                   <input type=submit value="submit">

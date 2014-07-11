@@ -1,8 +1,11 @@
                      #wellness {
-                          border: thin solid black;
-                          padding-left:1%;
+                           padding-left:1%;
                      }
-
+#wellness div {
+   float:left;
+   margin-bottom:5px;
+   margin-top:5px;
+}
 #wellness > input {
       display:inline;
 }
@@ -10,6 +13,16 @@
 #fwellReportingPerson {
      width:100%;
 }
+
+#wellNotes {
+  width:100%;
+}
+
+#wellTreat {
+ width:100%;
+}
+
+
 ##{fvId wellResponsibleView} {
     width:25em;
 }                     
