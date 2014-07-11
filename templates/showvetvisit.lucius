@@ -14,6 +14,12 @@
   border-bottom:thin solid #7f7f7f;
   width:100%;
 }
+
+.vvR {
+  width:100%;
+  border-bottom:1px dotted #999999;
+}
+
 #showvv { 
    width:100%;
    border-bottom:thin solid #7f7f7f;

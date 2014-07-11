@@ -1,5 +1,6 @@
 <div #vrDiv>
   <div #vrCore>
+   <div .vrRow>
     <div #vrname>
        Name: #{rabbitName rab}
     <div #vrsex>
@@ -8,10 +9,12 @@
        Altered: #{rabbitAltered rab} 
     <div #vrdatein>
         Date in: #{showtime (rabbitDateIn rab)}
+   <div .vrRow>
     <div #vrdesc>
        Desc: #{rabbitDesc rab}
     <div #vragein>
        Age at intake: #{rabbitAgeIntake rab}
+   <div .vrRow>
     <div #valteredDate>
        Altered Date:
        $maybe date <- rabbitAlteredDate rab
@@ -19,12 +22,14 @@
        $nothing
               &nbsp;-
    <div #vrSource>
+    <div .vrRow>
      <div #vrsourcet>
         Source: #{rabbitSource rab}
     <div #vrStatusBlk>
-     <div #vrstatus>
+     <div .vrRow>
+      <div #vrstatus>
          Status: #{rabbitStatus rab}
-     <div #vrstatdate>
+      <div #vrstatdate>
          Date: #{rabbitStatusDate rab}
      <div #vrstatnote>
          Notes: #{rabbitStatusNote rab}

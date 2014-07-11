@@ -65,15 +65,15 @@ adoptedForm rabID extra = do
 
           [whamlet|
                     #{extra}
-                    <div #fadopted>
+                   <div #fadopted>
                      <div #faDate>
                       Date: ^{fvInput adoptedDateView}
+                     <div #faPhone>
+                      Phone:  ^{fvInput adoptedPhoneView}
                      <div #faPersonFirst>
                       First Name : ^{fvInput adoptedFirstNameView} 
                      <div #faPersonLast>
                       Last Name :   ^{fvInput adoptedLastNameView}
-                     <div #faPhone>
-                      Phone:  ^{fvInput adoptedPhoneView}
                      <div #faStreet>
                       Street: ^{fvInput adoptedStreetView}
                      <div #faCity>

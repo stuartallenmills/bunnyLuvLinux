@@ -1,3 +1,8 @@
+.wellRw {
+   width:100%;
+   border-bottom:1px dotted #999999;
+}
+   
 #swellTitle {
    width:100%;
    border-bottom:thin solid #7f7f7f;

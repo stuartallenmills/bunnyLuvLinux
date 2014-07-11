@@ -13,7 +13,7 @@ div.nameC {
    align:middle;
    width:15%;
    height:100%;
-   background:#fFfeff;
+   background:#fFffaf;
    font-weight:bold;
    float:left;
 }
@@ -41,18 +41,11 @@ div.sexC {
 
 div.row1, div.row2 {
   width:100%;
-  border:none;
+  border-bottom:1px dotted #999999;
   float:left;
 }
 
-div.row1 {
-  border-bottom:none;
-  padding-bottom:0;
-}
 
-div.row2 {
-  border-top:none;
-}
 
 .dateInC {
    background:#fFfeff;

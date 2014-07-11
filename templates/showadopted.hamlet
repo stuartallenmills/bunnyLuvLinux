@@ -3,10 +3,12 @@
 <div #showAdopted>
   $forall Entity adoptedID adR <-adopteds
     <div #sadRow>
+     <div .sadRw>
       <div #sadDate>
           Date: #{showtime (adoptedDate adR)}
       <div #saPhone>
          Phone: #{personPhone (adoptedPerson adR)}
+     <div .sadRw>
       <div #saName>
         <div #saNameT>
           Name: 
@@ -14,8 +16,10 @@
            #{ personFirstName (adoptedPerson adR)} 
         <div #saLName>
             #{personLastName (adoptedPerson adR)}
+     <div .sadRw>
       <div #saStreet>
          Street: #{personStreet (adoptedPerson adR)}
+     <div .sadRw>
       <div #saCity>
          City: #{personCity (adoptedPerson adR)}
       <div #saState>

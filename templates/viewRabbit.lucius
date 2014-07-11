@@ -3,6 +3,7 @@
  width:100%;
  margin-left:0;
  float:left;
+ border-bottom:1px solid #9f9f9f
 }
 
 #vrDiv div {
@@ -17,6 +18,16 @@
   border-bottom:thin solid #7f7f7f;
   border-top:thin solid #7f7f7f;
   margin:1%;
+}
+
+.vrRow {
+  width:100%;
+  float:left;
+  border-bottom:1px dotted #999999;
+}
+
+#vrSource {
+  width:100%;
 }
 
 #vrname {

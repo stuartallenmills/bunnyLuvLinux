@@ -56,6 +56,10 @@ vetVisitForm rab rabid extra = do
     let vwidget = do 
          toWidget
              [lucius|
+              .vvRw {
+                width:100%;
+                border-bottom:1px dashed #999999;
+              }
               #fvVisit div {
                  float:float;
                  margin:1%;
@@ -93,16 +97,16 @@ vetVisitForm rab rabid extra = do
             #{extra}
            <div #fvVisit>
             <div #fvInline>
-             <div #fvDate>
-               Date:  ^{fvInput vvDateView}
-             <div #fvVet>
-               Vet:   ^{fvInput vvVetView}
-             <div #fvSpay>
-              Alter/Euthen:   ^{fvInput vvSpayView}
-             <div #fvCost>
-               Cost:  ^{fvInput vvCostView}
+              <div #fvDate>
+                Date:  ^{fvInput vvDateView}
+              <div #fvVet>
+                Vet:   ^{fvInput vvVetView}
+              <div #fvSpay>
+               Alter/Euthen:   ^{fvInput vvSpayView}
+              <div #fvCost>
+                Cost:  ^{fvInput vvCostView}
             <div #fvBlock>
-              <div #vfProblem>
+               <div #vfProblem>
                    Problem:   ^{fvInput vvProblemView}
               <div #vfProcedures>
                   Procedures:   ^{fvInput vvProceduresView}

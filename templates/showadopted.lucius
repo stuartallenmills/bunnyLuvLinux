@@ -4,6 +4,11 @@
    border-bottom:thin solid #8f8f8f;
 }
 
+.sadRw {
+  width:100%;
+  border-bottom:1px dotted #999999;
+}
+
 #showAdopted div {
    float:left;
    margin:2px;
