@@ -1,29 +1,29 @@
-                 #{extra}
-                  <div #fAdd>
+                #{extra}
+                 <div #fAdd>
+                  <div .faddRw>
                    <div id="nameF">
                      Name  ^{fvInput nameView}
                    <div id="sexF">  
                       Sex : ^{fvInput sexView}
                    <div id="alteredF">
                       Altered: ^{fvInput alteredView}
-                   <div id="falteredDate">
-                      Altered Date: ^{fvInput alteredDateView}
-                   <div id="descF">
-                      Desc: 
-                     ^{fvInput descView}
+                  <div .faddRw>
                    <div #ageIntakeF>
                       Age at intake : ^{fvInput ageIntakeView}
-                   <div #sourceDiv>
-                      <b> Source
-                    <div #sourceTypeF>
-                      Source Type: ^{fvInput sourceTypeView}
-                    <div #dateInF>
-                      Date In: ^{fvInput dateInView}
-                    <div #sourceF>
-                      Source: 
-                     ^{fvInput sourceView}
-                   <div #statusDiv>
-                      <b> Status
+                   <div id="falteredDate">
+                      Altered Date: ^{fvInput alteredDateView}
+                  <div .faddRw>
+                   <div id="descF">
+                      Desc:   ^{fvInput descView}
+                  <div .faddRw>
+                     <div #sourceTypeF>
+                       Source Type: ^{fvInput sourceTypeView}
+                     <div #dateInF>
+                       Date In: ^{fvInput dateInView}
+                  <div .faddRw>
+                     <div #sourceF>
+                       Source:   ^{fvInput sourceView}
+                   <div .faddRw>
                     <div #statusF>
                       Status:
                      ^{fvInput statusView}

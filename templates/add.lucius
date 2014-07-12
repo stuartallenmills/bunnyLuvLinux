@@ -11,6 +11,10 @@
                        margin-bottom:3px;
                     }
 
+                    .faddRw {
+                      width:100%;
+                   }
+
                     #fAdd {
                       float:left;
                       width:100%;
@@ -56,6 +60,14 @@
                      #alteredF {
                         width:30%;
                      }
+
+                     #ageIntakeF {
+                        width:50%;
+                     }
+
+                     #falteredDate {
+                        width:40%;
+                      }
                      #dateInF {
                         width:40%;
                      }
@@ -72,7 +84,7 @@
                         width:70%;
                       }
                      #sourceTypeF {
-                           width:40%;
+                           width:50%;
                            float:left;
                       }
                      #dateInF {
@@ -83,26 +95,26 @@
                        width:100%;
                      }
                      ##{fvId alteredView} {
-                         width: 7em;
+                         width: 6em;
                          display:inline;
                      }
+                     ##{fvId alteredDateView} {
+                         width:7em;
+                         display:inline;
+                      }
                      ##{fvId sexView} {
                          width: 3em;
-                         margin-top:3px;
+                         display:inline;
                      }
                      ##{fvId nameView} {
-                       
-                         background: #eeeeee;
                          width: 10em;
                          display:inline;
                      }
                      ##{fvId descView} {
-                         background: #eeeeee;
                          width: 25em;
                          display:inline;
                      }
                      ##{fvId sourceView} {
-                         background: #eeeeee;
                          width: 25em;
                          display:inline;
                     }
@@ -128,6 +140,7 @@
                      }
                      ##{fvId ageIntakeView} {
                          display:inline;
+                         width:8em;
                      }
 
     

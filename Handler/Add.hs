@@ -77,6 +77,9 @@ showWellness wellness =   $(widgetFileNoReload def "showwellness")
 testDateIn now  Nothing = Just now
 testDateIn now (Just rab)  = Just (showtime (rabbitDateIn rab))
 
+testStatusDate now Nothing = Just now
+testStatusDate now (Just rab) = Just (rabbitStatusDate rab)
+
 testAlteredDate::Maybe Rabbit -> Maybe (Maybe Text)
 testAlteredDate Nothing = Nothing
 testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ Nothing _ _ _ _) ) = Nothing
@@ -100,7 +103,7 @@ rabbitForm (mrab, rabID) extra = do
     (statusRes, statusView) <- mreq (selectFieldList status) "who" (test mrab rabbitStatus)
     (ageIntakeRes, ageIntakeView) <- mreq textField "zip" (test mrab rabbitAgeIntake)
     (sourceTypeRes, sourceTypeView) <- mreq (selectFieldList sourceType) "zip" (test mrab rabbitSourceType)
-    (statusDateRes, statusDateView) <- mreq textField " nope" (opttest mrab rabbitStatusDate)
+    (statusDateRes, statusDateView) <- mreq textField " nope" (testStatusDate stime  mrab)
     (statusNoteRes, statusNoteView) <- mreq textField "nope" (opttest mrab rabbitStatusNote)
     let date = text2date dateInRes
     let alteredDate = text2dateM alteredDateRes 
@@ -117,10 +120,13 @@ getAddR  = do
     (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing,Nothing))
     defaultLayout $ do
          setTitle "Add Rabbit"
+         $(widgetFileNoReload def "cancelbutton")
          [whamlet|
              ^{headerWidget}
-              <div #addCance style="text-align:center">
-                 <b> Add Rabbit
+              <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
+                <b> Add Rabbit
+                <div .cancelBut #rabEdCan style="display:inline; float:right;">
+                   <a href=@{HomeR}> cancel </a>
               <form method=post action=@{PostR} enctype=#{enctype}>
                  ^{formWidget}
           |]

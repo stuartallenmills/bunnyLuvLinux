@@ -111,11 +111,11 @@ sex =[("F","F"), ("M","M")]
 altered::[(Text,Text)]
 altered = [("Spayed", "Spayed"), ("Neutered", "Neutered"), ("No", "No"), ("Unknown", "Unknown")]
 status::[(Text, Text)]
-status = [ ("BunnyLuv", "BunnyLuv"), ("Adopted", "Adopted"), ("Died", "Died"), ("Euthenized", "Euthenized")]
+status = [ ("BunnyLuv", "BunnyLuv"), ("Adopted", "Adopted"), ("Died", "Died"), ("Euthanized", "Euthanized")]
 vets::[(Text, Text)]
 vets = [("Dr. Misetich", "Dr. Misetich"), ("Dr. Petritz", "Dr. Petritz"), ("Dr. Steele (C.A.R.E)", "Dr. Steele (C.A.R.E)")]
 procedures::[(Text,Text)]
-procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthenized", "Euthenized"), ("Other", "Other")]
+procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthanized", "Euthanized"), ("Other", "Other")]
 
 
                                       
