@@ -27,13 +27,14 @@ import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 
 --query:: IO ()
+{-
 queryAll = runSqlite "test5.db3" $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. RabbitName !=. val "")
      orderBy [asc (r ^. RabbitName)]
      return (r)
   return zipt
-
+-}
 query field value= runSqlite "test5.db3" $ do
   zipt<-select $ from $ \r->do
     where_ (r ^. field ==. val value)
@@ -109,7 +110,12 @@ getTestR = do
   
 getHomeR :: Handler Html
 getHomeR = do
-    zinc <-queryAll
+    bl <-queryStatus "BunnyLuv"
+    ad <-queryStatus "Adopted"
+    di <-queryStatus "Died"
+    eu <-queryStatus "Euthanized"
+--    zinc <-queryAll
+    let zinc = bl++ad++di++eu
     defaultLayout $ do
         setTitle "Rabbits"
 --        addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
