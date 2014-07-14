@@ -21,6 +21,12 @@
               #{showtime date}
        $nothing
               &nbsp;-
+   <div .vrRow>
+      <div #vrBirthday>
+       Estimated Birthday: #{showtime (rabbitBirthday rab)}
+      <div #vrAge>
+       Estimated Current age: 
+            #{yrs} years #{mnths} months
    <div #vrSource>
     <div .vrRow>
      <div #vrsourcet>

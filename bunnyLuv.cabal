@@ -43,6 +43,6 @@ executable bunnyLuv
                        , old-locale
                        , yesod ==1.2.6
   hs-source-dirs:      .
-  ghc-options:         -package-db G:/Haskell/yesod-1.2.6/.cabal-sandbox/x86_64-windows-ghc-7.8.2.20140609-packages.conf.d
-  extra-lib-dirs:      G:/Haskell/yesod-1.2.6/.cabal-sandbox/x86_64-windows-ghc-7.8.2.20140609
+  ghc-options:        
+  extra-lib-dirs:      
   default-language:    Haskell2010

@@ -30,6 +30,10 @@
   width:100%;
 }
 
+#vrBirthday {
+  width:40%;
+}
+
 #vrname {
   width:35%;
 }

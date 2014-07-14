@@ -35,7 +35,7 @@ testAltered rab | (((rabbitAltered rab)=="Spayed") || ((rabbitAltered rab)=="Neu
                 | otherwise = [("Neutered", "Neutered")]
 
 setSources::Rabbit->[(Text,Text)]
-setSources rab = (testAltered rab) ++ [("Other","Other"), ("Euthenized","Euthenized")]
+setSources rab = [("Other","Other")]++(testAltered rab) ++ [("Euthanized","Euthanized")]
 
 headerWidget::Widget
 headerWidget = $(widgetFileNoReload def "header")
@@ -53,7 +53,31 @@ vetVisitForm rab rabid extra = do
     (vvCostRes, vvCostView)<-mopt doubleField "n" Nothing
     let date = text2date vvDateRes
     let vetvisitRes = VetVisit rabid <$> vvVetRes <*> date <*> vvProblemRes <*> vvProceduresRes <*> vvNotesRes <*> vvSpayRes <*> vvCostRes 
-    let vwidget = do 
+    let vwidget = do
+         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"
+         toWidget
+             [julius|
+              var h7 =document.getElementById("hident7");
+              var h5 =document.getElementById("hident5");
+              var h4 =document.getElementById("hident4");
+              var h6 =document.getElementById("hident6");
+              h7.onchange=function(){
+              var selectedText = h7.options[h7.selectedIndex].text;
+              if (selectedText != "Other") {
+                    h5.value =selectedText;
+                    if (selectedText !="Euthanized") {
+                         h4.value = "Not altered";
+                         h6.value = "None";
+                    }
+                    else {
+                        h4.value ="";
+                        h6.value="";
+                    }
+              }
+              else{ h4.value=""; h6.value=""; h5.value=""; }
+               
+              }
+            |]
          toWidget
              [lucius|
               .vvRw {
@@ -102,7 +126,7 @@ vetVisitForm rab rabid extra = do
               <div #fvVet>
                 Vet:   ^{fvInput vvVetView}
               <div #fvSpay>
-               Alter/Euthen:   ^{fvInput vvSpayView}
+               Altered/Euthanized:   ^{fvInput vvSpayView}
               <div #fvCost>
                 Cost:  ^{fvInput vvCostView}
             <div #fvBlock>
@@ -159,7 +183,7 @@ postVetPostR  rabID = do
               return ()
           else
             return ();
-      if ((vetVisitSpay vetVisit) == "Euthenized")
+      if ((vetVisitSpay vetVisit) == "Euthanized")
        then
         runSqlite "test5.db3" $
          do  update $ \p -> do 

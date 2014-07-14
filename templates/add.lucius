@@ -19,32 +19,7 @@
                       float:left;
                       width:100%;
                     }
-                   .cancelBut {
-                     background: none repeat scroll 0 0 #09c;
-                     border: 1pt solid #999;
-                     border-radius: 5pt;
-                     color: #fff;
-                     float: right;
-                     font-size: 80%;
-                     height: 19px;
-                     padding: 0 13px 0 0;
-                     width: 50px;
-                     }
-                                 /* Change color on mouseover */
-                     .cancelBut:hover {
-                                  background:#fff;
-                                  color:#09c;
-                     }
-
-                     .cancelBut a {
-                            text-decoration:none;
-                            color: #fff;
-                            float:right;
-                     }
-
-                     .cancelBut a:hover {
-                             color:#09c;
-                      }
+ 
                      #aTitle {
                          margin:0;
                       }
@@ -97,6 +72,14 @@
                      ##{fvId alteredView} {
                          width: 6em;
                          display:inline;
+                     }
+                     ##{fvId yrsIntakeView} {
+                            width:4em;
+                            display:inline;
+                     }
+                     ##{fvId mnthsIntakeView} {
+                            width:4em;
+                            display:inline;
                      }
                      ##{fvId alteredDateView} {
                          width:7em;

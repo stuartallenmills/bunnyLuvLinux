@@ -18,7 +18,7 @@ import Yesod hiding ((!=.), (==.))
 import Yesod.Default.Util
 import Foundation
 
-import Data.Text (Text, unpack)
+import Data.Text (Text, unpack, pack)
 import Database.Esqueleto
 import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
@@ -27,6 +27,7 @@ import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
+import Data.Time.Calendar
 
 
 
@@ -82,14 +83,19 @@ testStatusDate now (Just rab) = Just (rabbitStatusDate rab)
 
 testAlteredDate::Maybe Rabbit -> Maybe (Maybe Text)
 testAlteredDate Nothing = Nothing
-testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ Nothing _ _ _ _) ) = Nothing
-testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ (Just da) _ _ _ _) ) = Just (Just (showtime da))
+testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ Nothing _ _ _ _ _) ) = Nothing
+testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ (Just da) _ _ _ _ _) ) = Just (Just (showtime da))
 
+months::[(Text, Integer)]
+months =[(pack (show x), x) | x<- [0..11]]
+years::[(Text, Integer)]
+years = [(pack (show x), x) | x<-[0..20]]
 
 rabbitForm ::(Maybe Rabbit, Maybe [Entity Wellness])-> Html -> MForm Handler (FormResult Rabbit, Widget)
 rabbitForm (mrab, rabID) extra = do
     local_time <- liftIO $ getLocalTime
-    let stime = showtime (localDay local_time)
+    let today = localDay local_time
+    let stime = showtime (today)
     let tname = case mrab of
           Nothing -> Nothing
           Just rb -> (Just (rabbitName rb))
@@ -102,12 +108,19 @@ rabbitForm (mrab, rabID) extra = do
     (alteredDateRes, alteredDateView)<-mopt textField "this is not" (testAlteredDate mrab)
     (statusRes, statusView) <- mreq (selectFieldList status) "who" (test mrab rabbitStatus)
     (ageIntakeRes, ageIntakeView) <- mreq textField "zip" (test mrab rabbitAgeIntake)
+    (yrsIntakeRes, yrsIntakeView) <- mreq (selectFieldList years) "zip" Nothing
+    (mnthsIntakeRes, mnthsIntakeView) <- mreq (selectFieldList months) "zip" Nothing
     (sourceTypeRes, sourceTypeView) <- mreq (selectFieldList sourceType) "zip" (test mrab rabbitSourceType)
     (statusDateRes, statusDateView) <- mreq textField " nope" (testStatusDate stime  mrab)
     (statusNoteRes, statusNoteView) <- mreq textField "nope" (opttest mrab rabbitStatusNote)
+    let yrdays = (365*) <$> yrsIntakeRes
+    let mndays = (30*) <$> mnthsIntakeRes
+    let daysTot = (+) <$> yrdays <*> mndays
+    let daysTotNeg = ((-1)*) <$> daysTot
     let date = text2date dateInRes
+    let bday = ( addDays) <$> daysTotNeg <*> date 
     let alteredDate = text2dateM alteredDateRes 
-    let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> date <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> alteredDate <*> ageIntakeRes <*> statusRes <*> statusDateRes <*> statusNoteRes      
+    let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> date <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> alteredDate <*> ageIntakeRes <*> statusRes <*> statusDateRes <*> statusNoteRes <*> bday     
  --   let rabbitRes = rabbitRes1 <*> (FormResult (Just True)) <*> (FormResult Nothing) Nothing
     let awid=  $(widgetFileNoReload def "add")
     return (rabbitUpdateRes, awid)
@@ -167,7 +180,7 @@ postUpdateR rabID = do
            |]
 -}
 
-viewRab rab = $(widgetFileNoReload def "viewRabbit")
+viewRab rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
 
 showgroomed::Wellness->Text
 showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
@@ -185,10 +198,16 @@ getViewR rabId  = do
     wellRs<-queryWellness rabId
     vetvisits<-queryVetVisits rabId
     adopteds<-queryAdopted rabId
+    local_time <- liftIO $ getLocalTime
+    let today = localDay local_time
+    let stime = showtime (today)
+    let dage = diffDays today  (rabbitBirthday rab)
+    let (yrs,rm) = dage `divMod` 365
+    let mnths = rm `div` 30
     let was_adopted = (length adopteds > 0)
     let had_visits = (length vetvisits >0)
     let had_well = (length wellRs > 0)
-    let not_dead = not ((rabbitStatus rab == "Died") || (rabbitStatus rab == "Euthenized"))
+    let not_dead = not ((rabbitStatus rab == "Died") || (rabbitStatus rab == "Euthanized"))
     let not_adopted = not (rabbitStatus rab == "Adopted")
     defaultLayout $ do
          setTitle "View Rabbit"
@@ -198,6 +217,8 @@ getViewR rabId  = do
                <div #eTitle .subTitle >
                 <b> View Rabbit </b>
                 <div #vrButD style="float:right; display:inline;">
+                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
+                    <a href=@{HomeR}> cancel </a>
                   <div .cancelBut #vrEdit style="display:inline; float:right;">
                    <a href=@{EditR rabId}> edit </a>
                   $if not_dead
@@ -208,16 +229,9 @@ getViewR rabId  = do
                      <a href=@{AdoptedR rabId}> adopt </a>
                     <div .cancelBut #vrWell style="display:inline; float:right;">
                      <a href=@{WellnessR rabId}>wellness </a>
-                   $else
-                     <span> </span>
-                   <div .cancelBut #vrHome sytle="display:inline; float:right;">
-                    <a href=@{HomeR}> home </a>
-                  $else
-                   <div .cancelBut #vrHome sytle="display:inline; float:right;">
-                    <a href=@{HomeR}> home </a>
                     
               <div #viewRabbitBlock>
-               ^{viewRab rab}
+               ^{viewRab rab yrs mnths}
                $if was_adopted
                    ^{showadopted adopteds}
                $else
