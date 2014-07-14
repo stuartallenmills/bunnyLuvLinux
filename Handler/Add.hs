@@ -14,7 +14,7 @@ import Conduit
 import Data.Conduit
 import Data.Conduit.Binary
 import Data.Default
-import Yesod hiding ((!=.), (==.))
+import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
 import Foundation
 
@@ -90,6 +90,70 @@ months::[(Text, Integer)]
 months =[(pack (show x), x) | x<- [0..11]]
 years::[(Text, Integer)]
 years = [(pack (show x), x) | x<-[0..20]]
+{-
+diedW::Widget
+diedW =  [whamlet|
+              <div #diedDate>
+                Date:  ^{fvInput statusDateView}
+              <div #diedNote>
+                Notes: ^{fvInput statusNoteView}
+          |]
+-}
+diedForm::Html -> MForm Handler (FormResult Died, Widget)
+diedForm extra = do
+    local_time <- liftIO $ getLocalTime
+    let today = localDay local_time
+    let stime = showtime (today)
+    (statusDateRes, statusDateView) <- mreq textField " nope" (Just stime) 
+    (statusNoteRes, statusNoteView) <- mreq textField "nope" Nothing
+    let diedRes = Died <$> statusDateRes <*> statusNoteRes
+    let diedw = do
+          [whamlet|
+              #{extra}
+              <div #diedDate>
+                Date:  ^{fvInput statusDateView}
+              <div #diedNote>
+                Notes: ^{fvInput statusNoteView}
+             <input type=submit value="submit">
+                        |]
+          toWidget [lucius|
+                ##{fvId statusNoteView} {
+                      width:25em;
+                 }
+              |]
+    return (diedRes, diedw)
+
+getDiedR::RabbitId->Handler Html
+getDiedR rabid= do
+    (formWidget, enctype) <- generateFormPost (diedForm )
+    defaultLayout $ do
+         setTitle "Death"
+         $(widgetFileNoReload def "cancelbutton")
+         [whamlet|
+             ^{headerWidget}
+              <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
+                <b> Died
+                <div .cancelBut #rabEdCan style="display:inline; float:right;">
+                   <a href=@{ViewR rabid}> cancel </a>
+              <form method=post action=@{DiedR rabid} enctype=#{enctype}>
+                 ^{formWidget}
+          |]
+           
+postDiedR::RabbitId->Handler Html
+postDiedR rabid = do
+  (((result), _), _) <-runFormPost (diedForm )
+
+  case result of
+    FormSuccess died -> do
+      runSqlite "test5.db3" $ do
+        update $ \p -> do
+          set p [RabbitStatus =. val "Died", RabbitStatusDate =. val ( (diedDate died)),
+                 RabbitStatusNote =. val (diedNotes died) ]
+          where_ (p ^. RabbitId ==. val rabid)
+          return ()
+    _ -> return ()
+
+  redirect (ViewR rabid)
 
 rabbitForm ::(Maybe Rabbit, Maybe [Entity Wellness])-> Html -> MForm Handler (FormResult Rabbit, Widget)
 rabbitForm (mrab, rabID) extra = do
@@ -222,6 +286,8 @@ getViewR rabId  = do
                   <div .cancelBut #vrEdit style="display:inline; float:right;">
                    <a href=@{EditR rabId}> edit </a>
                   $if not_dead
+                   <div .cancelBut #vrDied style="display:inline; float:right;">
+                    <a href=@{DiedR rabId}> died </a>
                    <div .cancelBut #vrVet  style="display:inline; float:right;">
                     <a href=@{VetVisitR rabId}> vet </a>
                    $if not_adopted

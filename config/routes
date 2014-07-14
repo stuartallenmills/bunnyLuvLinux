@@ -12,3 +12,4 @@
 /vet/#RabbitId          VetVisitR GET 
 /vetPost/#RabbitId      VetPostR POST
 /adopted/#RabbitId      AdoptedR GET POST
+/died/#RabbitId         DiedR GET POST

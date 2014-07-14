@@ -157,6 +157,6 @@ postAdoptedR  rabID = do
           return ()
     _ -> return ()
 
-  redirect HomeR
+  redirect (ViewR rabID)
 
     

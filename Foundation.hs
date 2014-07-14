@@ -43,11 +43,7 @@ Person
     PhoneKey phone
     deriving Show
 
-Died 
-    date Text
-    cause Text
-    deriving Show
-    
+
 Adopted
     rabbit RabbitId
     date Day
@@ -75,6 +71,11 @@ VetVisit
    spay Text
    cost Double Maybe
    deriving Show
+
+Died
+  date Text
+  notes Text
+  deriving Show
 
 Wellness
     rabbit RabbitId
