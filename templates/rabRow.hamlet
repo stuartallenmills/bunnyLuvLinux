@@ -6,15 +6,17 @@
               #{rabbitSex rabbit}
       <div class="descC">
                #{rabbitDesc rabbit}
+      <div class="statusC">
+          #{rabbitStatus rabbit}
      <div .row1>
       <div .dateInC>
            Date In:   #{showtime (rabbitDateIn rabbit)}
-      <div #ageIn>
-              Age then: #{rabbitAgeIntake rabbit}
       <div class="alteredC">
           Altered:     #{rabbitAltered rabbit}
-      <div class="statusC">
-               #{rabbitStatus rabbit}
+
+      <div class="vwEstAge">
+          Estimated Age: #{getCurrentYears today rabbit} Yrs #{getCurrentMonths today rabbit} Mnths
+
  <!--
       <div class="alteredD">
           Altered Date:

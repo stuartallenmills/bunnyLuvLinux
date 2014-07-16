@@ -97,7 +97,6 @@ Rabbit
    sex Text
    altered Text
    alteredDate Day Maybe
-   ageIntake Text
    status Text
    statusDate Text
    statusNote Text
@@ -155,6 +154,23 @@ getLocalTime = do
   let local_time = utcToLocalTime tz ct
   return (local_time)
 
+getCurrentDay = do
+    local_time <- getLocalTime
+    let today = localDay local_time
+    return (today)
+
+getCurrentYears::Day->Rabbit-> Integer
+getCurrentYears today rab = years where
+     dage = diffDays today  (rabbitBirthday rab)
+     years = dage `div` 365
+
+getCurrentMonths::Day->Rabbit-> Integer
+getCurrentMonths today rab = mnths where
+     dage = diffDays today  (rabbitBirthday rab)
+     (_,rm) = dage `divMod` 365
+     mnths = rm `div` 30 
+
+
 -- END  TIME ROUTINE
 
 getList :: Handler [Text]
@@ -178,7 +194,7 @@ getById ident = do
 
 sn = Person "Stuart" "Mills" "818-884-5537" "23425 Kilty" "West Hills" "CA" "91307"
 lulu = Rabbit "Lulu" "white terrorist" (doparseTime "11/10/2009") "Shelter" "East valley shelter"
-       "F" "No" Nothing  "approx 6 months" "Adopted" "11/11/2011" "Sharon Mills" (doparseTime "1/1/2007")
+       "F" "No" Nothing   "Adopted" "11/11/2011" "Sharon Mills" (doparseTime "1/1/2007")
 
 openConnectionCount :: Int
 openConnectionCount = 10
@@ -196,8 +212,8 @@ initDB = do
         insert $ Person "Michael" "Snoyman" "818-970-6052" "101 welby Way" "paris" "france" "12314"
         stu<-insert sn
         luid<-insert $ lulu 
-        chid<-insert $ Rabbit "Chester" "black bunny nice" (doparseTime "08/09/2001")  "Shelter" "West Valley Shelter" "M"  "Neutered" (Just (doparseTime "2/2/2003")) "approx 1 yr" "Died" "07/08/2005" "Unknown Causes" (doparseTime "1/1/1998")
-        jid<-insert $ Rabbit "Joan" "weird ass lop" (doparseTime "07/02/2013") "Other"  "Rescued by Britta Menges-lady to take to kill shelter" "F" "Unknown" Nothing "approx 2 yrs" "BunnyLuv" "07/07/1999" "in group 3" (doparseTime "1/1/1998")
+        chid<-insert $ Rabbit "Chester" "black bunny nice" (doparseTime "08/09/2001")  "Shelter" "West Valley Shelter" "M"  "Neutered" (Just (doparseTime "2/2/2003")) "Died" "07/08/2005" "Unknown Causes" (doparseTime "1/1/1998")
+        jid<-insert $ Rabbit "Joan" "weird ass lop" (doparseTime "07/02/2013") "Other"  "Rescued by Britta Menges-lady to take to kill shelter" "F" "Unknown" Nothing "BunnyLuv" "07/07/1999" "in group 3" (doparseTime "1/1/1998")
         insert $ Wellness jid ((doparseTime  "08/07/2013")) False Nothing (Weight 3 4) "Bad JuJu" "vooDoo" "Stuart"
         insert $ Wellness jid ((doparseTime  "11/10/2013")) True (Just 102.5) (Weight 3 6) "Healthy" "none" "Doug"
         insert $ Wellness jid  ( (doparseTime  "12/11/2013")) False Nothing (Weight 3 2) "Stubbed toe" "Vet for stubbed toe" "Sharon"

@@ -6,23 +6,21 @@
      <div .sadRw>
       <div #sadDate>
           Date: #{showtime (adoptedDate adR)}
-      <div #saPhone>
-         Phone: #{personPhone (adoptedPerson adR)}
      <div .sadRw>
       <div #saName>
         <div #saNameT>
-          Name: 
         <div #saFName>
-           #{ personFirstName (adoptedPerson adR)} 
+           #{personFirstName (adoptedPerson adR)} 
         <div #saLName>
-            #{personLastName (adoptedPerson adR)}
+           #{personLastName (adoptedPerson adR)}
+      <div #saPhone>
+         #{personPhone (adoptedPerson adR)}
      <div .sadRw>
       <div #saStreet>
-         Street: #{personStreet (adoptedPerson adR)}
-     <div .sadRw>
+         #{personStreet (adoptedPerson adR)}, 
       <div #saCity>
-         City: #{personCity (adoptedPerson adR)}
+         #{personCity (adoptedPerson adR)}, 
       <div #saState>
-         State: #{personState (adoptedPerson adR)}
+          #{personState (adoptedPerson adR)}
       <div #saZip>
-         Zip: #{personZip (adoptedPerson adR)}
+         &nbsp; #{personZip (adoptedPerson adR)}

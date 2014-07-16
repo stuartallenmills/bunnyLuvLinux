@@ -12,8 +12,6 @@
    <div .vrRow>
     <div #vrdesc>
        Desc: #{rabbitDesc rab}
-    <div #vragein>
-       Age at intake: #{rabbitAgeIntake rab}
    <div .vrRow>
     <div #valteredDate>
        Altered Date:

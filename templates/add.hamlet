@@ -5,16 +5,19 @@
                      Name  ^{fvInput nameView}
                    <div id="sexF">  
                       Sex : ^{fvInput sexView}
-                   <div id="alteredF">
-                      Altered: ^{fvInput alteredView}
                   <div .faddRw>
-                   <div #ageIntakeF>
-                      Age at intake : ^{fvInput ageIntakeView}
-                   <div id="falteredDate">
-                      Altered Date: ^{fvInput alteredDateView}
+                  <div .faddRw>
+                       Estimated Age:  Years: ^{fvInput yrsIntakeView}
+                       &nbsp; Months: ^{fvInput mnthsIntakeView}
+
                   <div .faddRw>
                    <div id="descF">
                       Desc:   ^{fvInput descView}
+                  <div .faddRw>
+                   <div id="alteredF">
+                      Altered: ^{fvInput alteredView}
+                   <div id="falteredDate">
+                      Altered Date: ^{fvInput alteredDateView} (leave blank if not known)
                   <div .faddRw>
                      <div #sourceTypeF>
                        Source Type: ^{fvInput sourceTypeView}
@@ -30,8 +33,5 @@
                     <div #statusDateF>   
                       Status Date: ^{fvInput statusDateView}
                     <div #statusNoteF>
-                      Status Notes: ^{fvInput statusNoteView}                 <div #fAgeIn>
-                  <div .faddRw>
-                       Estimated Age:  Years: ^{fvInput yrsIntakeView}
-                       &nbsp; Months: ^{fvInput mnthsIntakeView}
+                      Status Notes: ^{fvInput statusNoteView}          
                   <input type=submit value="submit">

@@ -83,8 +83,8 @@ testStatusDate now (Just rab) = Just (rabbitStatusDate rab)
 
 testAlteredDate::Maybe Rabbit -> Maybe (Maybe Text)
 testAlteredDate Nothing = Nothing
-testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ Nothing _ _ _ _ _) ) = Nothing
-testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ (Just da) _ _ _ _ _) ) = Just (Just (showtime da))
+testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ Nothing _  _ _ _) ) = Nothing
+testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ (Just da) _  _ _ _) ) = Just (Just (showtime da))
 
 months::[(Text, Integer)]
 months =[(pack (show x), x) | x<- [0..11]]
@@ -160,18 +160,17 @@ rabbitForm (mrab, rabID) extra = do
     local_time <- liftIO $ getLocalTime
     let today = localDay local_time
     let stime = showtime (today)
-    let tname = case mrab of
+    let tname = case mrab of 
           Nothing -> Nothing
           Just rb -> (Just (rabbitName rb))
     (nameRes, nameView) <- mreq textField "this is not used" tname
+    (dateInRes, dateInView) <-mreq textField "nope" (testDateIn stime mrab)
     (descRes, descView) <- mreq textField "neither is this"  (test mrab rabbitDesc)
-    (dateInRes, dateInView)<-mreq textField "  " (testDateIn stime  mrab)
     (sourceRes, sourceView) <- mreq textField "neither is this" (test mrab rabbitSource)
     (sexRes, sexView) <- mreq (selectFieldList sex) "not" (test mrab rabbitSex)
     (alteredRes, alteredView) <- mreq (selectFieldList altered) "not" (test mrab rabbitAltered)
     (alteredDateRes, alteredDateView)<-mopt textField "this is not" (testAlteredDate mrab)
     (statusRes, statusView) <- mreq (selectFieldList status) "who" (test mrab rabbitStatus)
-    (ageIntakeRes, ageIntakeView) <- mreq textField "zip" (test mrab rabbitAgeIntake)
     (yrsIntakeRes, yrsIntakeView) <- mreq (selectFieldList years) "zip" Nothing
     (mnthsIntakeRes, mnthsIntakeView) <- mreq (selectFieldList months) "zip" Nothing
     (sourceTypeRes, sourceTypeView) <- mreq (selectFieldList sourceType) "zip" (test mrab rabbitSourceType)
@@ -184,7 +183,7 @@ rabbitForm (mrab, rabID) extra = do
     let date = text2date dateInRes
     let bday = ( addDays) <$> daysTotNeg <*> date 
     let alteredDate = text2dateM alteredDateRes 
-    let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> date <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> alteredDate <*> ageIntakeRes <*> statusRes <*> statusDateRes <*> statusNoteRes <*> bday     
+    let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> date <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> alteredDate <*> statusRes <*> statusDateRes <*> statusNoteRes <*> bday     
  --   let rabbitRes = rabbitRes1 <*> (FormResult (Just True)) <*> (FormResult Nothing) Nothing
     let awid=  $(widgetFileNoReload def "add")
     return (rabbitUpdateRes, awid)
@@ -212,13 +211,13 @@ getAddR  = do
 postPostR::Handler Html
 postPostR = do
   (((result), _), _) <-runFormPost (rabbitForm (Nothing, Nothing))
-  case result of
+  link<- case result of
     FormSuccess  rabi -> do
       runSqlite "test5.db3" $ do
-        _ <-insert $ rabi
-        return ()
-    _ -> return ()
-  redirect HomeR
+        rabid<-insert $ rabi
+        return (ViewR rabid)
+    _ -> return (HomeR)
+  redirect (link)
 
 -- update a rabbit 
 postUpdateR::RabbitId->Handler Html
@@ -232,7 +231,7 @@ postUpdateR rabID = do
         return ()
     _ -> return ()
 
-  redirect HomeR
+  redirect (ViewR rabID)
 
 
 {-

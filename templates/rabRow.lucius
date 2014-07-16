@@ -11,7 +11,7 @@ div.rabRow {
 div.nameC {
    position: relative;
    align:middle;
-   width:30%;
+   width:24%;
    height:100%;
    background:#f8f5e1;
    font-weight:bold;

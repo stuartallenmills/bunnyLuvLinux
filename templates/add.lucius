@@ -24,7 +24,7 @@
                          margin:0;
                       }
                      #nameF {
-                        width:40%;
+                        width:50%;
                      }
                      #sexF {
                         width:20%;
@@ -41,7 +41,7 @@
                      }
 
                      #falteredDate {
-                        width:40%;
+                        width:60%;
                       }
                      #dateInF {
                         width:40%;
@@ -90,7 +90,7 @@
                          display:inline;
                      }
                      ##{fvId nameView} {
-                         width: 10em;
+                         width: 20em;
                          display:inline;
                      }
                      ##{fvId descView} {
@@ -121,9 +121,5 @@
                          width: 25em;
                          display:inline;
                      }
-                     ##{fvId ageIntakeView} {
-                         display:inline;
-                         width:8em;
-                     }
-
+ 
     

@@ -17,6 +17,7 @@
 #showAdopted {
    float:left;
    border-bottom:thin solid #7f7f7f;
+   width:100%;
 }
 
 #sadRow {
@@ -29,19 +30,5 @@
 }
 
 #saName {
-  width:100%;
-}
-#saLName {
-  width:40%;
-}
-
-#saStreet {
- width:80%;
-}
-
-#saCity {
-  width:30%;
-}
-#saState, #saZip {
- width:25%;
+  width:80%;
 }

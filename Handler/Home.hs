@@ -25,6 +25,7 @@ import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSe
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
 import Text.Printf
+import Data.Time
 
 --query:: IO ()
 {-
@@ -74,6 +75,7 @@ mainMenu = do
   
 getQueryR status  = do
      zinc<- queryStatus status
+     today<- liftIO $ getCurrentDay
      defaultLayout $ do
         setTitle "Rabbits"
         [whamlet|
@@ -81,22 +83,23 @@ getQueryR status  = do
          ^{mainMenu}
 
      $forall Entity rabbitid rabbit <- zinc
-           ^{doRabbitRow rabbitid rabbit }
+           ^{doRabbitRow  today rabbitid rabbit }
                 |]
 
 getSourceR source  = do
-     zinc<- querySource source
-     defaultLayout $ do
+    zinc<- querySource source
+    today<- liftIO $ getCurrentDay
+    defaultLayout $ do
         setTitle "Source"
         [whamlet|
          ^{headerWidget}
          ^{mainMenu}
      $forall Entity rabbitid rabbit <- zinc
-           ^{doRabbitRow rabbitid rabbit }
+           ^{doRabbitRow today rabbitid rabbit }
                 |]
 
-doRabbitRow::RabbitId->Rabbit->Widget
-doRabbitRow rabbitid rabbit = $(widgetFileNoReload def "rabRow") 
+doRabbitRow::Day->RabbitId->Rabbit->Widget
+doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow") 
 
 getTestR :: Handler Html
 getTestR = do
@@ -115,6 +118,7 @@ getHomeR = do
     di <-queryStatus "Died"
     eu <-queryStatus "Euthanized"
 --    zinc <-queryAll
+    today<- liftIO $ getCurrentDay
     let zinc = bl++ad++di++eu
     defaultLayout $ do
         setTitle "Rabbits"
@@ -130,7 +134,7 @@ getHomeR = do
          ^{mainMenu}
          <div #rabbitContainer>
      $forall Entity rabbitid rabbit <- zinc
-           ^{doRabbitRow rabbitid rabbit }
+           ^{doRabbitRow today rabbitid rabbit }
                 |]
 
 postHomeR :: Handler Html
