@@ -195,5 +195,5 @@ postVetPostR  rabID = do
             
     _ -> return ()
 
-  redirect HomeR
+  redirect (ViewR rabID)
 

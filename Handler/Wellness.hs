@@ -88,4 +88,4 @@ postWellnessR rabID = do
         insert wup
         return ()
     _ -> return ()
-  redirect HomeR
+  redirect (ViewR rabID)

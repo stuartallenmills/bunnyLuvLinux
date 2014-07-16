@@ -6,8 +6,6 @@
               #{rabbitSex rabbit}
       <div class="descC">
                #{rabbitDesc rabbit}
-      <div class="statusC">
-               #{rabbitStatus rabbit}
      <div .row1>
       <div .dateInC>
            Date In:   #{showtime (rabbitDateIn rabbit)}
@@ -15,12 +13,17 @@
               Age then: #{rabbitAgeIntake rabbit}
       <div class="alteredC">
           Altered:     #{rabbitAltered rabbit}
+      <div class="statusC">
+               #{rabbitStatus rabbit}
+ <!--
       <div class="alteredD">
           Altered Date:
            $maybe date <- rabbitAlteredDate rabbit
               #{showtime date}
            $nothing
                 &nbsp;-
-     <div .row1>
+
+      <div .row1>
       <div class="sourceC">
         Source:      #{rabbitSource rabbit}
+-->
