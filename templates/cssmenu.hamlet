@@ -7,10 +7,14 @@
          <li><a href=@{QueryR "BunnyLuv"}><span>BunnyLuv</span></a></li>
          <li><a href=@{QueryR "Adopted"}><span>Adopted</span></a></li>
          <li><a href=@{QueryR "Euthanized"}><span>Euthanized</span></a></li>
-         <li><a href=@{VVViewR}><span>Vet Visits</span></a></li>
-         <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>
          <li class='last'><a href=@{QueryR "Died"}><span>Died</span></a></li>
-   <li class='has-sub last'><a href='#'><span>Source</span></a>
+   <li class='has-sub'><a href='#'><span>Source</span></a>
       <ul>
          <li><a href=@{SourceR "Shelter"}><span>Shelter</span></a></li>
          <li class='last'><a href=@{SourceR "Other"}><span>Other</span></a></li>
+   <li class='has-sub last'><a href='#'><span>Reports</span></a>
+      <ul>
+         <li><a href=@{VVViewR}><span>Vet Visits</span></a></li>
+         <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>
+         <li class='last'><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
+      

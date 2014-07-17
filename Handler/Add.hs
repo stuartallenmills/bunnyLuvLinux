@@ -36,8 +36,33 @@ import Data.Time.Calendar
 headerWidget::Widget
 headerWidget = $(widgetFileNoReload def "header")
 
--- menuWidget::Widget
--- menuWidget = $(widgetFileNoReload def "menu")
+doAdoptedReport = runSqlite "test5.db3" $ do
+  zapt <- select $ from $ \(tr, tvv)-> do
+    where_ (tvv ^. AdoptedRabbit ==. tr ^. RabbitId)
+    orderBy [desc ( tvv ^. AdoptedDate)]
+    return ((tr, tvv))
+  return zapt
+  
+adoptedReport adoptReport = $(widgetFileNoReload def "adoptedReport")
+
+getAdoptedViewR::Handler Html
+getAdoptedViewR   = do
+    aReport <-doAdoptedReport
+    defaultLayout $ do
+         setTitle "View Rabbit"
+         $(widgetFileNoReload def "cancelbutton")
+         [whamlet| 
+              ^{headerWidget}
+               <div #eTitle .subTitle >
+                 <div #vrButD style="float:right; display:inline;">
+                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
+                       <a href=@{HomeR}>cancel</a>
+                <div #doShow>
+                 ^{adoptedReport aReport}
+  
+
+           |]
+           
 doWellnessReport = runSqlite "test5.db3" $ do
   zapt <- select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. WellnessRabbit ==. tr ^. RabbitId)
