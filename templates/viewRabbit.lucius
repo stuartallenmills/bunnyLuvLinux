@@ -61,8 +61,14 @@
   width:99%;
 }
 
-#valteredDate {
- width:80%;
+#vrDiv #valteredDate {
+  float:right;
+}
+
+#vrDiv #vrdatein {
+ float:right;
+ width:25%;
+ text-align:right;
 }
 
 #vrStatusBlk {

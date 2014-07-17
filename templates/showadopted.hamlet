@@ -4,11 +4,12 @@
   $forall Entity adoptedID adR <-adopteds
     <div #sadRow>
      <div .sadRw>
+      <div #sadRN>
+           #{rabbitName rabbit}
       <div #sadDate>
           Date: #{showtime (adoptedDate adR)}
      <div .sadRw>
       <div #saName>
-        <div #saNameT>
         <div #saFName>
            #{personFirstName (adoptedPerson adR)} 
         <div #saLName>

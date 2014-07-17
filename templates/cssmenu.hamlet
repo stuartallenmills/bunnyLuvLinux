@@ -7,6 +7,8 @@
          <li><a href=@{QueryR "BunnyLuv"}><span>BunnyLuv</span></a></li>
          <li><a href=@{QueryR "Adopted"}><span>Adopted</span></a></li>
          <li><a href=@{QueryR "Euthanized"}><span>Euthanized</span></a></li>
+         <li><a href=@{VVViewR}><span>Vet Visits</span></a></li>
+         <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>
          <li class='last'><a href=@{QueryR "Died"}><span>Died</span></a></li>
    <li class='has-sub last'><a href='#'><span>Source</span></a>
       <ul>

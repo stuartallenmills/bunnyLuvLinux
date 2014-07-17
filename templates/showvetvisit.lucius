@@ -4,6 +4,14 @@
    margin:2px;
 }
 
+#showvv #svvCost {
+  float:right;
+  text-align:right;
+}
+
+#svvRName {
+  width:30%;
+}
 #showVVTitle {
    width:100%;
    float:left;
@@ -28,7 +36,7 @@
 }
 
 #svvVet, 
-#svvDateD, #svvCost {
+#svvDateD{
     width:23%
 }
 

@@ -25,10 +25,16 @@
    border-bottom:thin solid: #8f8f8f;
 }
 
-#sadDate {
- width:40%;
+#showAdopted #sadDate {
+ width:25%;
+ text-align:right;
+ float:right;
 }
 
+#showAdopted #saPhone {
+  text-align:right;
+  float:right;
+}
 #saName {
   width:80%;
 }

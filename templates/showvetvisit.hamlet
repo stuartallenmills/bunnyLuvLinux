@@ -4,16 +4,16 @@
    $forall Entity vetVisitId vvR <- vetVisits
     <div #svvR>
      <div .vvR>
+      <div #svvRName>
+        #{rabbitName rabbit}
       <div #svvDateD>
-        Date: #{showtime (vetVisitDate vvR)}
+        #{showtime (vetVisitDate vvR)}
       <div #svvVet>
         Vet: #{vetVisitVet vvR}
-      <div #svvSpay>
-        Alter/Euth: #{vetVisitSpay vvR}
       <div #svvCost>
         Cost: 
          $maybe cost<-(vetVisitCost vvR)
-           #{cost}
+          \$#{cost}
          $nothing 
            &nbsp;-
      <div .vvR>

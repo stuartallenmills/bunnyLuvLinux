@@ -38,8 +38,59 @@ headerWidget = $(widgetFileNoReload def "header")
 
 -- menuWidget::Widget
 -- menuWidget = $(widgetFileNoReload def "menu")
+doWellnessReport = runSqlite "test5.db3" $ do
+  zapt <- select $ from $ \(tr, tvv)-> do
+    where_ (tvv ^. WellnessRabbit ==. tr ^. RabbitId)
+    orderBy [desc ( tvv ^.WellnessDate)]
+    return ((tr, tvv))
+  return zapt
+  
+weReport wellReport = $(widgetFileNoReload def "wellnessReport")
 
+getWellViewR::Handler Html
+getWellViewR   = do
+    wellReport <-doWellnessReport
+    defaultLayout $ do
+         setTitle "View Rabbit"
+         $(widgetFileNoReload def "cancelbutton")
+         [whamlet| 
+              ^{headerWidget}
+               <div #eTitle .subTitle >
+                 <div #vrButD style="float:right; display:inline;">
+                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
+                       <a href=@{HomeR}>cancel</a>
+                <div #doShow>
+                 ^{weReport wellReport}
+  
 
+           |]
+           
+doVetVisits = runSqlite "test5.db3" $ do
+  zapt <- select $ from $ \(tr, tvv)-> do
+    where_ (tvv ^. VetVisitRabbit ==. tr ^. RabbitId)
+    orderBy [desc ( tvv ^. VetVisitDate)]
+    return ((tr, tvv))
+  return zapt
+  
+vvReport vetVisits = $(widgetFileNoReload def "vetvisitReport")
+
+getVVViewR::Handler Html
+getVVViewR   = do
+    vetvisits <-doVetVisits
+    defaultLayout $ do
+         setTitle "View Rabbit"
+         $(widgetFileNoReload def "cancelbutton")
+         [whamlet| 
+              ^{headerWidget}
+               <div #eTitle .subTitle >
+                 <div #vrButD style="float:right; display:inline;">
+                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
+                       <a href=@{HomeR}>cancel</a>
+                <div #doShow>
+                 ^{vvReport vetvisits}
+  
+
+           |]
 
 queryWellness rabID = runSqlite "test5.db3" $ do
   zipt<-select $ from $ \r ->do
@@ -249,9 +300,9 @@ showgroomed::Wellness->Text
 showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
 
 
-showvetvisit vetVisits = $(widgetFileNoReload def "showvetvisit");
+showvetvisit rabbit vetVisits = $(widgetFileNoReload def "showvetvisit");
 
-showadopted adopteds = $(widgetFileNoReload def "showadopted");
+showadopted rabbit adopteds = $(widgetFileNoReload def "showadopted");
 
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
@@ -298,11 +349,11 @@ getViewR rabId  = do
               <div #viewRabbitBlock>
                ^{viewRab rab yrs mnths}
                $if was_adopted
-                   ^{showadopted adopteds}
+                   ^{showadopted rab adopteds}
                $else
                    <span> </span>
                $if had_visits 
-                   ^{showvetvisit vetvisits}
+                   ^{showvetvisit rab vetvisits}
                $else
                   <span> </span>
                $if had_well
