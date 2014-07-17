@@ -49,16 +49,17 @@ getAdoptedViewR::Handler Html
 getAdoptedViewR   = do
     aReport <-doAdoptedReport
     defaultLayout $ do
-         setTitle "View Rabbit"
+         setTitle "Adopted Report"
          $(widgetFileNoReload def "cancelbutton")
+         $(widgetFileNoReload def "nameC")
          [whamlet| 
               ^{headerWidget}
-               <div #eTitle .subTitle >
-                 <div #vrButD style="float:right; display:inline;">
-                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
+               <div #eTitle .subTitle style=border-bottom:1px solid black>
+                 <b> Adopted Rabbits Report
+                 <div .cancelBut #vrHome sytle="display:inline; float:right;">
                        <a href=@{HomeR}>cancel</a>
-                <div #doShow>
-                 ^{adoptedReport aReport}
+                 <div #doShow>
+                  ^{adoptedReport aReport}
   
 
            |]
@@ -78,14 +79,15 @@ getWellViewR   = do
     defaultLayout $ do
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
+         $(widgetFileNoReload def "nameC")
          [whamlet| 
               ^{headerWidget}
-               <div #eTitle .subTitle >
-                 <div #vrButD style="float:right; display:inline;">
-                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
+              <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
+                <b> Rabbit Wellness Report
+                <div .cancelBut #vrHome sytle="display:inline; float:right;">
                        <a href=@{HomeR}>cancel</a>
-                <div #doShow>
-                 ^{weReport wellReport}
+              <div #doShow>
+               ^{weReport wellReport}
   
 
            |]
@@ -105,14 +107,15 @@ getVVViewR   = do
     defaultLayout $ do
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
+         $(widgetFileNoReload def "nameC")
          [whamlet| 
               ^{headerWidget}
-               <div #eTitle .subTitle >
-                 <div #vrButD style="float:right; display:inline;">
-                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
+              <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
+                 <b>Vet Visit Report
+                 <div .cancelBut #vrHome sytle="display:inline; float:right;">
                        <a href=@{HomeR}>cancel</a>
-                <div #doShow>
-                 ^{vvReport vetvisits}
+                 <div #doShow>
+                  ^{vvReport vetvisits}
   
 
            |]
