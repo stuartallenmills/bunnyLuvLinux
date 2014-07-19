@@ -69,7 +69,7 @@ postImagesR rabId = do
                where_ (p ^. RabbitId ==. val rabId)
                return ()
             setMessage "Image saved"
-            redirect HomeR
+            redirect (ViewR rabId)
         _ -> do
             setMessage "Something went wrong"
             redirect HomeR
