@@ -40,41 +40,36 @@ headerWidget = $(widgetFileNoReload def "header")
 uploadDirectory :: FilePath
 uploadDirectory = "C:/shared/msys64/home/smills/Hask/scott/Images"
 
-uploadForm :: Html -> MForm Handler  (FormResult FileInfo, Widget)
-uploadForm   = fileAFormReq "Image file"
+uploadForm :: Html -> MForm Handler  (FormResult (FileInfo, Maybe Textarea), Widget)
+uploadForm  = renderBootstrap $ (,)
+    <$> fileAFormReq "Image file"
+    <*> aopt textareaField "Image description" Nothing
 
-
-                         
-getImagesR::RabbitId -> Handler RepHtml
+getImagesR::RabbitId-> Handler RepHtml
 getImagesR rabId = do
   ((_, widget), enctype) <-runFormPost uploadForm
-  mmsg <- getMessage
   defaultLayout $ do
-     [whamlet|
-      $newline never
-     $maybe msg <- mmsg
-       #{msg}
-   <b> New Image
-    <form method=post enctype=#{enctype}>
-          ^{widget}
-          <input .btn type=submit value="Upload">
+     [whamlet|  <b> Upload Rabbit Image
+                <form method=post enctype=#{enctype}>
+                  ^{widget}
+                 <input .btn type=submit value="Upload">
   |]
 postImagesR ::RabbitId-> Handler RepHtml
 postImagesR rabId = do
     ((result, widget), enctype) <- runFormPost uploadForm
     case result of
-        FormSuccess (file) -> do
+        FormSuccess (file, info) -> do
             -- TODO: check if image already exists
             -- save to image directory
             filename <- writeToServer file
-            runSqlite "test5.db3" $ do
-              update $ \ p -> do
-                set p [RabbitImage =. val (Just (pack filename))]
-                where_ (p ^. RabbitId ==. val rabId)
-                return ()
 --            _ <- runDB $ insert (Image filename info date)
-            setMessage ""
-            redirect (ViewR rabId)
+            runSqlite "test5.db3" $ do
+              update $ \p -> do
+               set p [RabbitImage =. val (Just (pack filename))]
+               where_ (p ^. RabbitId ==. val rabId)
+               return ()
+            setMessage "Image saved"
+            redirect HomeR
         _ -> do
             setMessage "Something went wrong"
             redirect HomeR
