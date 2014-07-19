@@ -16,3 +16,4 @@
 /viewVetVisits          VVViewR GET
 /wellreport             WellViewR GET
 /adoptedreport          AdoptedViewR GET
+/image/#RabbitId        ImagesR GET POST

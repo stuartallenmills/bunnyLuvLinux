@@ -54,12 +54,11 @@ getAdoptedViewR   = do
          $(widgetFileNoReload def "nameC")
          [whamlet| 
               ^{headerWidget}
-               <div #eTitle .subTitle style=border-bottom:1px solid black>
+               <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
                  <b> Adopted Rabbits Report
                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
                        <a href=@{HomeR}>cancel</a>
-                 <div #doShow>
-                  ^{adoptedReport aReport}
+                 ^{adoptedReport aReport}
   
 
            |]
@@ -77,16 +76,15 @@ getWellViewR::Handler Html
 getWellViewR   = do
     wellReport <-doWellnessReport
     defaultLayout $ do
-         setTitle "View Rabbit"
+         setTitle "Wellness Report"
          $(widgetFileNoReload def "cancelbutton")
          $(widgetFileNoReload def "nameC")
          [whamlet| 
               ^{headerWidget}
-              <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
-                <b> Rabbit Wellness Report
-                <div .cancelBut #vrHome sytle="display:inline; float:right;">
+                <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
+                   <b> Rabbit Wellness Report
+                   <div .cancelBut #vrHome sytle="display:inline; float:right;">
                        <a href=@{HomeR}>cancel</a>
-              <div #doShow>
                ^{weReport wellReport}
   
 
@@ -105,17 +103,16 @@ getVVViewR::Handler Html
 getVVViewR   = do
     vetvisits <-doVetVisits
     defaultLayout $ do
-         setTitle "View Rabbit"
+         setTitle "Vet Visit Report"
          $(widgetFileNoReload def "cancelbutton")
          $(widgetFileNoReload def "nameC")
          [whamlet| 
               ^{headerWidget}
               <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
                  <b>Vet Visit Report
-                 <div .cancelBut #vrHome sytle="display:inline; float:right;">
+                 <div .cancelBut #vrHome sytle="display:inline; float:right; margin=0%;">
                        <a href=@{HomeR}>cancel</a>
-                 <div #doShow>
-                  ^{vvReport vetvisits}
+                 ^{vvReport vetvisits}
   
 
            |]
@@ -162,8 +159,8 @@ testStatusDate now (Just rab) = Just (rabbitStatusDate rab)
 
 testAlteredDate::Maybe Rabbit -> Maybe (Maybe Text)
 testAlteredDate Nothing = Nothing
-testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ Nothing _  _ _ _) ) = Nothing
-testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ (Just da) _  _ _ _) ) = Just (Just (showtime da))
+testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ Nothing _  _ _ _ _) ) = Nothing
+testAlteredDate (Just ( Rabbit _ _ _ _ _ _ _ (Just da) _  _ _ _ _) ) = Just (Just (showtime da))
 
 months::[(Text, Integer)]
 months =[(pack (show x), x) | x<- [0..11]]
@@ -255,6 +252,7 @@ rabbitForm (mrab, rabID) extra = do
     (sourceTypeRes, sourceTypeView) <- mreq (selectFieldList sourceType) "zip" (test mrab rabbitSourceType)
     (statusDateRes, statusDateView) <- mreq textField " nope" (testStatusDate stime  mrab)
     (statusNoteRes, statusNoteView) <- mreq textField "nope" (opttest mrab rabbitStatusNote)
+    (imgNoteRes, imgNoteView)<- mopt textField "nopt" Nothing
     let yrdays = (365*) <$> yrsIntakeRes
     let mndays = (30*) <$> mnthsIntakeRes
     let daysTot = (+) <$> yrdays <*> mndays
@@ -262,7 +260,7 @@ rabbitForm (mrab, rabID) extra = do
     let date = text2date dateInRes
     let bday = ( addDays) <$> daysTotNeg <*> date 
     let alteredDate = text2dateM alteredDateRes 
-    let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> date <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> alteredDate <*> statusRes <*> statusDateRes <*> statusNoteRes <*> bday     
+    let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> date <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> alteredDate <*> statusRes <*> statusDateRes <*> statusNoteRes <*> bday  <*> imgNoteRes
  --   let rabbitRes = rabbitRes1 <*> (FormResult (Just True)) <*> (FormResult Nothing) Nothing
     let awid=  $(widgetFileNoReload def "add")
     return (rabbitUpdateRes, awid)
@@ -359,8 +357,10 @@ getViewR rabId  = do
                <div #eTitle .subTitle >
                 <b> View Rabbit </b>
                 <div #vrButD style="float:right; display:inline;">
-                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
+                  <div .cancelBut #vrHome style="display:inline; float:right;">
                     <a href=@{HomeR}> cancel </a>
+                  <div .cancelBut #vrImage style="display:inline; float:right;">
+                    <a href=@{ImagesR rabId }> image </a>
                   <div .cancelBut #vrEdit style="display:inline; float:right;">
                    <a href=@{EditR rabId}> edit </a>
                   $if not_dead

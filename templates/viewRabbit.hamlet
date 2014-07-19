@@ -1,6 +1,19 @@
 <div #vrDiv>
-  <div #vrCore>
-   <div .vrRow>
+ <div #vrCore>
+   $maybe img <- (rabbitImage rab)
+    <div .vrRow>
+     <div #animage style="width:100%;">
+        <img #rabImg src=#{imagesURL ++ (unpack img)} style="width:30%; float:left; margin-right:5px;">
+      <div #vrname>
+       #{rabbitName rab}
+      <div #vrdatein>
+          Date In: #{showtime (rabbitDateIn rab)}
+      <div #vrsex>
+          Sex: #{rabbitSex rab}
+      <div #vralt>
+          Altered: #{rabbitAltered rab}
+   $nothing
+    <div .vrRow>
     <div #vrname>
        Name: #{rabbitName rab}
     <div #vrsex>

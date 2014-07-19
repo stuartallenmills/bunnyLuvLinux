@@ -101,8 +101,11 @@ Rabbit
    statusDate Text
    statusNote Text
    birthday Day
+   image Text Maybe
    deriving Show
 |]
+
+imagesURL = "http://192.168.0.15:3000/images/"
 
 sourceType::[(Text,Text)]
 sourceType=[("Shelter","Shelter"), ("Other", "Other")]
@@ -194,7 +197,7 @@ getById ident = do
 
 sn = Person "Stuart" "Mills" "818-884-5537" "23425 Kilty" "West Hills" "CA" "91307"
 lulu = Rabbit "Lulu" "white terrorist" (doparseTime "11/10/2009") "Shelter" "East valley shelter"
-       "F" "No" Nothing   "Adopted" "11/11/2011" "Sharon Mills" (doparseTime "1/1/2007")
+       "F" "No" Nothing   "Adopted" "11/11/2011" "Sharon Mills" (doparseTime "1/1/2007") (Just "Test1.jpg")
 
 openConnectionCount :: Int
 openConnectionCount = 10
@@ -212,8 +215,8 @@ initDB = do
         insert $ Person "Michael" "Snoyman" "818-970-6052" "101 welby Way" "paris" "france" "12314"
         stu<-insert sn
         luid<-insert $ lulu 
-        chid<-insert $ Rabbit "Chester" "black bunny nice" (doparseTime "08/09/2001")  "Shelter" "West Valley Shelter" "M"  "Neutered" (Just (doparseTime "2/2/2003")) "Died" "07/08/2005" "Unknown Causes" (doparseTime "1/1/1998")
-        jid<-insert $ Rabbit "Joan" "weird ass lop" (doparseTime "07/02/2013") "Other"  "Rescued by Britta Menges-lady to take to kill shelter" "F" "Unknown" Nothing "BunnyLuv" "07/07/1999" "in group 3" (doparseTime "1/1/1998")
+        chid<-insert $ Rabbit "Chester" "black bunny nice" (doparseTime "08/09/2001")  "Shelter" "West Valley Shelter" "M"  "Neutered" (Just (doparseTime "2/2/2003")) "Died" "07/08/2005" "Unknown Causes" (doparseTime "1/1/1998") Nothing
+        jid<-insert $ Rabbit "Joan" "weird ass lop" (doparseTime "07/02/2013") "Other"  "Rescued by Britta Menges-lady to take to kill shelter" "F" "Unknown" Nothing "BunnyLuv" "07/07/1999" "in group 3" (doparseTime "1/1/1998") Nothing
         insert $ Wellness jid ((doparseTime  "08/07/2013")) False Nothing (Weight 3 4) "Bad JuJu" "vooDoo" "Stuart"
         insert $ Wellness jid ((doparseTime  "11/10/2013")) True (Just 102.5) (Weight 3 6) "Healthy" "none" "Doug"
         insert $ Wellness jid  ( (doparseTime  "12/11/2013")) False Nothing (Weight 3 2) "Stubbed toe" "Vet for stubbed toe" "Sharon"
