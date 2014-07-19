@@ -1,0 +1,27 @@
+   <div #showWell>
+     $forall (Entity rabId rabbit, Entity wellId wellR) <-wellReport
+               <div #swellR>
+                <div .wellRw>
+                 <div .nameC>
+                   <a href=@{ViewR rabId}>#{rabbitName rabbit}</a>
+                 <div #swellDateD>
+                   #{showtime (wellnessDate wellR)}
+                <div .wellRw> 
+                 <div #swellGroomedD>
+                   Groomed: #{showgroomed wellR}
+                 <div #swellTempD>
+                   Temp:
+                   $maybe temp<-(wellnessTemp wellR)
+                       #{temp}
+                   $nothing
+                       &nbsp-                  
+                 <div #swellnessWeight>
+                      Weight: #{ weightLbs (wellnessWeight  wellR)} lbs.  #{weightOz  ( wellnessWeight wellR)} oz.
+                 <div #swellPerson>
+                       #{wellnessResponsible wellR}
+                <div .wellRw>
+                 <div #swellNoteD>
+                   Problem: #{wellnessNotes wellR}
+                <div .wellRw>
+                 <div #swellTreatD>
+                  Treatment: #{wellnessTreatment wellR}

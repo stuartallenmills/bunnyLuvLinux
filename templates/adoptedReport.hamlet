@@ -1,0 +1,26 @@
+
+<div #showAdopted>
+  $forall (Entity rabid rabbit, Entity adoptedID adR) <-adoptReport
+    <div #sadRow>
+     <div .sadRw>
+      <div .nameC #sadRN>
+          <a href=@{ViewR rabid}>#{rabbitName rabbit}</a>
+      <div #sadDate>
+          Date: #{showtime (adoptedDate adR)}
+     <div .sadRw>
+      <div #saName>
+        <div #saFName>
+           #{personFirstName (adoptedPerson adR)} 
+        <div #saLName>
+           #{personLastName (adoptedPerson adR)}
+      <div #saPhone>
+         #{personPhone (adoptedPerson adR)}
+     <div .sadRw>
+      <div #saStreet>
+         #{personStreet (adoptedPerson adR)}, 
+      <div #saCity>
+         #{personCity (adoptedPerson adR)}, 
+      <div #saState>
+          #{personState (adoptedPerson adR)}
+      <div #saZip>
+         &nbsp; #{personZip (adoptedPerson adR)}

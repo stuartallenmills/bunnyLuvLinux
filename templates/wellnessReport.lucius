@@ -1,0 +1,64 @@
+
+
+.wellRw {
+   width:100%;
+   border-bottom:1px dotted #999999;
+}
+   
+#swellTitle {
+   width:100%;
+   border-bottom:thin solid #7f7f7f;
+   float:left;
+}
+
+#showWell {
+  float:left;
+  width:100%;
+  display:block;
+}
+
+#showWell div {
+  float:left;
+  margin:2px;
+}
+
+#swellR div {
+      float:left;
+}
+
+#swellR > div {
+    margin-bottom:0;
+    margin-top:0;
+}
+
+
+
+#swellR {
+      border-bottom:thin solid #7f7f7f;
+      width:100%;
+}
+
+#showWell #swellDateD {
+  width:25%;
+  float:right;
+  text-align:right;
+}
+
+#showWell #swellPerson {
+  float:right;
+}
+
+#swellGroomedD, #swellTempD {
+          width:15%;
+}
+#swellnessWeight {
+          width:25%;
+}
+
+#swellPerson {
+  width:20%;
+}
+
+#swellnessNoteD, #swellTreatD {
+   width:100%;
+}

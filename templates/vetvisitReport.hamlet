@@ -1,0 +1,26 @@
+  <div #showvv>
+   $forall (Entity rabId rabbit, Entity vetVisitId vvR) <- vetVisits
+    <div #svvR>
+     <div .vvR>
+      <div .nameC #svvRName>
+        <a href=@{ViewR rabId}> #{rabbitName rabbit}</a>
+      <div #svvDateD>
+        #{showtime (vetVisitDate vvR)}
+     <div .vvR>
+      <div #svvVet>
+        Vet: #{vetVisitVet vvR}
+      <div #svvCost>
+        Cost: 
+         $maybe cost<-(vetVisitCost vvR)
+          \$#{cost}
+         $nothing 
+           &nbsp;-
+     <div .vvR>
+      <div #svvProblem>
+       Problem: #{vetVisitProblem vvR}
+     <div .vvR>
+      <div #svvProcedure>
+       Procedure: #{vetVisitProcedures vvR}
+     <div .vvR>
+       <div #svvNotes>
+        Notes: #{vetVisitNotes vvR}
