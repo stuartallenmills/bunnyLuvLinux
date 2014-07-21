@@ -14,7 +14,7 @@
                      font-size: 80%;
                      height: 19px;
                      padding: 1px;
-                     width: 60px;
+                     width: 56px;
                      text-align:center;
                      }
                                  /* Change color on mouseover */

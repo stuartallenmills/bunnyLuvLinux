@@ -46,7 +46,7 @@ wellnessForm rabID extra = do
     (wellTempRes, wellTempView)<-mopt doubleField "nope" Nothing
     (wellNoteRes, wellNotesView)<-mreq textField "nope" Nothing
     (wellGroomedRes, wellGroomedView)<-mreq boolField "nope" (Just False)
-    (wellTreatmentRes, wellTreatmentView)<-mreq textField "nope" Nothing
+    (wellTreatmentRes, wellTreatmentView)<-mreq textareaField "nope" Nothing
     (wellResponsibleRes, wellResponsibleView)<-mreq textField "nope" Nothing
     
     let date = fmap (doparseTime.unpack) wellDateRes

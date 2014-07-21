@@ -1,6 +1,6 @@
      <div class="title" >
       <div #headimg>
-       <a href=@{HomeR}> <img src="http://192.168.0.15:3000/images/bunnyluv_img.gif" width="80px"></a>
+       <a href=@{HomeR}> <img src="http://192.168.1.128:3000/images/bunnyluv_img.gif" width="80px"></a>
       <div #splash>  
        <h2> BunnyLuv Rabbit Database
      <div #null></div>

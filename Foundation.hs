@@ -84,7 +84,7 @@ Wellness
     temp  Double Maybe
     weight Weight
     notes Text
-    treatment Text
+    treatment Textarea
     responsible Text
     deriving Show
     
@@ -105,7 +105,8 @@ Rabbit
    deriving Show
 |]
 
-imagesURL = "http://192.168.0.15:3000/images/"
+
+imagesURL = "http://192.168.1.128:3000/images/"
 
 sourceType::[(Text,Text)]
 sourceType=[("Shelter","Shelter"), ("Other", "Other")]
@@ -217,10 +218,10 @@ initDB = do
         luid<-insert $ lulu 
         chid<-insert $ Rabbit "Chester" "black bunny nice" (doparseTime "08/09/2001")  "Shelter" "West Valley Shelter" "M"  "Neutered" (Just (doparseTime "2/2/2003")) "Died" "07/08/2005" "Unknown Causes" (doparseTime "1/1/1998") Nothing
         jid<-insert $ Rabbit "Joan" "weird ass lop" (doparseTime "07/02/2013") "Other"  "Rescued by Britta Menges-lady to take to kill shelter" "F" "Unknown" Nothing "BunnyLuv" "07/07/1999" "in group 3" (doparseTime "1/1/1998") Nothing
-        insert $ Wellness jid ((doparseTime  "08/07/2013")) False Nothing (Weight 3 4) "Bad JuJu" "vooDoo" "Stuart"
-        insert $ Wellness jid ((doparseTime  "11/10/2013")) True (Just 102.5) (Weight 3 6) "Healthy" "none" "Doug"
-        insert $ Wellness jid  ( (doparseTime  "12/11/2013")) False Nothing (Weight 3 2) "Stubbed toe" "Vet for stubbed toe" "Sharon"
-        insert $ Wellness jid ((doparseTime  "1/12/2014"))  False (Just 101.2) (Weight 3 1) "none" "none" "Paul"
+        insert $ Wellness jid ((doparseTime  "08/07/2013")) False Nothing (Weight 3 4) "Bad JuJu" (Textarea "vooDoo") "Stuart"
+        insert $ Wellness jid ((doparseTime  "11/10/2013")) True (Just 102.5) (Weight 3 6) "Healthy" (Textarea "none") "Doug"
+        insert $ Wellness jid  ( (doparseTime  "12/11/2013")) False Nothing (Weight 3 2) "Stubbed toe" (Textarea "Vet for stubbed toe") "Sharon"
+        insert $ Wellness jid ((doparseTime  "1/12/2014"))  False (Just 101.2) (Weight 3 1) "none" (Textarea "none") "Paul"
         ard<-insert $ Vet "Arden the Vet" "MisaFit" "818-970-6051"
         jona<-insert $ Vet "We Like Pets" "Jabba" "310-642-5947"
         insert $ VetVisit luid "Arden the Vet" (doparseTime "2/12/2014") "Needs to be altered" "Spayed" "Went Well" "Spade" (Just 295.45)

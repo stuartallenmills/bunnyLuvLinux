@@ -6,6 +6,10 @@
                 <div .wellRw> 
                  <div #swellDateD>
                    Date: #{showtime (wellnessDate wellR)}
+                 <div #swellPerson style="float:right;">
+                       #{wellnessResponsible wellR}
+
+                <div .wellRw>
                  <div #swellGroomedD>
                    Groomed: #{showgroomed wellR}
                  <div #swellTempD>
@@ -16,11 +20,10 @@
                        &nbsp-                  
                  <div #swellnessWeight>
                       Weight: #{ weightLbs (wellnessWeight  wellR)} lbs.  #{weightOz  ( wellnessWeight wellR)} oz.
-                 <div #swellPerson>
-                       #{wellnessResponsible wellR}
                 <div .wellRw>
                  <div #swellNoteD>
                    Problem: #{wellnessNotes wellR}
                 <div .wellRw>
                  <div #swellTreatD>
-                  Treatment: #{wellnessTreatment wellR}
+                  <div #wTreat style="width:100%;">Treatment: 
+                  <div #wellTreat style="width:100%"> #{wellnessTreatment wellR}

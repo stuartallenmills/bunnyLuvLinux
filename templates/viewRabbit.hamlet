@@ -4,14 +4,29 @@
     <div .vrRow>
      <div #animage style="width:100%;">
         <img #rabImg src=#{imagesURL ++ (unpack img)} style="width:30%; float:left; margin-right:5px;">
-      <div #vrname>
-       #{rabbitName rab}
-      <div #vrdatein>
+      <.prow>
+       <div #vrname>
+        #{rabbitName rab}
+       <div #vrdatein title="Date In">
           Date In: #{showtime (rabbitDateIn rab)}
-      <div #vrsex>
+      <.prow>
+       <div #vrsex>
           Sex: #{rabbitSex rab}
-      <div #vralt>
+       <div #vralt>
           Altered: #{rabbitAltered rab}
+      <.prow>
+       <div #vrdesc>
+          Desc: #{rabbitDesc rab}
+      <.prow>
+       <div #vrAge>
+         Est.  age now:             
+             #{yrs} years #{mnths} months
+       <div #valteredDate>
+        Altered Date:
+        $maybe date <- rabbitAlteredDate rab
+              #{showtime date}
+        $nothing
+              &nbsp;-
    $nothing
     <div .vrRow>
     <div #vrname>
@@ -22,14 +37,14 @@
        Altered: #{rabbitAltered rab} 
     <div #vrdatein>
         Date in: #{showtime (rabbitDateIn rab)}
-   <div .vrRow>
-    <div #vrdesc>
+    <div .vrRow>
+     <div #vrdesc>
        Desc: #{rabbitDesc rab}
-   <div .vrRow>
-    <div #vrAge>
+    <div .vrRow>
+     <div #vrAge>
        Estimated current age: 
             #{yrs} years #{mnths} months
-    <div #valteredDate>
+     <div #valteredDate>
        Altered Date:
        $maybe date <- rabbitAlteredDate rab
               #{showtime date}

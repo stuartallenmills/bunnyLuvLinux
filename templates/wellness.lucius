@@ -73,7 +73,9 @@
                     
                      ##{fvId wellNotesView} {
                         width:35em;
+                        display:block;
                        }
                      ##{fvId wellTreatmentView} {
                         width:35em;
+                        display:block;
                        }

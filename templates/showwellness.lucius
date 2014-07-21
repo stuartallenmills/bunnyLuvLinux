@@ -37,18 +37,19 @@
 }
 
 #swellDateD {
-  width:20%;
+  width:30%;
 }
 
 #swellGroomedD, #swellTempD {
-          width:15%;
+          width:30%;
 }
 #swellnessWeight {
-          width:25%;
+          width:35%;
 }
 
 #swellPerson {
   width:20%;
+  text-align:right;
 }
 
 #swellnessNoteD, #swellTreatD {

@@ -40,12 +40,11 @@ headerWidget = $(widgetFileNoReload def "header")
 uploadDirectory :: FilePath
 uploadDirectory = "C:/shared/msys64/home/smills/Hask/scott/Images"
 
-uploadForm :: Html -> MForm Handler  (FormResult (FileInfo, Maybe Textarea), Widget)
-uploadForm  = renderBootstrap $ (,)
-    <$> fileAFormReq "Image file"
-    <*> aopt textareaField "Image description" Nothing
+uploadForm :: Html -> MForm Handler  (FormResult (FileInfo), Widget)
+uploadForm  = renderDivs $ fileAFormReq "Image file"
+  
 
-getImagesR::RabbitId-> Handler RepHtml
+getImagesR::RabbitId-> Handler Html
 getImagesR rabId = do
   ((_, widget), enctype) <-runFormPost uploadForm
   defaultLayout $ do
@@ -54,11 +53,11 @@ getImagesR rabId = do
                   ^{widget}
                  <input .btn type=submit value="Upload">
   |]
-postImagesR ::RabbitId-> Handler RepHtml
+postImagesR ::RabbitId-> Handler Html
 postImagesR rabId = do
-    ((result, widget), enctype) <- runFormPost uploadForm
+    ((result, _), _) <- runFormPost uploadForm
     case result of
-        FormSuccess (file, info) -> do
+        FormSuccess (file) -> do
             -- TODO: check if image already exists
             -- save to image directory
             filename <- writeToServer file
