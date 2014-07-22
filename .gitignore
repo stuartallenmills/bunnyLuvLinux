@@ -7,3 +7,6 @@ templates/*~
 /test5.db3
 /Handler/#Add.hs#
 .cabal-sandbox
+*.exe
+*.hi
+*.o
