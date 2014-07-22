@@ -2,27 +2,31 @@
  <div #vrCore>
    $maybe img <- (rabbitImage rab)
     <div .vrRow>
-     <div #animage style="width:100%;">
-        <img #rabImg src=#{imagesURL ++ (unpack img)} style="width:30%; float:left; margin-right:5px;">
-      <.prow>
+      <div #animage style="width:30%;">
+        <img #rabImg src=#{imagesURL ++ (unpack img)} style="width:98%; float:left; margin-right:5px;">
+      <div .prow>
        <div #vrname>
         #{rabbitName rab}
        <div #vrdatein title="Date In">
-          Date In: #{showtime (rabbitDateIn rab)}
-      <.prow>
+         <div .bllabel> Date In: 
+         #{showtime (rabbitDateIn rab)}
+      <div .prow>
        <div #vrsex>
-          Sex: #{rabbitSex rab}
+         <div .bllabel> Sex:&nbsp; 
+         #{rabbitSex rab}
        <div #vralt>
-          Altered: #{rabbitAltered rab}
-      <.prow>
+         <div .bllabel> Altered:&nbsp;  
+         &nbsp;#{rabbitAltered rab}
+      <div .prow>
        <div #vrdesc>
-          Desc: #{rabbitDesc rab}
-      <.prow>
+         <div .bllabel> Desc:&nbsp; 
+         &nbsp;#{rabbitDesc rab}
+      <div .prow>
        <div #vrAge>
-         Est.  age now:             
-             #{yrs} years #{mnths} months
+         <div .bllabel> Est. age now:&nbsp;           
+         #{yrs} years #{mnths} months
        <div #valteredDate>
-        Altered Date:
+        <div .bllabel> Altered Date:
         $maybe date <- rabbitAlteredDate rab
               #{showtime date}
         $nothing
@@ -30,7 +34,7 @@
    $nothing
     <div .vrRow>
     <div #vrname>
-       Name: #{rabbitName rab}
+      <div .bllabel> Name: </div>#{rabbitName rab}
     <div #vrsex>
        Sex: #{rabbitSex rab}
     <div #vraltered>

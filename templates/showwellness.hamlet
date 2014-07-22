@@ -1,5 +1,3 @@
-   <div #swellTitle>
-                  <b> Wellness Reports 
    <div #showWell>
      $forall Entity wellId wellR <-wellness
                <div #swellR>

@@ -145,6 +145,8 @@ doparseTime  st = readTime defaultTimeLocale "%-m/%-d/%-Y" st
 showtime::Day->Text
 showtime time = pack (formatTime defaultTimeLocale "%m/%d/%Y" time)
 
+showfiletime time = (formatTime defaultTimeLocale "%m_%d_%Y" time)
+
 text2date::FormResult Text -> FormResult Day
 text2date tdate =  fmap (doparseTime.unpack) tdate
 

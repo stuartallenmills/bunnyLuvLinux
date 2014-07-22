@@ -3,6 +3,12 @@
    border-bottom:1px dashed #AAAACC;
 }
 
+.bllabel {
+ font-size:90%;
+ font-weight:lighter;
+ display:inline;
+}
+
 #vrDiv {
  background:#fff;
  width:100%;
@@ -45,7 +51,7 @@
   width:35%;
 }
 #vrsex {
-  width:10%;
+  width:30%;
 }
 
 #vraltered {

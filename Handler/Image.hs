@@ -75,10 +75,16 @@ postImagesR rabId = do
 
 writeToServer :: FileInfo -> Handler FilePath
 writeToServer file = do
+    today<- liftIO $ getCurrentDay
+    let date = showfiletime today
     let filename = unpack $ fileName file
-        path = imageFilePath filename
+        rf = reverse filename
+        (ext, thead) = break (== '.') rf
+        thead2 = tail thead
+        fn = (reverse thead2) ++ "_"++( date) ++ "." ++ (reverse ext)
+        path = imageFilePath fn
     liftIO $ fileMove file path
-    return filename
+    return fn
 
 imageFilePath :: String -> FilePath
 imageFilePath f = uploadDirectory </> f

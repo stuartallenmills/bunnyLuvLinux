@@ -350,8 +350,40 @@ getViewR rabId  = do
     let not_dead = not ((rabbitStatus rab == "Died") || (rabbitStatus rab == "Euthanized"))
     let not_adopted = not (rabbitStatus rab == "Adopted")
     defaultLayout $ do
+         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
+         addScriptRemote "//code.jquery.com/jquery-1.10.2.js"
+         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
+         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
+         toWidget [lucius|
+             
+               #vetvisits, #haswell {
+                background: #e0e0e0;
+                padding:5px;
+                float:left;
+                width:100%;
+                text-align:center;
+                border-bottom:1px solid #707080;
+              }
+              
+             #vetvisits:hover, #haswell:hover {
+                 cursor:pointer;
+                 background:#f0f0f0;
+              }
+            |]
+         toWidget [julius|
+                     $(function() {
+            $( "#accordion" ).accordion();
+             });
+            $("#vetvisits").click(function() {
+                $("#showvv").toggle();
+             });
+            $("#haswell").click(function() {
+               $("#showWell").toggle();             
+             });
+          |]
+
          [whamlet| 
               ^{headerWidget}
                <div #eTitle .subTitle >
@@ -381,11 +413,13 @@ getViewR rabId  = do
                $else
                    <span> </span>
                $if had_visits 
-                   ^{showvetvisit rab vetvisits}
+                 <div #vetvisits style="float:left;"> <b> Vet Visits </b> </div>
+                 ^{showvetvisit rab vetvisits}
                $else
                   <span> </span>
                $if had_well
-                   ^{showWellness wellRs}
+                 <div #haswell style="float:left;"><b> Wellness </b> </div>
+                    ^{showWellness wellRs}
                $else
                   <span> </span>
                 

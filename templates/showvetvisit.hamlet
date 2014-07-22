@@ -1,5 +1,3 @@
-  <div #showVVTitle>
-     <b> Vet Visits
   <div #showvv>
    $forall Entity vetVisitId vvR <- vetVisits
     <div #svvR>
