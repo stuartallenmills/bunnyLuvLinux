@@ -16,6 +16,7 @@ import Data.Conduit.Binary
 import Data.Default
 import Yesod hiding ((!=.), (==.))
 import Yesod.Default.Util
+import Yesod.Auth
 import Foundation
 
 import Data.Text (Text, unpack)
@@ -57,8 +58,6 @@ querySource source = runSqlite "test5.db3" $ do
      return (r)
   return zipt
 
-headerWidget::Widget
-headerWidget = $(widgetFileNoReload def "header")
 
 -- menuWidget::Widget
 -- menuWidget = $(widgetFileNoReload def "menu")
@@ -74,12 +73,13 @@ mainMenu = do
 
   
 getQueryR status  = do
+     maid <- maybeAuthId
      zinc<- queryStatus status
      today<- liftIO $ getCurrentDay
      defaultLayout $ do
         setTitle "Rabbits"
         [whamlet|
-         ^{headerWidget}
+         ^{headerLogWid maid}
          ^{mainMenu}
 
      $forall Entity rabbitid rabbit <- zinc
@@ -87,12 +87,13 @@ getQueryR status  = do
                 |]
 
 getSourceR source  = do
+    maid <- maybeAuthId
     zinc<- querySource source
     today<- liftIO $ getCurrentDay
     defaultLayout $ do
         setTitle "Source"
         [whamlet|
-         ^{headerWidget}
+         ^{headerLogWid maid}
          ^{mainMenu}
      $forall Entity rabbitid rabbit <- zinc
            ^{doRabbitRow today rabbitid rabbit }
@@ -106,13 +107,13 @@ getTestR = do
   defaultLayout $ do
      setTitle "Test"
      [whamlet|
-      ^{headerWidget}
       ^{mainMenu}
       <div>This is a test of the something
             |]
   
 getHomeR :: Handler Html
 getHomeR = do
+    maid <- maybeAuthId
     bl <-queryStatus "BunnyLuv"
     ad <-queryStatus "Adopted"
     di <-queryStatus "Died"
@@ -128,9 +129,9 @@ getHomeR = do
      --   <img src="http://localhost:3000/images/bunnyluv_img.gif" width="80px">
      --  <div #splash>  
      --   <h2> BunnyLuv Rabbit Database
-
+   
         [whamlet|
-         ^{headerWidget}
+         ^{headerLogWid maid}
          ^{mainMenu}
          <div #rabbitContainer>
      $forall Entity rabbitid rabbit <- zinc

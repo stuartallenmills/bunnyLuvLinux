@@ -128,7 +128,7 @@ procedures::[(Text,Text)]
 procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthanized", "Euthanized"), ("Other", "Other")]
 
 
-                                      
+               
 
 data App = App
   { httpManager :: Manager
@@ -139,9 +139,12 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 -- instance Yesod App
 instance Yesod App where
   authRoute _ = Just $ AuthR LoginR
+  isAuthorized PostR True = isAdmin
+  isAuthorized (UpdateR _) True = isAdmin
   isAuthorized _ _ = return Authorized
   
   defaultLayout widget = do
+    mmsg <-getMessage
     pc <- widgetToPageContent $ $(widgetFileNoReload def "default-layout")
     giveUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
@@ -165,15 +168,21 @@ instance YesodAuth App where
 
     maybeAuthId = lookupSession "_ID"
 
+-- authenication
 isAdmin::HandlerT App IO AuthResult
 isAdmin = do
     mu <- maybeAuthId
     return $ case mu of
         Nothing -> AuthenticationRequired
         Just "admin" -> Authorized
-        Just "Sharon"-> Authorized
+        Just "sharon"-> Authorized
         Just _ -> Unauthorized "You must be an admin"
+
+-- header
         
+headerLogWid maid = $(widgetFileNoReload def "headerLog")
+
+
 --  TIME ROUTINES 
 doparseTime::String->Day
 doparseTime  st = readTime defaultTimeLocale "%-m/%-d/%-Y" st

@@ -1,0 +1,25 @@
+#headimg {
+      float:left;
+      display:block;
+      width:30%;
+      padding:0;
+      border:none;
+}
+#splash {
+    float:left;
+    display:block;
+    width:69%;
+    border:none;
+}
+
+
+#null {
+   width:100%;
+   height:1px;
+}
+   
+div.title {
+    border-bottom:thin solid #7f7f7f;
+    width:100%;
+    height:90px;
+}

@@ -17,7 +17,7 @@ import Data.Default
 import Yesod hiding ((!=.), (==.))
 import Yesod.Default.Util
 import Foundation
-
+import Yesod.Auth
 import Data.Text (Text, unpack)
 import Database.Esqueleto
 import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
@@ -32,12 +32,10 @@ import Data.Time.LocalTime
 
 
 
-headerWidget::Widget
-headerWidget = $(widgetFileNoReload def "header")
 
     
-wellnessForm::RabbitId->Html-> MForm Handler (FormResult Wellness, Widget)
-wellnessForm rabID extra = do
+wellnessForm::(Maybe Text)->RabbitId->Html-> MForm Handler (FormResult Wellness, Widget)
+wellnessForm user rabID extra = do
     local_time <- liftIO $ getLocalTime
     let stime = showtime (localDay local_time)
     (wellDateRes, wellDateView)<-mreq textField "nope" (Just stime)
@@ -47,7 +45,7 @@ wellnessForm rabID extra = do
     (wellNoteRes, wellNotesView)<-mreq textField "nope" Nothing
     (wellGroomedRes, wellGroomedView)<-mreq boolField "nope" (Just False)
     (wellTreatmentRes, wellTreatmentView)<-mreq textareaField "nope" Nothing
-    (wellResponsibleRes, wellResponsibleView)<-mreq textField "nope" Nothing
+    (wellResponsibleRes, wellResponsibleView)<-mreq textField "nope" user
     
     let date = fmap (doparseTime.unpack) wellDateRes
     let wellnessRes = Wellness rabID <$> date <*> wellGroomedRes <*>
@@ -59,15 +57,16 @@ wellnessForm rabID extra = do
 
 getWellnessR::RabbitId->Handler Html
 getWellnessR rabID  = do
+    maid <- maybeAuthId
     Just rabbit <-runSqlite "test5.db3"  $ do
                   rabt<- get rabID
                   return rabt
-    (wellnessWidget, enctype) <-generateFormPost (wellnessForm rabID)
+    (wellnessWidget, enctype) <-generateFormPost (wellnessForm maid rabID)
     defaultLayout $ do
          setTitle "Wellness Report"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-              ^{headerWidget}
+              ^{headerLogWid maid}
               <div #eTitle .subTitle>
                 <b> Wellness Report for &nbsp;  #{rabbitName rabbit}
                 <div #wellCan style="float:right; display:inline;">
@@ -81,7 +80,8 @@ getWellnessR rabID  = do
 
 postWellnessR::RabbitId->Handler Html
 postWellnessR rabID = do
-  (((result), _), _) <-runFormPost (wellnessForm rabID)
+  maid <-maybeAuthId
+  (((result), _), _) <-runFormPost (wellnessForm maid rabID)
   case result of
     FormSuccess wup -> do
       runSqlite "test5.db3" $ do

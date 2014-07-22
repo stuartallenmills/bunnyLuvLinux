@@ -1,0 +1,12 @@
+     <div class="title" >
+      <div #headimg>
+       <a href=@{HomeR}> <img src="http://192.168.1.128:3000/images/bunnyluv_img.gif" width="80px"></a>
+      <div #splash>  
+       <h2> BunnyLuv Rabbit Database
+      $maybe usr <-maid
+       <div #usr style="float:right;">
+         logged in as #{usr}  <a href=@{AuthR LogoutR}>logout</a>
+      $nothing
+       <div #login style="float:right;">
+        <a href=@{AuthR LoginR}>login</a>
+     <div #null></div>

@@ -17,7 +17,7 @@ import Data.Default
 import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
 import Foundation
-
+import Yesod.Auth
 import Data.Text (Text, unpack)
 import Database.Esqueleto
 import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
@@ -124,6 +124,7 @@ adoptedForm rabID extra = do
 
 getAdoptedR ::RabbitId->Handler Html
 getAdoptedR rabid = do
+    maid<-maybeAuthId
     Just rabbit <-runSqlite "test5.db3"  $ do
                   rabt<- get rabid
                   return rabt
@@ -132,7 +133,7 @@ getAdoptedR rabid = do
          setTitle "Adoption"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerWidget}
+             ^{headerLogWid maid}
               <div #addCance .subTitle>
                  <b> Adoption for &nbsp; #{rabbitName rabbit}
                 <div #adoptCan style="float:right; display:inline;">

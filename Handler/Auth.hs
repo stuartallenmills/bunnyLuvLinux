@@ -14,6 +14,10 @@ import           Yesod.Auth
 import           Yesod.Auth.Message
 --import           Yesod.Auth.Dummy -- just for testing, don't use in real life!!!
 
+chkMsg amsg
+     | (head amsg)=='P' = amsg
+     | otherwise = ""
+                   
 authBunnyluv :: YesodAuth m => AuthPlugin m
 authBunnyluv =
     AuthPlugin "bunnyluv" dispatch login
@@ -38,7 +42,8 @@ authBunnyluv =
 
     dispatch _ _ = notFound
     url = PluginR "bunnyluv" []
-    login authToMaster =
+    login authToMaster = do
+        msg <- getMessage
         toWidget [hamlet|
 $newline never
 <form method="post" action="@{authToMaster url}">
@@ -50,6 +55,8 @@ $newline never
      <input type="password" name="pass">
     <p>
     <input type="submit" value="Login">
+    $maybe tmsg <-msg
+       <p> #{ tmsg}
 
 |]
 

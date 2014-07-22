@@ -17,7 +17,7 @@ import Data.Default
 import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
 import Foundation
-
+import Yesod.Auth
 import Data.Text (Text, unpack)
 import Database.Esqueleto
 import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
@@ -37,8 +37,6 @@ testAltered rab | (((rabbitAltered rab)=="Spayed") || ((rabbitAltered rab)=="Neu
 setSources::Rabbit->[(Text,Text)]
 setSources rab = [("Other","Other")]++(testAltered rab) ++ [("Euthanized","Euthanized")]
 
-headerWidget::Widget
-headerWidget = $(widgetFileNoReload def "header")
 
 vetVisitForm::Rabbit-> RabbitId->Html-> MForm Handler (FormResult VetVisit, Widget)
 vetVisitForm rab rabid extra = do
@@ -142,6 +140,7 @@ vetVisitForm rab rabid extra = do
         
 getVetVisitR ::RabbitId->Handler Html
 getVetVisitR rabid = do
+    maid <- maybeAuthId
     Just rab <-runSqlite "test5.db3"  $ do
                   rabt<- get rabid
                   return rabt
@@ -150,7 +149,7 @@ getVetVisitR rabid = do
          setTitle "Vet Visit" 
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerWidget}
+             ^{headerLogWid maid}
               <div #vvTitle .subTitle>
                 <b> Vet Visit for &nbsp; #{rabbitName rab}
                 <div #vvCan style="float:right; display:inline;">

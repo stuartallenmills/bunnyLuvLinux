@@ -17,7 +17,7 @@ import Data.Default
 import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
 import Foundation
-
+import Yesod.Auth
 import Data.Text (Text, unpack, pack)
 import Database.Esqueleto
 import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
@@ -33,8 +33,6 @@ import Data.Time.Calendar
 
 
 
-headerWidget::Widget
-headerWidget = $(widgetFileNoReload def "header")
 
 doAdoptedReport = runSqlite "test5.db3" $ do
   zapt <- select $ from $ \(tr, tvv)-> do
@@ -47,13 +45,14 @@ adoptedReport adoptReport = $(widgetFileNoReload def "adoptedReport")
 
 getAdoptedViewR::Handler Html
 getAdoptedViewR   = do
+    maid <- maybeAuthId
     aReport <-doAdoptedReport
     defaultLayout $ do
          setTitle "Adopted Report"
          $(widgetFileNoReload def "cancelbutton")
          $(widgetFileNoReload def "nameC")
          [whamlet| 
-              ^{headerWidget}
+              ^{headerLogWid maid}
                <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
                  <b> Adopted Rabbits Report
                  <div .cancelBut #vrHome sytle="display:inline; float:right;">
@@ -74,13 +73,14 @@ weReport wellReport = $(widgetFileNoReload def "wellnessReport")
 
 getWellViewR::Handler Html
 getWellViewR   = do
+    maid <- maybeAuthId
     wellReport <-doWellnessReport
     defaultLayout $ do
          setTitle "Wellness Report"
          $(widgetFileNoReload def "cancelbutton")
          $(widgetFileNoReload def "nameC")
          [whamlet| 
-              ^{headerWidget}
+              ^{headerLogWid maid}
                 <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
                    <b> Rabbit Wellness Report
                    <div .cancelBut #vrHome sytle="display:inline; float:right;">
@@ -102,12 +102,13 @@ vvReport vetVisits = $(widgetFileNoReload def "vetvisitReport")
 getVVViewR::Handler Html
 getVVViewR   = do
     vetvisits <-doVetVisits
+    maid <- maybeAuthId
     defaultLayout $ do
          setTitle "Vet Visit Report"
          $(widgetFileNoReload def "cancelbutton")
          $(widgetFileNoReload def "nameC")
          [whamlet| 
-              ^{headerWidget}
+              ^{headerLogWid maid}
               <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
                  <b>Vet Visit Report
                  <div .cancelBut #vrHome sytle="display:inline; float:right; margin=0%;">
@@ -201,12 +202,13 @@ diedForm extra = do
 
 getDiedR::RabbitId->Handler Html
 getDiedR rabid= do
+    maid <- maybeAuthId
     (formWidget, enctype) <- generateFormPost (diedForm )
     defaultLayout $ do
          setTitle "Death"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerWidget}
+             ^{headerLogWid maid}
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
                 <b> Died
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
@@ -270,12 +272,13 @@ rabbitForm (mrab, rabID) extra = do
 
 getAddR ::Handler Html    
 getAddR  = do
+    maid <- maybeAuthId
     (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing,Nothing))
     defaultLayout $ do
          setTitle "Add Rabbit"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerWidget}
+             ^{headerLogWid maid}
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
                 <b> Add Rabbit
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
@@ -332,6 +335,7 @@ showadopted rabbit adopteds = $(widgetFileNoReload def "showadopted");
 
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
+    maid <- maybeAuthId
     Just rab <-runSqlite "test5.db3"  $ do
                   rabt<- get rabId
                   return rabt
@@ -385,7 +389,7 @@ getViewR rabId  = do
           |]
 
          [whamlet| 
-              ^{headerWidget}
+              ^{headerLogWid maid}
                <div #eTitle .subTitle >
                 <b> View Rabbit </b>
                 <div #vrButD style="float:right; display:inline;">
@@ -428,6 +432,7 @@ getViewR rabId  = do
 
 getEditR::RabbitId->Handler Html
 getEditR rabID  = do
+    maid <- maybeAuthId
     rabbit <-runSqlite "test5.db3"  $ do
                   rabt<- get rabID
                   return rabt
@@ -437,7 +442,7 @@ getEditR rabID  = do
          setTitle "Edit Rabbit"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-              ^{headerWidget}
+              ^{headerLogWid maid}
               <div #eTitle .subTitle>
                 <b> Edit Rabbit
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
