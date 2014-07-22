@@ -1,5 +1,5 @@
-/                       HomeR    GET POST
-/file/#Text             PreviewR GET
+/                       HomeR    GET 
+/auth                   AuthR Auth getAuth
 /add                    AddR     GET 
 /putrab                 PostR    POST
 /edit/#RabbitId         EditR    GET

@@ -137,15 +137,3 @@ getHomeR = do
            ^{doRabbitRow today rabbitid rabbit }
                 |]
 
-postHomeR :: Handler Html
-postHomeR = do
-    ((result, _), _) <- runFormPost uploadForm
-    case result of
-      FormSuccess fi -> do
-        app <- getYesod
-        fileBytes <- runResourceT $ fileSource fi $$ sinkLbs
-        addFile app (fileName fi, fileBytes)
-      _ -> return ()
-    redirect HomeR
-
-uploadForm = renderDivs $ fileAFormReq "file"

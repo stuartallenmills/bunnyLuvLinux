@@ -7,6 +7,7 @@
 module Foundation where
 
 import Conduit
+import Network.HTTP.Conduit (Manager, conduitManagerSettings, newManager)
 import Control.Concurrent.STM
 import Data.ByteString.Lazy (ByteString)
 import Data.Default
@@ -15,6 +16,8 @@ import qualified Data.Text as Text
 import Text.Hamlet
 import Yesod hiding (parseTime)
 import Yesod.Default.Util
+import Yesod.Auth
+import Yesod.Auth.Message
 import Data.Text (Text, unpack)
 import Database.Esqueleto
 import Database.Persist.Sqlite --(runSqlite, runMigrationSilent, withSqlitePool)
@@ -30,6 +33,8 @@ import Data.Time.Format
 import Data.Time.Calendar
 import Data.Time.LocalTime
 import System.Locale
+
+import Handler.Auth
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Person
@@ -125,10 +130,17 @@ procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthanized", "Euth
 
                                       
 
-data App = App (TVar [(Text, ByteString)])
+data App = App
+  { httpManager :: Manager
+  }
+
+mkYesodData "App" $(parseRoutesFile "config/routes")
 
 -- instance Yesod App
 instance Yesod App where
+  authRoute _ = Just $ AuthR LoginR
+  isAuthorized _ _ = return Authorized
+  
   defaultLayout widget = do
     pc <- widgetToPageContent $ $(widgetFileNoReload def "default-layout")
     giveUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
@@ -136,8 +148,32 @@ instance Yesod App where
 instance RenderMessage App FormMessage where
   renderMessage _ _ = defaultFormMessage
 
-mkYesodData "App" $(parseRoutesFile "config/routes")
 
+
+
+-- AUTHORIZATION
+instance YesodAuth App where
+    type AuthId App = Text
+    getAuthId = return . Just . credsIdent
+
+    loginDest _ = HomeR
+    logoutDest _ = HomeR
+
+    authPlugins _ = [authBunnyluv]
+
+    authHttpManager = httpManager
+
+    maybeAuthId = lookupSession "_ID"
+
+isAdmin::HandlerT App IO AuthResult
+isAdmin = do
+    mu <- maybeAuthId
+    return $ case mu of
+        Nothing -> AuthenticationRequired
+        Just "admin" -> Authorized
+        Just "Sharon"-> Authorized
+        Just _ -> Unauthorized "You must be an admin"
+        
 --  TIME ROUTINES 
 doparseTime::String->Day
 doparseTime  st = readTime defaultTimeLocale "%-m/%-d/%-Y" st
@@ -179,24 +215,7 @@ getCurrentMonths today rab = mnths where
 
 -- END  TIME ROUTINE
 
-getList :: Handler [Text]
-getList = do
-    App tstate <- getYesod
-    state <- liftIO $ readTVarIO tstate
-    return $ map fst state
 
-addFile :: App -> (Text, ByteString) -> Handler ()
-addFile (App tstore) op =
-    liftIO . atomically $ do
-        modifyTVar tstore $ \ ops -> op : ops
-
-getById :: Text -> Handler ByteString
-getById ident = do
-    App tstore <- getYesod
-    operations <- liftIO $ readTVarIO tstore
-    case lookup ident operations of
-      Nothing -> notFound
-      Just bytes -> return bytes
 
 sn = Person "Stuart" "Mills" "818-884-5537" "23425 Kilty" "West Hills" "CA" "91307"
 lulu = Rabbit "Lulu" "white terrorist" (doparseTime "11/10/2009") "Shelter" "East valley shelter"

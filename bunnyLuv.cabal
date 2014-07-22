@@ -18,7 +18,7 @@ cabal-version:       >=1.10
 
 executable bunnyLuv
   main-is:             Main.hs
-  other-modules:       Handler.Home, Handler.Preview, Handler.Add, Handler.VetVisit, Handler.Adopted, Handler.Wellness, Handler.Image
+  other-modules:       Handler.Home, Handler.Add, Handler.VetVisit, Handler.Adopted, Handler.Wellness, Handler.Image
   other-extensions:    OverloadedStrings, QuasiQuotes, TemplateHaskell, TypeFamilies, MultiParamTypeClasses
   build-depends:       base >=4.7 && <4.8
                        , bytestring >=0.10 && <0.11
@@ -43,6 +43,8 @@ executable bunnyLuv
                        , old-locale
                        , yesod ==1.2.6
                        , filepath
+                       , http-conduit
+                       , yesod-auth
   hs-source-dirs:      .
   ghc-options:        
   extra-lib-dirs:      
