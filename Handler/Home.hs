@@ -73,6 +73,7 @@ mainMenu = do
 
   
 getQueryR status  = do
+     msg <- getMessage
      maid <- maybeAuthId
      zinc<- queryStatus status
      today<- liftIO $ getCurrentDay
@@ -87,6 +88,7 @@ getQueryR status  = do
                 |]
 
 getSourceR source  = do
+    msg <- getMessage
     maid <- maybeAuthId
     zinc<- querySource source
     today<- liftIO $ getCurrentDay
@@ -113,6 +115,7 @@ getTestR = do
   
 getHomeR :: Handler Html
 getHomeR = do
+    msg <- getMessage
     maid <- maybeAuthId
     bl <-queryStatus "BunnyLuv"
     ad <-queryStatus "Adopted"

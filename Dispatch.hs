@@ -14,6 +14,5 @@ import Handler.VetVisit
 import Handler.Adopted
 import Handler.Wellness
 import Handler.Image
-import Handler.Auth
 
 mkYesodDispatch "App" resourcesApp

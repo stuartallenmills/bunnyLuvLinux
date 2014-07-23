@@ -34,7 +34,6 @@ import Data.Time.Calendar
 import Data.Time.LocalTime
 import System.Locale
 
-import Handler.Auth
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Person
@@ -152,7 +151,7 @@ instance Yesod App where
   isAuthorized _ _ = return Authorized
   
   defaultLayout widget = do
-    mmsg <-getMessage
+--    mmsg <-getMessage
     pc <- widgetToPageContent $ $(widgetFileNoReload def "default-layout")
     giveUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
@@ -189,6 +188,7 @@ isAdmin = do
 -- header
         
 headerLogWid maid = $(widgetFileNoReload def "headerLog")
+headerwidget = $(widgetFileNoReload def "header")
 
 
 --  TIME ROUTINES 
@@ -232,7 +232,48 @@ getCurrentMonths today rab = mnths where
 
 -- END  TIME ROUTINE
 
+-- Authorization
 
+
+authBunnyluv :: YesodAuth m => AuthPlugin m
+authBunnyluv =
+    AuthPlugin "bunnyluv" dispatch login
+  where
+    dispatch "POST" [] = do
+        ident <- lift $ runInputPost $ ireq textField "ident"
+        pass <-lift $ runInputPost $ ireq passwordField "pass"
+        if (pass == "bunnyluv") then
+         lift $ setCredsRedirect $ Creds "bunnyluv" ident []
+        else loginErrorMessageI  LoginR PassMismatch
+
+    dispatch _ _ = notFound
+    url = PluginR "bunnyluv" []
+    login authToMaster = do
+        msg <- getMessage
+        headerwidget
+        toWidget 
+           [whamlet|
+$newline never
+
+<div #logTitle>
+    <b> BunnyLuv Login
+
+<form method="post" action="@{authToMaster url}">
+    <p>Username: #
+     <input type="text" name="ident">
+
+    <p>Password: #
+     <input type="password" name="pass">
+    <p>
+    <input type="submit" value="Login">
+    $maybe tmsg <-msg
+       <p> #{ tmsg}
+
+|]
+
+
+
+-- Database init
 
 sn = Person "Stuart" "Mills" "818-884-5537" "23425 Kilty" "West Hills" "CA" "91307"
 lulu = Rabbit "Lulu" "white terrorist" (doparseTime "11/10/2009") "Shelter" "East valley shelter"
