@@ -17,7 +17,7 @@ import Data.Default
 import Yesod hiding ((!=.), (==.), update, (=.))
 import Yesod.Default.Util
 import Foundation
-
+import Yesod.Auth
 import Data.Text (Text, unpack, pack)
 import Database.Esqueleto
 import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
@@ -46,9 +46,12 @@ uploadForm  = renderDivs $ fileAFormReq "Image file"
 
 getImagesR::RabbitId-> Handler Html
 getImagesR rabId = do
+  maid <- maybeAuthId
   ((_, widget), enctype) <-runFormPost uploadForm
   defaultLayout $ do
-     [whamlet|  <b> Upload Rabbit Image
+     [whamlet|
+      ^{headerLogWid maid}
+      <b> Upload Rabbit Image
                 <form method=post enctype=#{enctype}>
                   ^{widget}
                  <input .btn type=submit value="Upload">

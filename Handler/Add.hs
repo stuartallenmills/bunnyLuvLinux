@@ -336,6 +336,8 @@ showadopted rabbit adopteds = $(widgetFileNoReload def "showadopted");
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
     maid <- maybeAuthId
+    admin <- isAdmin
+    let showMenu = (admin==Authorized)
     Just rab <-runSqlite "test5.db3"  $ do
                   rabt<- get rabId
                   return rabt
@@ -389,9 +391,10 @@ getViewR rabId  = do
           |]
 
          [whamlet| 
-              ^{headerLogWid maid}
-               <div #eTitle .subTitle >
-                <b> View Rabbit </b>
+            ^{headerLogWid maid}
+              <div #eTitle .subTitle >
+               <b> View Rabbit </b>
+               $if showMenu
                 <div #vrButD style="float:right; display:inline;">
                   <div .cancelBut #vrHome style="display:inline; float:right;">
                     <a href=@{HomeR}> cancel </a>

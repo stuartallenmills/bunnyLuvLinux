@@ -33,23 +33,28 @@
               &nbsp;-
    $nothing
     <div .vrRow>
-    <div #vrname>
-      <div .bllabel> Name: </div>#{rabbitName rab}
-    <div #vrsex>
-       Sex: #{rabbitSex rab}
-    <div #vraltered>
-       Altered: #{rabbitAltered rab} 
-    <div #vrdatein>
-        Date in: #{showtime (rabbitDateIn rab)}
+     <div #vrnamen>
+      <div .bllabel> Name: #
+      \ #{rabbitName rab}
+     <div #vrsexn>
+        <div .bllabel> Sex: #
+        \ #{rabbitSex rab}
+     <div #vralteredn>
+        <div .bllabel> Altered: #
+        \ #{rabbitAltered rab} 
+     <div #vrdateinn>
+        <div .bllabel> Date in: #
+        \ #{showtime (rabbitDateIn rab)}
     <div .vrRow>
      <div #vrdesc>
-       Desc: #{rabbitDesc rab}
+       <div .bllabel> Desc: #
+       #{rabbitDesc rab}
     <div .vrRow>
-     <div #vrAge>
-       Estimated current age: 
+     <div #vrAgen>
+        <div .bllabel> Estimated current age: #
             #{yrs} years #{mnths} months
-     <div #valteredDate>
-       Altered Date:
+     <div #valteredDaten>
+       <div .bllabel>  Altered Date: #
        $maybe date <- rabbitAlteredDate rab
               #{showtime date}
        $nothing
@@ -57,13 +62,17 @@
    <div #vrSource>
     <div .vrRow>
      <div #vrsourcet>
-        Source: #{rabbitSource rab}
+        <div .bllabel>  Source: #
+        #{rabbitSource rab}
     <div #vrStatusBlk>
      <div .vrRow>
       <div #vrstatus>
-         Status: #{rabbitStatus rab}
+         <div .bllabel>  Status: 
+         #{rabbitStatus rab}
       <div #vrstatdate>
-         Date: #{rabbitStatusDate rab}
+          <div .bllabel> Date: 
+          #{rabbitStatusDate rab}
      <div #vrstatnote>
-         Notes: #{rabbitStatusNote rab}
+          <div .bllabel> Notes: 
+          #{rabbitStatusNote rab}
        

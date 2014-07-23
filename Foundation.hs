@@ -140,7 +140,15 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 instance Yesod App where
   authRoute _ = Just $ AuthR LoginR
   isAuthorized PostR True = isAdmin
+  isAuthorized AddR _ = isAdmin
+  isAuthorized (EditR _) _ = isAdmin
+  isAuthorized (WellnessR _) _ = isAdmin
+  isAuthorized (DiedR _) _ = isAdmin
+  isAuthorized (VetVisitR _) _ = isAdmin
+  isAuthorized (AdoptedR _) _ = isAdmin
   isAuthorized (UpdateR _) True = isAdmin
+  isAuthorized (ImagesR _) _ = isAdmin
+  
   isAuthorized _ _ = return Authorized
   
   defaultLayout widget = do
@@ -176,7 +184,7 @@ isAdmin = do
         Nothing -> AuthenticationRequired
         Just "admin" -> Authorized
         Just "sharon"-> Authorized
-        Just _ -> Unauthorized "You must be an admin"
+        Just _ -> Unauthorized "Your account is  not authorized"
 
 -- header
         

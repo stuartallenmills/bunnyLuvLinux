@@ -12,6 +12,29 @@
     border:none;
 }
 
+#login a,
+#usr a,
+#loglabel {
+   font-size:90%;
+   font-weight:lighter;
+   display:inline;
+}
+
+#login a,
+#usr a {
+  background:#e0e0e0;
+  text-decoration:none;
+  padding-left:5px;
+  padding-right:5px;
+  color:#000000;
+}
+
+#usrName {
+  font-size:95%;
+  font-weight:bolder;
+  display:inline;
+  margin-right:4px;
+}
 
 #null {
    width:100%;
