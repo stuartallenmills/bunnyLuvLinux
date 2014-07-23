@@ -45,6 +45,7 @@ executable bunnyLuv
                        , filepath
                        , http-conduit
                        , yesod-auth
+                       , containers
   hs-source-dirs:      .
   ghc-options:        
   extra-lib-dirs:      

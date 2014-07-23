@@ -33,6 +33,7 @@ import Data.Time.Format
 import Data.Time.Calendar
 import Data.Time.LocalTime
 import System.Locale
+import qualified Data.Map.Strict as Map
 
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
@@ -110,6 +111,13 @@ Rabbit
 |]
 
 
+type UName = Text
+type UPass = Text
+type UserMap = Map.Map UName UPass
+
+usersMap = Map.fromList [("sharon", "bunnyluv"), ("stuart", "jrr1jrr1")]
+
+
 imagesURL = "http://192.168.1.128:3000/images/"
 
 sourceType::[(Text,Text)]
@@ -181,9 +189,8 @@ isAdmin = do
     mu <- maybeAuthId
     return $ case mu of
         Nothing -> AuthenticationRequired
-        Just "admin" -> Authorized
-        Just "sharon"-> Authorized
-        Just _ -> Unauthorized "Your account is  not authorized"
+        Just usr -> if (Map.member usr usersMap) then Authorized
+          else  Unauthorized "Your account is  not authorized"
 
 -- header
         
@@ -241,8 +248,10 @@ authBunnyluv =
   where
     dispatch "POST" [] = do
         ident <- lift $ runInputPost $ ireq textField "ident"
+        let isOnFile = Map.member ident usersMap
+        let upass = if isOnFile then usersMap Map.! ident else "guest"
         pass <-lift $ runInputPost $ ireq passwordField "pass"
-        if (pass == "bunnyluv") then
+        if ((pass == upass) || (not isOnFile) ) then
          lift $ setCredsRedirect $ Creds "bunnyluv" ident []
         else loginErrorMessageI  LoginR PassMismatch
 
