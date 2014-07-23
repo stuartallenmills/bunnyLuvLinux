@@ -188,7 +188,7 @@ isAdmin::HandlerT App IO AuthResult
 isAdmin = do
     mu <- maybeAuthId
     return $ case mu of
-        Nothing -> AuthenticationRequired
+        Nothing -> Unauthorized "You must log in to an authorized account" --AuthenticationRequired
         Just usr -> if (Map.member usr usersMap) then Authorized
           else  Unauthorized "Your account is  not authorized"
 

@@ -117,6 +117,8 @@ getHomeR :: Handler Html
 getHomeR = do
     msg <- getMessage
     maid <- maybeAuthId
+    auth <- isAdmin
+    let isAuth=(auth==Authorized)
     bl <-queryStatus "BunnyLuv"
     ad <-queryStatus "Adopted"
     di <-queryStatus "Died"
@@ -126,13 +128,19 @@ getHomeR = do
     let zinc = bl++ad++di++eu
     defaultLayout $ do
         setTitle "Rabbits"
---        addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+        addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
      -- <div class="title" style="width:95%; margin-left:1%; margin-right:1%;" >
      --  <div #headimg>
      --   <img src="http://localhost:3000/images/bunnyluv_img.gif" width="80px">
      --  <div #splash>  
      --   <h2> BunnyLuv Rabbit Database
-   
+        toWidget [julius| $( document ).ready(function(){
+                             if (#{isAuth}) { 
+                              $( "#cssmenu li:eq(1)" ).show(); }
+                             else {
+                              $( "#cssmenu li:eq(1)" ).hide(); }
+                           });
+                             |]
         [whamlet|
          ^{headerLogWid maid}
          ^{mainMenu}
