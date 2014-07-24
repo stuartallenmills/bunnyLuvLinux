@@ -115,10 +115,15 @@ type UName = Text
 type UPass = Text
 type UserMap = Map.Map UName UPass
 
-usersMap = Map.fromList [("sharon", "bunnyluv"), ("stuart", "jrr1jrr1")]
+
+usersMap = Map.fromList [("sharon", "bunnyluv"), ("stuart", "jrr1jrr1"), ("bunnyluv", "Ilovebuns2")]
 
 
 imagesURL = "http://192.168.1.128:3000/images/"
+
+
+showgroomed::Wellness->Text
+showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
 
 sourceType::[(Text,Text)]
 sourceType=[("Shelter","Shelter"), ("Other", "Other")]
@@ -191,6 +196,15 @@ isAdmin = do
         Nothing -> Unauthorized "You must log in to an authorized account" --AuthenticationRequired
         Just usr -> if (Map.member usr usersMap) then Authorized
           else  Unauthorized "Your account is  not authorized"
+
+--  HTML  CSS ELEMENTS
+cssmenuWidget::Widget
+cssmenuWidget = $(widgetFileNoReload def "cssmenu")
+
+mainMenu::Widget
+mainMenu = do
+          addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+          cssmenuWidget
 
 -- header
         

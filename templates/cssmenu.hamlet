@@ -1,12 +1,14 @@
 <div id=cssmenu>
   <ul>
    <li class='active'><a href=@{HomeR}><span>Home</span></a></li>
-   <li><a href=@{AddR}><span>Add</span></a>
+   <li id="rAddM"><a href=@{AddR}><span>Add</span></a>
    <li class='has-sub'><a href='#'><span>Status</span></a>
       <ul>
          <li><a href=@{QueryR "BunnyLuv"}><span>BunnyLuv</span></a></li>
          <li><a href=@{QueryR "Adopted"}><span>Adopted</span></a></li>
          <li><a href=@{QueryR "Euthanized"}><span>Euthanized</span></a></li>
+         <li><a href=@{AlteredR "No"}><span>Not Altered</span></a></li>
+         <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
          <li class='last'><a href=@{QueryR "Died"}><span>Died</span></a></li>
    <li class='has-sub'><a href='#'><span>Source</span></a>
       <ul>
@@ -17,4 +19,5 @@
          <li><a href=@{VVViewR}><span>Vet Visits</span></a></li>
          <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>
          <li class='last'><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
+         
       

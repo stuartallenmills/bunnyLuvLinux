@@ -1,7 +1,7 @@
 #headimg {
       float:left;
       display:block;
-      width:30%;
+      width:28%;
       padding:0;
       border:none;
 }
@@ -10,7 +10,8 @@
     display:block;
     width:69%;
     border:none;
-    text-shadow:2px 2px 3px #aaaaaa;
+    text-shadow:2px 2px 1px #aaaaaa;
+    font-family:-moz-fixed;
 }
 
 #login,

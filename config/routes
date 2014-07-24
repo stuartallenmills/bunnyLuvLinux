@@ -17,3 +17,4 @@
 /wellreport             WellViewR GET
 /adoptedreport          AdoptedViewR GET
 /image/#RabbitId        ImagesR GET POST
+/alteredReport/#Text    AlteredR GET

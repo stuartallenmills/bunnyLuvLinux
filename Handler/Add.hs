@@ -31,93 +31,6 @@ import Data.Time.Calendar
 
 
 
-
-
-
-doAdoptedReport = runSqlite "test5.db3" $ do
-  zapt <- select $ from $ \(tr, tvv)-> do
-    where_ (tvv ^. AdoptedRabbit ==. tr ^. RabbitId)
-    orderBy [desc ( tvv ^. AdoptedDate)]
-    return ((tr, tvv))
-  return zapt
-  
-adoptedReport adoptReport = $(widgetFileNoReload def "adoptedReport")
-
-getAdoptedViewR::Handler Html
-getAdoptedViewR   = do
-    maid <- maybeAuthId
-    aReport <-doAdoptedReport
-    defaultLayout $ do
-         setTitle "Adopted Report"
-         $(widgetFileNoReload def "cancelbutton")
-         $(widgetFileNoReload def "nameC")
-         [whamlet| 
-              ^{headerLogWid maid}
-               <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
-                 <b> Adopted Rabbits Report
-                 <div .cancelBut #vrHome sytle="display:inline; float:right;">
-                       <a href=@{HomeR}>cancel</a>
-                 ^{adoptedReport aReport}
-  
-
-           |]
-           
-doWellnessReport = runSqlite "test5.db3" $ do
-  zapt <- select $ from $ \(tr, tvv)-> do
-    where_ (tvv ^. WellnessRabbit ==. tr ^. RabbitId)
-    orderBy [desc ( tvv ^.WellnessDate)]
-    return ((tr, tvv))
-  return zapt
-  
-weReport wellReport = $(widgetFileNoReload def "wellnessReport")
-
-getWellViewR::Handler Html
-getWellViewR   = do
-    maid <- maybeAuthId
-    wellReport <-doWellnessReport
-    defaultLayout $ do
-         setTitle "Wellness Report"
-         $(widgetFileNoReload def "cancelbutton")
-         $(widgetFileNoReload def "nameC")
-         [whamlet| 
-              ^{headerLogWid maid}
-                <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
-                   <b> Rabbit Wellness Report
-                   <div .cancelBut #vrHome sytle="display:inline; float:right;">
-                       <a href=@{HomeR}>cancel</a>
-               ^{weReport wellReport}
-  
-
-           |]
-           
-doVetVisits = runSqlite "test5.db3" $ do
-  zapt <- select $ from $ \(tr, tvv)-> do
-    where_ (tvv ^. VetVisitRabbit ==. tr ^. RabbitId)
-    orderBy [desc ( tvv ^. VetVisitDate)]
-    return ((tr, tvv))
-  return zapt
-  
-vvReport vetVisits = $(widgetFileNoReload def "vetvisitReport")
-
-getVVViewR::Handler Html
-getVVViewR   = do
-    vetvisits <-doVetVisits
-    maid <- maybeAuthId
-    defaultLayout $ do
-         setTitle "Vet Visit Report"
-         $(widgetFileNoReload def "cancelbutton")
-         $(widgetFileNoReload def "nameC")
-         [whamlet| 
-              ^{headerLogWid maid}
-              <div #eTitle .subTitle style="padding-top:5px; padding-bottom:8px; border-bottom:1px solid black; margin=0;" >
-                 <b>Vet Visit Report
-                 <div .cancelBut #vrHome sytle="display:inline; float:right; margin=0%;">
-                       <a href=@{HomeR}>cancel</a>
-                 ^{vvReport vetvisits}
-  
-
-           |]
-
 queryWellness rabID = runSqlite "test5.db3" $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. WellnessRabbit ==. val rabID)
@@ -314,19 +227,10 @@ postUpdateR rabID = do
   redirect (ViewR rabID)
 
 
-{-
-              ^{headerWidget}
-              <div #eTitle style="text-align:center; width=100%; margin:0;">
-                <b> View Rabbit
-                <a href=@{EditR rab}>Edit</a>           
-              ^{showWellness wellRs}
-           |]
--}
+
 
 viewRab rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
 
-showgroomed::Wellness->Text
-showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
 
 
 showvetvisit rabbit vetVisits = $(widgetFileNoReload def "showvetvisit");
