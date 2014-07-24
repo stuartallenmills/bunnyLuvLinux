@@ -19,7 +19,7 @@ import Yesod.Default.Util
 import Yesod.Auth
 import Foundation
 
-import Data.Text (Text, unpack)
+import Data.Text (Text, unpack, append)
 import Database.Esqueleto
 import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
@@ -67,16 +67,19 @@ querySource source = runSqlite "test5.db3" $ do
 
 getAlteredR isAlt = do
      zinc<- queryAltered isAlt
-     base zinc
+     let ti = if (isAlt=="No") then "Not Altered" else "Altered"
+     base ti  zinc
 
   
 getQueryR status  = do
      zinc<- queryStatus status
-     base zinc
+     let ti = append "Status: " status
+     base (toHtml ti) zinc
      
 getSourceR source  = do
     zinc<- querySource source
-    base zinc
+    let ti = append "Source: " source
+    base (toHtml ti)  zinc
 
 doRabbitRow::Day->RabbitId->Rabbit->Widget
 doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow") 
@@ -90,14 +93,14 @@ getTestR = do
       <div>This is a test of the something
             |]
 
-base result = do 
+base atitle result = do 
      msg <-getMessage
      maid <- maybeAuthId
      auth <- isAdmin
      let isAuth=(auth==Authorized)
      today<- liftIO $ getCurrentDay
      defaultLayout $ do
-        setTitle "Rabbits"
+        setTitle atitle
         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
         toWidget [julius| $( document ).ready(function(){
                              if (#{isAuth}) { 
@@ -106,9 +109,23 @@ base result = do
                               $( "#cssmenu li:eq(1)" ).hide(); }
                            });
                              |]
+        toWidget [lucius| #atitleD {
+                                width:100%;
+                                float:left;
+                                text-align:center;
+                                background:#e8e8e8;
+                                padding-bottom:5px;
+                                padding-top:5px;
+                                border-bottom:thin solid #404040;
+                        }
+              |]
+
         [whamlet|
          ^{headerLogWid maid}
          ^{mainMenu}
+         <div #atitleD> 
+              <b> #{atitle} 
+
          <div #rabbitContainer>
      $forall Entity rabbitid rabbit <- result
            ^{doRabbitRow today rabbitid rabbit }
@@ -121,5 +138,5 @@ getHomeR = do
     di <-queryStatus "Died"
     eu <-queryStatus "Euthanized"
     let zinc = bl++ad++di++eu
-    base zinc
+    base "All Rabbits" zinc
 
