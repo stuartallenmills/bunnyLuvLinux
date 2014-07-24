@@ -10,6 +10,13 @@
     display:block;
     width:69%;
     border:none;
+    text-shadow:2px 2px 3px #aaaaaa;
+}
+
+#login,
+#usr {
+   float:right;
+   transform:translateY(-6px);
 }
 
 #login a,
@@ -27,6 +34,9 @@
   padding-left:5px;
   padding-right:5px;
   color:#000000;
+  font-size:80%;
+  border: 1px solid #aaaaaa;
+  box-shadow:2px 1px 2px;
 }
 
 #usrName {

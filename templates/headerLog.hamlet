@@ -2,7 +2,7 @@
       <div #headimg>
        <a href=@{HomeR}> <img src="http://192.168.1.128:3000/images/bunnyluv_img.gif" width="80px"></a>
       <div #splash>  
-       <h2> BunnyLuv Rabbit Database
+       <h2> BunnyLuv Rabbit Tracker
       $maybe usr <-maid
        <div #usr style="float:right;">
          <div #loglabel>logged in as 
