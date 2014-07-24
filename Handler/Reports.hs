@@ -54,6 +54,7 @@ reportbase atitle result = do
               <b> #{atitle} 
          ^{result}
          |]
+        $(widgetFileNoReload def "nameC")
         toWidget [lucius| #atitleD {
                                 width:100%;
                                 float:left;
