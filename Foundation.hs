@@ -48,6 +48,12 @@ Person
     PhoneKey phone
     deriving Show
 
+Usr
+    loginName Text
+    password Text
+    UniqueLoginName loginName
+    deriving Show
+
 
 Adopted
     rabbit RabbitId
@@ -113,10 +119,9 @@ Rabbit
 
 type UName = Text
 type UPass = Text
-type UserMap = Map.Map UName UPass
+type UsrMap = Map.Map Text Text
 
 
-usersMap = Map.fromList [("sharon", "bunnyluv"), ("stuart", "jrr1jrr1"), ("bunnyluv", "Ilovebuns2")]
 
 
 imagesURL = "http://192.168.1.128:3000/images/"
@@ -191,10 +196,11 @@ instance YesodAuth App where
 -- authenication
 isAdmin::HandlerT App IO AuthResult
 isAdmin = do
+    usrsMap <- liftIO $ getUsrs
     mu <- maybeAuthId
     return $ case mu of
         Nothing -> Unauthorized "You must log in to an authorized account" --AuthenticationRequired
-        Just usr -> if (Map.member usr usersMap) then Authorized
+        Just usr -> if (Map.member usr usrsMap) then Authorized
           else  Unauthorized "Your account is  not authorized"
 
 --  HTML  CSS ELEMENTS
@@ -262,10 +268,11 @@ authBunnyluv =
   where
     dispatch "POST" [] = do
         ident <- lift $ runInputPost $ ireq textField "ident"
-        let isOnFile = Map.member ident usersMap
-        let upass = if isOnFile then usersMap Map.! ident else "guest"
+        usrsMap <- liftIO  getUsrs
+        let isOnFile = Map.member ident usrsMap
+        let upass = if isOnFile then usrsMap Map.! ident else "guest"
         pass <-lift $ runInputPost $ ireq passwordField "pass"
-        if ((pass == upass) || (not isOnFile) ) then
+        if (pass == upass)   then
          lift $ setCredsRedirect $ Creds "bunnyluv" ident []
         else loginErrorMessageI  LoginR PassMismatch
 
@@ -294,7 +301,19 @@ $newline never
 
 |]
 
+usrInsert umap (Entity uId (Usr nme pss))  = Map.insert nme pss umap
 
+getUsrsDb = runSqlite "test5.db3" $ do
+    tusrs <- select $ from $ \person-> do
+      return person
+    return tusrs
+
+getUsrs  :: IO (UsrMap)
+getUsrs  = do
+    tusrs <- getUsrsDb
+    return $  foldl (\accum eusr->usrInsert accum eusr) Map.empty tusrs
+    
+                                     
 
 -- Database init
 
@@ -315,6 +334,9 @@ initDB = do
   withSqlitePool "test5.db3" openConnectionCount $ \pool -> do
    runResourceT $ runStderrLoggingT $ flip runSqlPool pool $ do
         runMigration migrateAll
+        insert $ Usr "sharon" "bunnyluv"
+        insert $ Usr "stuart" "jrr1jrr1"
+        
         insert $ Person "Michael" "Snoyman" "818-970-6052" "101 welby Way" "paris" "france" "12314"
         stu<-insert sn
         luid<-insert $ lulu 

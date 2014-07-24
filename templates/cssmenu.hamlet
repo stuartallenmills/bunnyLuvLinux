@@ -14,10 +14,15 @@
       <ul>
          <li><a href=@{SourceR "Shelter"}><span>Shelter</span></a></li>
          <li class='last'><a href=@{SourceR "Other"}><span>Other</span></a></li>
-   <li class='has-sub last'><a href='#'><span>Reports</span></a>
+   <li class='has-sub'><a href='#'><span>Reports</span></a>
       <ul>
          <li><a href=@{VVViewR}><span>Vet Visits</span></a></li>
          <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>
          <li class='last'><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
+   <li class='has-sub last' id='blAdmin'><a href='#'><span>Admin</span></a>
+      <ul>
+         <li><a href=@{ChangePassR}><span>Change Password</span></a></li>
+         <li><a href='#'><span>Delete User</span></a></li>
+         <li class='last'><a href=@{AddUR}><span>Add User</span></a></li>
          
       

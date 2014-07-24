@@ -18,3 +18,5 @@
 /adoptedreport          AdoptedViewR GET
 /image/#RabbitId        ImagesR GET POST
 /alteredReport/#Text    AlteredR GET
+/addU                   AddUR GET POST
+/changePass             ChangePassR GET POST
