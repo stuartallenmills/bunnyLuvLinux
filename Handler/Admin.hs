@@ -49,7 +49,7 @@ getAddUR = do
  maid <- maybeAuthId
  (formWidget, enctype) <- generateFormPost addUsrForm
  defaultLayout $ do
-         setTitle "Add Usr"
+         setTitle "Add User"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
              ^{headerLogWid maid}
@@ -72,18 +72,38 @@ postAddUR = do
     _ -> return ()
   redirect HomeR
 
+p2 = FieldSettings "pass2" (Just "Verify Password") (Just "pass2") Nothing []
+p1 = FieldSettings "pass1" (Just "Enter Password") (Just "pass1") Nothing []
 
 changePassForm::Text->Html->MForm Handler (FormResult Usr, Widget) 
 changePassForm uname extra = do
   (usrNameRes, usrNameView)<- mreq textField "hello" (Just uname)
-  (usrPassRes, usrPassView) <- mreq passwordField "hello" Nothing
+  (usrPassRes, usrPassView) <- mreq passwordField p1 Nothing
+  (_ , usrPassView2) <- mreq passwordField p2 Nothing
   let usrRes = Usr <$> usrNameRes <*> usrPassRes
-  let usrW=
+  
+  let usrW=do
+        addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+        toWidget [julius| $( function () {
+                          $( "#pass2" ).keyup (function(){
+                              if ( $( "#pass2" ).val() == $( "#pass1" ).val() ) {
+                                $( "#match").text("Match!");
+                                $( "#chngpass" ).prop( "disabled", false);
+                              } else {
+                                $( "#match" ).text("Passwords don't match");
+                                $( "#chngpass" ).prop( "disabled", true );
+                              }
+                            });
+                           });
+                   |]
         [whamlet|
           #{extra}
           Name: ^{fvInput usrNameView}
           Password ^{fvInput usrPassView}
-          <input type=submit value="submit">
+          Re-enter Password ^{fvInput usrPassView2}
+          <br>
+          <div #match>
+          <input #chngpass type=submit value="submit">
           |]
   return (usrRes, usrW)
 
@@ -92,7 +112,7 @@ getChangePassR = do
  Just maid <- maybeAuthId
  (formWidget, enctype) <- generateFormPost (changePassForm maid)
  defaultLayout $ do
-         setTitle "Add Usr"
+         setTitle "Change Password"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
              ^{headerLogWid (Just maid)}
@@ -144,12 +164,12 @@ getDeleteUR = do
  Just maid <- maybeAuthId
  (formWidget, enctype) <- generateFormPost deleteUsrForm
  defaultLayout $ do
-         setTitle "Delete Usr"
+         setTitle "Delete User"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
              ^{headerLogWid (Just maid)}
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
-                <b> Change Password
+                <b> Delete User
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
                    <a href=@{HomeR}> cancel </a>
               <form method=post action=@{DeleteUR} enctype=#{enctype}>
