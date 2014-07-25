@@ -48,7 +48,7 @@
   float: left;
 }
 #cssmenu > ul > li > a {
-  padding: 18px 25px 21px 25px;
+  padding: 12px 17px;
   border-right: 1px solid rgba(80, 80, 80, 0.12);
   text-decoration: none;
   font-size: 13px;
@@ -118,7 +118,7 @@
   top: 120px;
 }
 #cssmenu > ul > li:hover > ul {
-  top: 52px;
+  top: 25px;
   left: 0;
   opacity: 1;
 }
@@ -134,7 +134,7 @@
 #cssmenu ul ul li a {
   text-decoration: none;
   font-weight: 400;
-  padding: 11px 25px;
+  padding: 6px 20px;
   width: 180px;
   color: #777777;
   background: #ffffff;

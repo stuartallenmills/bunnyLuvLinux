@@ -42,9 +42,11 @@ reportbase atitle result = do
         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
         toWidget [julius| $( document ).ready(function(){
                              if (#{isAuth}) { 
-                              $( "#cssmenu li:eq(1)" ).show(); }
-                             else {
-                              $( "#cssmenu li:eq(1)" ).hide(); }
+                              $( "#cssmenu li:eq(1)" ).show(); 
+                              $( "#blAdmin" ).show(); }                                                       else {
+                              $( "#cssmenu li:eq(1)" ).hide(); 
+                              $( "#blAdmin" ).hide(); }
+
                            });
                              |]
         [whamlet|

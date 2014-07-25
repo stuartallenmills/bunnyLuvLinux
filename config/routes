@@ -20,3 +20,4 @@
 /alteredReport/#Text    AlteredR GET
 /addU                   AddUR GET POST
 /changePass             ChangePassR GET POST
+/delU                   DeleteUR GET POST

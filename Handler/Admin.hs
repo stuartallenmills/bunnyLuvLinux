@@ -14,7 +14,7 @@ import Conduit
 import Data.Conduit
 import Data.Conduit.Binary
 import Data.Default
-import Yesod hiding ((!=.), (==.), (=.), update)
+import Yesod hiding ((!=.), (==.), (=.), update, insert, delete)
 import Yesod.Default.Util
 import Foundation
 import Yesod.Auth
@@ -28,6 +28,7 @@ import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time.Calendar
+import qualified Data.Map as Map
 
 addUsrForm::Html->MForm Handler (FormResult Usr, Widget) 
 addUsrForm extra = do
@@ -62,14 +63,14 @@ getAddUR = do
            
 postAddUR::Handler Html
 postAddUR = do
-  (((result), _), _) <-runFormPost addUsrForm 
+  ((result, _), _) <-runFormPost addUsrForm 
   case result of
-    FormSuccess usr -> do
+    FormSuccess usr -> 
       runSqlite "test5.db3" $ do
-        insert $ usr
+        insert usr
         return ()
     _ -> return ()
-  redirect (HomeR)
+  redirect HomeR
 
 
 changePassForm::Text->Html->MForm Handler (FormResult Usr, Widget) 
@@ -117,3 +118,52 @@ postChangePassR = do
   redirect HomeR
  
            
+
+deleteUsrForm::Html->MForm Handler (FormResult Text, Widget) 
+deleteUsrForm  extra = do
+  usrMap <- liftIO $ getUsrs
+  let ulist = Map.keys usrMap
+  let usrList = map (\x->(x,x)) ulist
+  (usrRes, usrNameView)<- mreq (selectFieldList usrList) "hello" Nothing
+  let usrW= do
+        [whamlet|
+          #{extra}
+          Select User: ^{fvInput usrNameView}
+          <input type=submit value="submit">
+          |]
+        toWidget [lucius| 
+                     ##{fvId usrNameView} {
+                            width:20em;
+                            margin:10px;
+                        }
+                |]
+  return (usrRes, usrW)
+
+getDeleteUR::Handler Html  
+getDeleteUR = do
+ Just maid <- maybeAuthId
+ (formWidget, enctype) <- generateFormPost deleteUsrForm
+ defaultLayout $ do
+         setTitle "Delete Usr"
+         $(widgetFileNoReload def "cancelbutton")
+         [whamlet|
+             ^{headerLogWid (Just maid)}
+              <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
+                <b> Change Password
+                <div .cancelBut #rabEdCan style="display:inline; float:right;">
+                   <a href=@{HomeR}> cancel </a>
+              <form method=post action=@{DeleteUR} enctype=#{enctype}>
+                 ^{formWidget}
+                 |]
+
+postDeleteUR::Handler Html
+postDeleteUR = do
+  ((result, _), _) <-runFormPost deleteUsrForm 
+  case result of
+    FormSuccess usrname -> 
+      runSqlite "test5.db3" $ do
+        delete $ from $ \user -> do
+          where_ (user ^. UsrLoginName ==. val usrname)
+        return ()
+    _ -> return ()
+  redirect HomeR
