@@ -34,7 +34,21 @@ import Data.Time.Calendar
 import Data.Time.LocalTime
 import System.Locale
 import qualified Data.Map.Strict as Map
+import Filesystem
 
+
+-- CONFIGURATION
+imagesURL = "http://192.168.1.128:3000/images/"
+
+uploadDirectory :: FilePath
+uploadDirectory = "C:/shared/msys64/home/smills/Hask/newscott/Images"
+
+
+getImagePath = readTextFile "imagepath"
+getUploadDir = readTextFile "uploaddir"
+
+getImage::String->String->String
+getImage a b = a++b
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Person
@@ -124,8 +138,6 @@ type UsrMap = Map.Map Text Text
 
 
 
-imagesURL = "http://192.168.1.128:3000/images/"
-
 
 showgroomed::Wellness->Text
 showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
@@ -214,7 +226,7 @@ mainMenu = do
 
 -- header
         
-headerLogWid maid = $(widgetFileNoReload def "headerLog")
+headerLogWid imgpath maid = $(widgetFileNoReload def "headerLog")
 headerwidget = $(widgetFileNoReload def "header")
 
 

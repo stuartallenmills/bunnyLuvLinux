@@ -37,8 +37,6 @@ headerWidget::Widget
 headerWidget = $(widgetFileNoReload def "header")
 
     
-uploadDirectory :: FilePath
-uploadDirectory = "C:/shared/msys64/home/smills/Hask/newscott/Images"
 
 uploadForm :: Html -> MForm Handler  (FormResult (FileInfo), Widget)
 uploadForm  = renderDivs $ fileAFormReq "Image file"
@@ -47,10 +45,12 @@ uploadForm  = renderDivs $ fileAFormReq "Image file"
 getImagesR::RabbitId-> Handler Html
 getImagesR rabId = do
   maid <- maybeAuthId
+  impath <- liftIO getImagePath
+  let imgpath = unpack impath
   ((_, widget), enctype) <-runFormPost uploadForm
   defaultLayout $ do
      [whamlet|
-      ^{headerLogWid maid}
+      ^{headerLogWid imgpath maid}
       <b> Upload Rabbit Image
                 <form method=post enctype=#{enctype}>
                   ^{widget}
@@ -78,16 +78,17 @@ postImagesR rabId = do
 
 writeToServer :: FileInfo -> Handler FilePath
 writeToServer file = do
-    today<- liftIO $ getCurrentDay
+    today<- liftIO  getCurrentDay
+    uploadDir <- liftIO getUploadDir
     let date = showfiletime today
     let filename = unpack $ fileName file
         rf = reverse filename
         (ext, thead) = break (== '.') rf
         thead2 = tail thead
         fn = (reverse thead2) ++ "_"++( date) ++ "." ++ (reverse ext)
-        path = imageFilePath fn
+        path = imageFilePath uploadDir fn
     liftIO $ fileMove file path
     return fn
 
-imageFilePath :: String -> FilePath
-imageFilePath f = uploadDirectory </> f
+imageFilePath :: Text->String -> FilePath
+imageFilePath adir f = (unpack adir) </> f

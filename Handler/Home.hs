@@ -96,6 +96,8 @@ getTestR = do
             |]
 
 base atitle result = do 
+     impath <- liftIO getImagePath
+     let imgpath = unpack impath
      msg <-getMessage
      maid <- maybeAuthId
      auth <- isAdmin
@@ -125,7 +127,7 @@ base atitle result = do
               |]
 
         [whamlet|
-         ^{headerLogWid maid}
+         ^{headerLogWid imgpath maid}
          ^{mainMenu}
          <div #atitleD> 
               <b> #{atitle} 
