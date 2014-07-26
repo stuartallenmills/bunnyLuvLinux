@@ -21,3 +21,4 @@
 /addU                   AddUR GET POST
 /changePass             ChangePassR GET POST
 /delU                   DeleteUR GET POST
+/ages/#Integer           AgesR GET

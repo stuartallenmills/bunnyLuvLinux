@@ -1,4 +1,4 @@
-  <div #showvv>
+  <div #showvv >
    $forall Entity vetVisitId vvR <- vetVisits
     <div #svvR>
      <div .vvR>

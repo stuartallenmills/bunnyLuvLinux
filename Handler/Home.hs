@@ -27,6 +27,8 @@ import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Data.Time
+import Data.List (sortBy)
+
 
 
 
@@ -142,3 +144,29 @@ getHomeR = do
     let zinc = bl++ad++di++eu
     base "All Rabbits" zinc
 
+ageDiff::Day->Entity Rabbit->(Integer, Entity Rabbit)
+ageDiff bday rabE@(Entity _ rab) = ( abs (diffDays bday (rabbitBirthday rab)), rabE)
+
+sortImp::(Integer, Entity Rabbit)->(Integer, Entity Rabbit)->Ordering
+sortImp (a, r1) (b, r2)
+          | a>b = GT
+          | a==b = EQ
+          | a<b = LT
+
+extractRabb (a, rabE) = rabE
+                  
+sortEnt::Day->[Entity Rabbit]->[Entity Rabbit]
+sortEnt bday rabs = nrabs where
+        ageDiffs = map (ageDiff bday) rabs
+        sorted =  (sortBy sortImp ageDiffs)
+        nrabs = map extractRabb sorted
+  
+getAgesR::Integer->Handler Html
+getAgesR yrs = do
+    b1 <-queryStatus "BunnyLuv"
+    today <- liftIO getCurrentDay
+    let bday = addDays (yrs*(-365)) today
+    let result = sortEnt bday b1
+    let ageTit= "Age: "++(show yrs)
+    base (toHtml ageTit) result
+ 

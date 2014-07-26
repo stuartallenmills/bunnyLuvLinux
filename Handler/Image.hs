@@ -38,7 +38,7 @@ headerWidget = $(widgetFileNoReload def "header")
 
     
 uploadDirectory :: FilePath
-uploadDirectory = "C:/shared/msys64/home/smills/Hask/scott/Images"
+uploadDirectory = "C:/shared/msys64/home/smills/Hask/newscott/Images"
 
 uploadForm :: Html -> MForm Handler  (FormResult (FileInfo), Widget)
 uploadForm  = renderDivs $ fileAFormReq "Image file"

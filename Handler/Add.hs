@@ -68,6 +68,9 @@ showWellness wellness =   $(widgetFileNoReload def "showwellness")
 testDateIn now  Nothing = Just now
 testDateIn now (Just rab)  = Just (showtime (rabbitDateIn rab))
 
+getDateIn Nothing = Nothing
+getDateIn (Just rab) = Just (rabbitDateIn rab)
+
 testStatusDate now Nothing = Just now
 testStatusDate now (Just rab) = Just (rabbitStatusDate rab)
 
@@ -146,6 +149,8 @@ postDiedR rabid = do
 
   redirect (ViewR rabid)
 
+
+
 rabbitForm ::(Maybe Rabbit, Maybe [Entity Wellness])-> Html -> MForm Handler (FormResult Rabbit, Widget)
 rabbitForm (mrab, rabID) extra = do
     local_time <- liftIO $ getLocalTime
@@ -162,8 +167,8 @@ rabbitForm (mrab, rabID) extra = do
     (alteredRes, alteredView) <- mreq (selectFieldList altered) "not" (test mrab rabbitAltered)
     (alteredDateRes, alteredDateView)<-mopt textField "this is not" (testAlteredDate mrab)
     (statusRes, statusView) <- mreq (selectFieldList status) "who" (test mrab rabbitStatus)
-    (yrsIntakeRes, yrsIntakeView) <- mreq (selectFieldList years) "zip" Nothing
-    (mnthsIntakeRes, mnthsIntakeView) <- mreq (selectFieldList months) "zip" Nothing
+    (yrsIntakeRes, yrsIntakeView) <- mreq (selectFieldList years) "zip" (getYrsDateInM mrab)
+    (mnthsIntakeRes, mnthsIntakeView) <- mreq (selectFieldList months) "zip" (getMonthsDateInM mrab)
     (sourceTypeRes, sourceTypeView) <- mreq (selectFieldList sourceType) "zip" (test mrab rabbitSourceType)
     (statusDateRes, statusDateView) <- mreq textField " nope" (testStatusDate stime  mrab)
     (statusNoteRes, statusNoteView) <- mreq textField "nope" (opttest mrab rabbitStatusNote)
@@ -281,6 +286,13 @@ getViewR rabId  = do
                  cursor:pointer;
                  background:#f0f0f0;
               }
+
+             #showWell{
+                   display:none;
+                }
+             #showvv {
+                   display:none;
+             }
             |]
          toWidget [julius|
                      $(function() {
@@ -317,8 +329,9 @@ getViewR rabId  = do
                     <div .cancelBut #vrWell style="display:inline; float:right;">
                      <a href=@{WellnessR rabId}>wellness </a>
                     
-              <div #viewRabbitBlock>
-               ^{viewRab rab yrs mnths}
+             <div #viewRabbitBlock>
+              ^{viewRab rab yrs mnths}
+              $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}
                $else
@@ -330,7 +343,7 @@ getViewR rabId  = do
                   <span> </span>
                $if had_well
                  <div #haswell style="float:left;"><b> Wellness </b> </div>
-                    ^{showWellness wellRs}
+                 ^{showWellness wellRs}
                $else
                   <span> </span>
                 

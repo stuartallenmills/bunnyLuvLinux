@@ -7,7 +7,7 @@
                       Sex : ^{fvInput sexView}
                   <div .faddRw>
                   <div .faddRw>
-                       Estimated Age:  Years: ^{fvInput yrsIntakeView}
+                       Estimated Age at intake:  Years: ^{fvInput yrsIntakeView}
                        &nbsp; Months: ^{fvInput mnthsIntakeView}
 
                   <div .faddRw>

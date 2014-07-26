@@ -41,7 +41,7 @@ executable bunnyLuv
                        , directory
                        , time
                        , old-locale
-                       , yesod ==1.2.6
+                       , yesod >=1.2.6 && < 1.3
                        , filepath
                        , http-conduit
                        , yesod-auth

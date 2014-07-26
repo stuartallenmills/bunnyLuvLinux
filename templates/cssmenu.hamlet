@@ -14,6 +14,20 @@
       <ul>
          <li><a href=@{SourceR "Shelter"}><span>Shelter</span></a></li>
          <li class='last'><a href=@{SourceR "Other"}><span>Other</span></a></li>
+   <li class='has-sub'><a href='#'><span>Age</span></a>
+     <ul>
+        <li><a href=@{AgesR 1}><span>1 year</span></a></li>
+        <li><a href=@{AgesR 2}><span>2 year</span></a></li>
+        <li><a href=@{AgesR 3}><span>3 year</span></a></li>
+        <li><a href=@{AgesR 4}><span>4 year</span></a></li>
+        <li><a href=@{AgesR 5}><span>5 year</span></a></li>
+        <li><a href=@{AgesR 6}><span>6 year</span></a></li>
+        <li><a href=@{AgesR 7}><span>7 year</span></a></li>
+        <li><a href=@{AgesR 8}><span>8 year</span></a></li>
+        <li><a href=@{AgesR 9}><span>9 year</span></a></li>
+        <li class='last'><a href=@{AgesR 10}><span>10 year</span></a></li>
+
+
    <li class='has-sub'><a href='#'><span>Reports</span></a>
       <ul>
          <li><a href=@{VVViewR}><span>Vet Visits</span></a></li>
@@ -21,6 +35,7 @@
          <li class='last'><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
    <li class='has-sub last' id="blAdmin"><a href='#'><span>Admin</span></a>
       <ul>
+         <li><a href='#'><span>Back up data</span></a></li>
          <li><a href=@{ChangePassR}><span>Change Password</span></a></li>
          <li><a href=@{DeleteUR}><span>Delete User</span></a></li>
          <li class='last'><a href=@{AddUR}><span>Add User</span></a></li>

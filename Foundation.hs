@@ -245,16 +245,25 @@ getCurrentDay = do
     let today = localDay local_time
     return (today)
 
+getYrsDateInM::Maybe Rabbit-> Maybe Integer
+getYrsDateInM  Nothing = Nothing
+getYrsDateInM  (Just rab) = Just (getCurrentYears (rabbitDateIn rab) rab)
+
 getCurrentYears::Day->Rabbit-> Integer
 getCurrentYears today rab = years where
      dage = diffDays today  (rabbitBirthday rab)
      years = dage `div` 365
 
+getMonthsDateInM::Maybe Rabbit->Maybe Integer
+getMonthsDateInM Nothing = Nothing
+getMonthsDateInM  (Just rab) = Just (getCurrentMonths (rabbitDateIn rab) rab)
+
 getCurrentMonths::Day->Rabbit-> Integer
 getCurrentMonths today rab = mnths where
      dage = diffDays today  (rabbitBirthday rab)
      (_,rm) = dage `divMod` 365
-     mnths = rm `div` 30 
+     tmnths = rm `div` 30
+     mnths = if tmnths > 11 then 11 else tmnths
 
 
 -- END  TIME ROUTINE
