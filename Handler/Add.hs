@@ -119,12 +119,15 @@ diedForm extra = do
 getDiedR::RabbitId->Handler Html
 getDiedR rabid= do
     maid <- maybeAuthId
+    impath <- liftIO getImagePath
+    let imgpath = unpack impath
+
     (formWidget, enctype) <- generateFormPost (diedForm )
     defaultLayout $ do
          setTitle "Death"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerLogWid maid}
+             ^{headerLogWid imgpath maid}
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
                 <b> Died
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
@@ -191,12 +194,14 @@ rabbitForm (mrab, rabID) extra = do
 getAddR ::Handler Html    
 getAddR  = do
     maid <- maybeAuthId
+    impath <- liftIO getImagePath
+    let imgpath = unpack impath
     (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing,Nothing))
     defaultLayout $ do
          setTitle "Add Rabbit"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerLogWid maid}
+             ^{headerLogWid imgpath maid}
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
                 <b> Add Rabbit
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
@@ -234,7 +239,7 @@ postUpdateR rabID = do
 
 
 
-viewRab rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
+viewRab imgpath rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
 
 
 
@@ -245,6 +250,9 @@ showadopted rabbit adopteds = $(widgetFileNoReload def "showadopted");
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
     maid <- maybeAuthId
+    impath <- liftIO getImagePath
+    let imgpath = unpack impath
+
     admin <- isAdmin
     let showMenu = (admin==Authorized)
     Just rab <-runSqlite "test5.db3"  $ do
@@ -307,7 +315,7 @@ getViewR rabId  = do
           |]
 
          [whamlet| 
-            ^{headerLogWid maid}
+            ^{headerLogWid imgpath maid}
               <div #eTitle .subTitle >
                <b> View Rabbit </b>
                $if showMenu
@@ -330,7 +338,7 @@ getViewR rabId  = do
                      <a href=@{WellnessR rabId}>wellness </a>
                     
              <div #viewRabbitBlock>
-              ^{viewRab rab yrs mnths}
+              ^{viewRab imgpath rab yrs mnths}
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}
@@ -353,6 +361,8 @@ getViewR rabId  = do
 getEditR::RabbitId->Handler Html
 getEditR rabID  = do
     maid <- maybeAuthId
+    impath <- liftIO getImagePath
+    let imgpath = unpack impath
     rabbit <-runSqlite "test5.db3"  $ do
                   rabt<- get rabID
                   return rabt
@@ -362,7 +372,7 @@ getEditR rabID  = do
          setTitle "Edit Rabbit"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-              ^{headerLogWid maid}
+              ^{headerLogWid imgpath maid}
               <div #eTitle .subTitle>
                 <b> Edit Rabbit
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">

@@ -125,6 +125,8 @@ adoptedForm rabID extra = do
 getAdoptedR ::RabbitId->Handler Html
 getAdoptedR rabid = do
     maid<-maybeAuthId
+    impath <- liftIO getImagePath
+    let imgpath = unpack impath
     Just rabbit <-runSqlite "test5.db3"  $ do
                   rabt<- get rabid
                   return rabt
@@ -133,7 +135,7 @@ getAdoptedR rabid = do
          setTitle "Adoption"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerLogWid maid}
+             ^{headerLogWid imgpath maid}
               <div #addCance .subTitle>
                  <b> Adoption for &nbsp; #{rabbitName rabbit}
                 <div #adoptCan style="float:right; display:inline;">

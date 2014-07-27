@@ -28,9 +28,30 @@ import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Data.Time
 import Data.List (sortBy)
+import qualified Data.Text as T
 
+fsource::Text
+fsource = "bob, shir"
 
+-- tform::Html->MForm Handler (FormResult Text, Widget)
+-- tform extra =do
+--   (nameRes, nameView) <- mreq (jqueryAutocompleteField  fsource) "help" Nothing
+--   let wid = [whamlet|
+--                 rabbit name:^{fvInput nameView}
+--              |]
+--   return (nameRes, wid) 
+                 
+--gfrom = renderDivs $  areq (jqueryAutocompleteField )  "bbbb" Nothing
 
+tform::Html->MForm Handler (FormResult Text, Widget)
+tform extra = do
+  (nameRes, nameView) <- mreq textField "bbbb" Nothing
+  let wid =
+                  [whamlet| #{extra}
+                      <span style="font-size:85%;">name:</span> ^{fvInput nameView}
+                      <input #nameInput type=submit value="find">
+                    |]
+  return (nameRes, wid)
 
 queryAltered value =runSqlite "test5.db3" $ do
   zipt<-select $ from $ \r->do
@@ -64,7 +85,18 @@ querySource source = runSqlite "test5.db3" $ do
      return (r)
   return zipt
 
-
+queryName name = runSqlite "test5.db3" $ do
+  let (f,s) = T.splitAt 1 name
+  let capName = append (T.toUpper f) s
+  let lowName = append (T.toLower f) s
+      
+  zipt<-select $ from $ \r ->do
+     where_ ((like  (r ^. RabbitName)  ((%) ++. val capName ++. (%)) ) ||.
+             (like  (r ^. RabbitName)  ((%) ++. val lowName ++. (%)) ) 
+             )
+     orderBy [asc (r ^. RabbitName)]
+     return r
+  return zipt
 
 
 getAlteredR isAlt = do
@@ -86,6 +118,12 @@ getSourceR source  = do
 doRabbitRow::Day->RabbitId->Rabbit->Widget
 doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow") 
 
+getShowNameR::Text->Handler Html
+getShowNameR name = do
+  zinc<-queryName name
+  let ti = append "Name: " name
+  base (toHtml ti) zinc
+   
 getTestR :: Handler Html
 getTestR = do
   defaultLayout $ do
@@ -95,7 +133,15 @@ getTestR = do
       <div>This is a test of the something
             |]
 
+postNameR::Handler Html 
+postNameR = do
+  ((result,_), _) <- runFormPost tform
+  case result of
+    FormSuccess name -> (redirect (ShowNameR name))
+    _ -> redirect (HomeR)
+  
 base atitle result = do 
+     (formWidget, enctype) <- generateFormPost tform
      impath <- liftIO getImagePath
      let imgpath = unpack impath
      msg <-getMessage
@@ -123,10 +169,22 @@ base atitle result = do
                                 padding-bottom:5px;
                                 padding-top:5px;
                                 border-bottom:thin solid #404040;
-                        }
+                            }
+                           #rName {
+                              padding:0;
+                              border:none;
+                              margin:0;
+                              float:right;
+                             }
+                           #rName input {
+                              display:inline;
+                           }
+                      
               |]
 
         [whamlet|
+         <form #rName method=post action=@{NameR} enctype=#{enctype}>
+           ^{formWidget}
          ^{headerLogWid imgpath maid}
          ^{mainMenu}
          <div #atitleD> 

@@ -47,12 +47,15 @@ addUsrForm extra = do
 getAddUR::Handler Html  
 getAddUR = do
  maid <- maybeAuthId
+ impath <- liftIO getImagePath
+ let imgpath = unpack impath
+
  (formWidget, enctype) <- generateFormPost addUsrForm
  defaultLayout $ do
          setTitle "Add User"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerLogWid maid}
+             ^{headerLogWid imgpath maid}
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
                 <b> Add New User
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
@@ -110,12 +113,14 @@ changePassForm uname extra = do
 getChangePassR::Handler Html  
 getChangePassR = do
  Just maid <- maybeAuthId
+ impath <- liftIO getImagePath
+ let imgpath = unpack impath
  (formWidget, enctype) <- generateFormPost (changePassForm maid)
  defaultLayout $ do
          setTitle "Change Password"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerLogWid (Just maid)}
+             ^{headerLogWid imgpath (Just maid)}
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
                 <b> Change Password
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
@@ -162,12 +167,14 @@ deleteUsrForm  extra = do
 getDeleteUR::Handler Html  
 getDeleteUR = do
  Just maid <- maybeAuthId
+ impath <- liftIO getImagePath
+ let imgpath = unpack impath
  (formWidget, enctype) <- generateFormPost deleteUsrForm
  defaultLayout $ do
          setTitle "Delete User"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerLogWid (Just maid)}
+             ^{headerLogWid imgpath (Just maid)}
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
                 <b> Delete User
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">

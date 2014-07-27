@@ -3,7 +3,7 @@
    $maybe img <- (rabbitImage rab)
     <div .vrRow>
       <div #animage style="width:30%;">
-        <img #rabImg src=#{imagesURL ++ (unpack img)} style="width:98%; float:left; margin-right:5px;">
+        <img #rabImg src=#{getImage imgpath (unpack img)} style="width:98%; float:left; margin-right:5px;">
       <div .prow>
        <div #vrname>
         #{rabbitName rab}

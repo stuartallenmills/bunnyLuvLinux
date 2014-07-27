@@ -58,6 +58,8 @@ wellnessForm user rabID extra = do
 getWellnessR::RabbitId->Handler Html
 getWellnessR rabID  = do
     maid <- maybeAuthId
+    impath <- liftIO getImagePath
+    let imgpath = unpack impath
     Just rabbit <-runSqlite "test5.db3"  $ do
                   rabt<- get rabID
                   return rabt
@@ -66,7 +68,7 @@ getWellnessR rabID  = do
          setTitle "Wellness Report"
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-              ^{headerLogWid maid}
+              ^{headerLogWid imgpath maid}
               <div #eTitle .subTitle>
                 <b> Wellness Report for &nbsp;  #{rabbitName rabbit}
                 <div #wellCan style="float:right; display:inline;">

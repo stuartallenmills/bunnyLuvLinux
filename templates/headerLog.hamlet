@@ -1,6 +1,6 @@
      <div class="title" >
       <div #headimg>
-       <a href=@{HomeR}> <img src=#{getImage imgpath "bunnyluv_img.gif"} width="80px"></a>
+       <a href=@{HomeR}> <img id="himg" src=#{getImage imgpath "bunnyluv_img.gif"}></a>
       <div #splash>  
        <h2> BunnyLuv Rabbit Tracker
       $maybe usr <-maid

@@ -35,6 +35,9 @@ reportbase atitle result = do
      msg <-getMessage
      maid <- maybeAuthId
      auth <- isAdmin
+     impath <- liftIO getImagePath
+     let imgpath = unpack impath
+
      let isAuth=(auth==Authorized)
      today<- liftIO $ getCurrentDay
      defaultLayout $ do
@@ -50,7 +53,7 @@ reportbase atitle result = do
                            });
                              |]
         [whamlet|
-         ^{headerLogWid maid}
+         ^{headerLogWid imgpath maid}
          ^{mainMenu}
          <div #atitleD> 
               <b> #{atitle} 

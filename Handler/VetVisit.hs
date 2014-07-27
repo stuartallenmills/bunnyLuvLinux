@@ -141,6 +141,9 @@ vetVisitForm rab rabid extra = do
 getVetVisitR ::RabbitId->Handler Html
 getVetVisitR rabid = do
     maid <- maybeAuthId
+    impath <- liftIO getImagePath
+    let imgpath = unpack impath
+
     Just rab <-runSqlite "test5.db3"  $ do
                   rabt<- get rabid
                   return rabt
@@ -149,7 +152,7 @@ getVetVisitR rabid = do
          setTitle "Vet Visit" 
          $(widgetFileNoReload def "cancelbutton")
          [whamlet|
-             ^{headerLogWid maid}
+             ^{headerLogWid imgpath maid}
               <div #vvTitle .subTitle>
                 <b> Vet Visit for &nbsp; #{rabbitName rab}
                 <div #vvCan style="float:right; display:inline;">

@@ -38,7 +38,6 @@ import Filesystem
 
 
 -- CONFIGURATION
-imagesURL = "http://192.168.1.128:3000/images/"
 
 uploadDirectory :: FilePath
 uploadDirectory = "C:/shared/msys64/home/smills/Hask/newscott/Images"

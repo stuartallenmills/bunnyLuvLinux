@@ -1,7 +1,7 @@
 #headimg {
       float:left;
       display:block;
-      width:28%;
+      width:26%;
       padding:0;
       border:none;
 }
@@ -12,6 +12,11 @@
     border:none;
     text-shadow:2px 2px 1px #aaaaaa;
     font-family:-moz-fixed;
+}
+
+#splash h2 {
+  margin-bottom: 2%;
+  margin-top:2%;
 }
 
 #login,
@@ -40,6 +45,10 @@
   box-shadow:2px 1px 2px;
 }
 
+#himg {
+  width:88px;
+}
+
 #usrName {
   font-size:95%;
   font-weight:bolder;
@@ -55,5 +64,5 @@
 div.title {
     border-bottom:thin solid #7f7f7f;
     width:100%;
-    height:90px;
+    height:98px;
 }
