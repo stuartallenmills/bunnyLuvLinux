@@ -27,6 +27,7 @@ import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
+import FormUtils
 
 
 
@@ -58,25 +59,23 @@ wellnessForm user rabID extra = do
 getWellnessR::RabbitId->Handler Html
 getWellnessR rabID  = do
     maid <- maybeAuthId
-    impath <- liftIO getImagePath
-    let imgpath = unpack impath
     Just rabbit <-runSqlite "test5.db3"  $ do
                   rabt<- get rabID
                   return rabt
     (wellnessWidget, enctype) <-generateFormPost (wellnessForm maid rabID)
-    defaultLayout $ do
-         setTitle "Wellness Report"
-         $(widgetFileNoReload def "cancelbutton")
-         [whamlet|
-              ^{headerLogWid imgpath maid}
-              <div #eTitle .subTitle>
+    let menu = [whamlet|
+                <div #eTitle .subTitle>
                 <b> Wellness Report for &nbsp;  #{rabbitName rabbit}
                 <div #wellCan style="float:right; display:inline;">
                   <div .cancelBut #wellEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabID }> cancel </a>
+                |]
+    let form = [whamlet| 
               <form method=post action=@{WellnessR rabID} enctype=#{enctype}>
                  ^{wellnessWidget}
-          |]
+            |]
+
+    baseForm "Wellness Report" menu form
 
 
 

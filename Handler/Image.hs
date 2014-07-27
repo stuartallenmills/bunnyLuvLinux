@@ -29,6 +29,7 @@ import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time
 import System.FilePath
+import FormUtils
 
 
 
@@ -44,18 +45,20 @@ uploadForm  = renderDivs $ fileAFormReq "Image file"
 
 getImagesR::RabbitId-> Handler Html
 getImagesR rabId = do
-  maid <- maybeAuthId
-  impath <- liftIO getImagePath
-  let imgpath = unpack impath
   ((_, widget), enctype) <-runFormPost uploadForm
-  defaultLayout $ do
-     [whamlet|
-      ^{headerLogWid imgpath maid}
-      <b> Upload Rabbit Image
+  Just rabbit <-runSqlite "test5.db3"  $ do get rabId
+  let menu = [whamlet| <b> Upload Rabbit Image for #{rabbitName rabbit}
+                <div #wellCan style="float:right; display:inline;">
+                  <div .cancelBut #wellEdCan style="display:inline; float:right;">
+                   <a href=@{ViewR rabId }> cancel </a>
+                     |]
+  let form = [whamlet|            
                 <form method=post enctype=#{enctype}>
                   ^{widget}
                  <input .btn type=submit value="Upload">
-  |]
+      |]
+  baseForm "Upload Image" menu form
+
 postImagesR ::RabbitId-> Handler Html
 postImagesR rabId = do
     ((result, _), _) <- runFormPost uploadForm

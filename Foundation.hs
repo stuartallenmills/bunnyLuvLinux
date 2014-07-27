@@ -39,12 +39,11 @@ import Filesystem
 
 -- CONFIGURATION
 
-uploadDirectory :: FilePath
-uploadDirectory = "C:/shared/msys64/home/smills/Hask/newscott/Images"
 
 
-getImagePath = readTextFile "imagepath"
-getUploadDir = readTextFile "uploaddir"
+getImagePath = readTextFile "links/imagepath"
+getUploadDir = readTextFile "links/uploaddir"
+getBackup = readTextFile "/links/backup"
 
 getImage::String->String->String
 getImage a b = a++b
@@ -130,8 +129,7 @@ Rabbit
 |]
 
 
-type UName = Text
-type UPass = Text
+
 type UsrMap = Map.Map Text Text
 
 
@@ -140,20 +138,6 @@ type UsrMap = Map.Map Text Text
 
 showgroomed::Wellness->Text
 showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
-
-sourceType::[(Text,Text)]
-sourceType=[("Shelter","Shelter"), ("Other", "Other")]
-
-sex::[(Text,Text)]
-sex =[("F","F"), ("M","M")]
-altered::[(Text,Text)]
-altered = [("Spayed", "Spayed"), ("Neutered", "Neutered"), ("No", "No"), ("Unknown", "Unknown")]
-status::[(Text, Text)]
-status = [ ("BunnyLuv", "BunnyLuv"), ("Adopted", "Adopted"), ("Died", "Died"), ("Euthanized", "Euthanized")]
-vets::[(Text, Text)]
-vets = [("Dr. Misetich", "Dr. Misetich"), ("Dr. Petritz", "Dr. Petritz"), ("Dr. Steele (C.A.R.E)", "Dr. Steele (C.A.R.E)")]
-procedures::[(Text,Text)]
-procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthanized", "Euthanized"), ("Other", "Other")]
 
 
                
@@ -304,21 +288,17 @@ authBunnyluv =
         toWidget 
            [whamlet|
 $newline never
-
 <div #logTitle>
     <b> BunnyLuv Login
-
 <form method="post" action="@{authToMaster url}">
     <p>Username: #
      <input type="text" name="ident">
-
     <p>Password: #
      <input type="password" name="pass">
     <p>
     <input type="submit" value="Login">
     $maybe tmsg <-msg
        <p> #{ tmsg}
-
 |]
 
 usrInsert umap (Entity uId (Usr nme pss))  = Map.insert nme pss umap

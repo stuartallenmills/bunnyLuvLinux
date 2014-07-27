@@ -27,6 +27,7 @@ import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
+import FormUtils
 
 
 
@@ -84,39 +85,7 @@ adoptedForm rabID extra = do
                       Zip : ^{fvInput adoptedZipView}
                     <input type=submit value="submit">
         |]
-{-
-    let wlucius =  toWidget
-           [lucius|
-                   .cancelBut {
-                     background: none repeat scroll 0 0 #09c;
-                     border: 1pt solid #999;
-                     border-radius: 5pt;
-                     color: #fff;
-                     float: right;
-                     font-size: 80%;
-                     height: 19px;
-                     padding: 0 13px 0 0;
-                     transform: translateY(-5px);
-                     width: 50px;
-                     }
-                                 /* Change color on mouseover */
-                     .cancelBut:hover {
-                                  background:#fff;
-                                  color:#09c;
-                     }
 
-                     .cancelBut a {
-                            text-decoration:none;
-                            color: #fff;
-                            float:right;
-                     }
-
-                     .cancelBut a:hover {
-                             color:#09c;
-                    }
-                 |]
-    
- -}
     return (adoptedRes, adoptwid)
 
 
@@ -124,31 +93,27 @@ adoptedForm rabID extra = do
 
 getAdoptedR ::RabbitId->Handler Html
 getAdoptedR rabid = do
-    maid<-maybeAuthId
-    impath <- liftIO getImagePath
-    let imgpath = unpack impath
     Just rabbit <-runSqlite "test5.db3"  $ do
                   rabt<- get rabid
                   return rabt
     (formWidget, enctype) <- generateFormPost (adoptedForm rabid)
-    defaultLayout $ do
-         setTitle "Adoption"
-         $(widgetFileNoReload def "cancelbutton")
-         [whamlet|
-             ^{headerLogWid imgpath maid}
+    let menu = [whamlet|
               <div #addCance .subTitle>
                  <b> Adoption for &nbsp; #{rabbitName rabbit}
                 <div #adoptCan style="float:right; display:inline;">
                   <div .cancelBut #adoptEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabid }> cancel </a>
+          |]
+    let form = [whamlet|         
               <form method=post action=@{AdoptedR rabid} enctype=#{enctype}>
                  ^{formWidget}
-          |]
+         |]
+    baseForm "Adoption" menu form
   
 
 postAdoptedR::RabbitId->Handler Html
 postAdoptedR  rabID = do
-  (((result), _), _) <-runFormPost (adoptedForm rabID)
+  ((result, _), _) <-runFormPost (adoptedForm rabID)
 
   case result of
     FormSuccess adopted -> do

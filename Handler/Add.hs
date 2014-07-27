@@ -28,6 +28,7 @@ import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time.Calendar
+import FormUtils
 
 
 
@@ -118,27 +119,24 @@ diedForm extra = do
 
 getDiedR::RabbitId->Handler Html
 getDiedR rabid= do
-    maid <- maybeAuthId
-    impath <- liftIO getImagePath
-    let imgpath = unpack impath
-
-    (formWidget, enctype) <- generateFormPost (diedForm )
-    defaultLayout $ do
-         setTitle "Death"
-         $(widgetFileNoReload def "cancelbutton")
-         [whamlet|
-             ^{headerLogWid imgpath maid}
+    Just rab <- runSqlite "test5.db3" $ get rabid
+    (formWidget, enctype) <- generateFormPost diedForm 
+    let menu = [whamlet|
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
-                <b> Died
+                <b> Death Report for #{rabbitName rab}
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabid}> cancel </a>
-              <form method=post action=@{DiedR rabid} enctype=#{enctype}>
+                |]
+    let form = [whamlet|
+                <form method=post action=@{DiedR rabid} enctype=#{enctype}>
                  ^{formWidget}
-          |]
-           
+                 |]
+
+    baseForm "Died" menu form
+    
 postDiedR::RabbitId->Handler Html
 postDiedR rabid = do
-  (((result), _), _) <-runFormPost (diedForm )
+  ((result, _), _) <-runFormPost (diedForm )
 
   case result of
     FormSuccess died -> do
@@ -189,31 +187,26 @@ rabbitForm (mrab, rabID) extra = do
     return (rabbitUpdateRes, awid)
 
 
-
-
-getAddR ::Handler Html    
-getAddR  = do
-    maid <- maybeAuthId
-    impath <- liftIO getImagePath
-    let imgpath = unpack impath
-    (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing,Nothing))
-    defaultLayout $ do
-         setTitle "Add Rabbit"
-         $(widgetFileNoReload def "cancelbutton")
-         [whamlet|
-             ^{headerLogWid imgpath maid}
-              <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
+getAddR::Handler Html
+getAddR = do
+  (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing,Nothing))
+  let menu = 
+           [whamlet|
+             <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
                 <b> Add Rabbit
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
                    <a href=@{HomeR}> cancel </a>
-              <form method=post action=@{PostR} enctype=#{enctype}>
+                   |]
+  let form =   [whamlet|  <form method=post action=@{PostR} enctype=#{enctype}>
                  ^{formWidget}
-          |]
+                 |]
+  baseForm "Add Rabbit" menu form
+
   
-         
+
 postPostR::Handler Html
 postPostR = do
-  (((result), _), _) <-runFormPost (rabbitForm (Nothing, Nothing))
+  ((result, _), _) <-runFormPost (rabbitForm (Nothing, Nothing))
   link<- case result of
     FormSuccess  rabi -> do
       runSqlite "test5.db3" $ do
@@ -314,7 +307,9 @@ getViewR rabId  = do
              });
           |]
 
-         [whamlet| 
+         [whamlet|
+            <div #ablank style="color:#ffffff; float:right">  
+                 This is a test
             ^{headerLogWid imgpath maid}
               <div #eTitle .subTitle >
                <b> View Rabbit </b>
@@ -342,42 +337,29 @@ getViewR rabId  = do
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}
-               $else
-                   <span> </span>
                $if had_visits 
                  <div #vetvisits style="float:left;"> <b> Vet Visits </b> </div>
                  ^{showvetvisit rab vetvisits}
-               $else
-                  <span> </span>
-               $if had_well
+                $if had_well
                  <div #haswell style="float:left;"><b> Wellness </b> </div>
-                 ^{showWellness wellRs}
-               $else
-                  <span> </span>
-                
+                 ^{showWellness wellRs}               
            |]
 
 
 getEditR::RabbitId->Handler Html
 getEditR rabID  = do
-    maid <- maybeAuthId
-    impath <- liftIO getImagePath
-    let imgpath = unpack impath
-    rabbit <-runSqlite "test5.db3"  $ do
-                  rabt<- get rabID
-                  return rabt
+    rabbit <-runSqlite "test5.db3"  $  get rabID
     wellRs<-queryWellness rabID
     (formWidget, enctype) <- generateFormPost (rabbitForm (rabbit, (Just wellRs)))
-    defaultLayout $ do
-         setTitle "Edit Rabbit"
-         $(widgetFileNoReload def "cancelbutton")
-         [whamlet|
-              ^{headerLogWid imgpath maid}
+    let menu = [whamlet|
               <div #eTitle .subTitle>
                 <b> Edit Rabbit
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabID}> cancel </a>
+               |]
+    let form = [whamlet|
               <form method=post action=@{UpdateR rabID} enctype=#{enctype}>
                  ^{formWidget}
-          |]
+                 |]            
+    baseForm "Edit Rabbit" menu form
 

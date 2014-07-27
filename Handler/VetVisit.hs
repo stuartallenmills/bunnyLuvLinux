@@ -27,6 +27,7 @@ import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
+import FormUtils
 
 
 testAltered::Rabbit->[(Text,Text)]
@@ -140,29 +141,23 @@ vetVisitForm rab rabid extra = do
         
 getVetVisitR ::RabbitId->Handler Html
 getVetVisitR rabid = do
-    maid <- maybeAuthId
-    impath <- liftIO getImagePath
-    let imgpath = unpack impath
-
     Just rab <-runSqlite "test5.db3"  $ do
                   rabt<- get rabid
                   return rabt
     (formWidget, enctype) <- generateFormPost (vetVisitForm rab rabid)
-    defaultLayout $ do
-         setTitle "Vet Visit" 
-         $(widgetFileNoReload def "cancelbutton")
-         [whamlet|
-             ^{headerLogWid imgpath maid}
-              <div #vvTitle .subTitle>
+    let menu = [whamlet|
                 <b> Vet Visit for &nbsp; #{rabbitName rab}
                 <div #vvCan style="float:right; display:inline;">
                   <div .cancelBut #vvEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabid}> cancel </a>
-
-              <form method=post action=@{VetPostR   rabid} enctype=#{enctype}>
+               |]
+    let form = [whamlet|<form method=post action=@{VetPostR   rabid} enctype=#{enctype}>
                  ^{formWidget}
-          |]
-  
+               |]
+    baseForm "Vet Visit" menu form
+
+
+ 
 
 postVetPostR::RabbitId->Handler Html
 postVetPostR  rabID = do
