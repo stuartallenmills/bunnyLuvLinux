@@ -30,6 +30,25 @@ import Data.Time.LocalTime
 import Data.Time.Calendar
 import qualified Data.Map as Map
 
+backupForm :: Html -> MForm Handler  (FormResult (FileInfo), Widget)
+backupForm  = renderDivs $ fileAFormReq "backupe"
+{-
+getBackupR::Handler Html
+getBackupR  = do
+  ((_, widget), enctype) <-runFormPost backupForm
+  let menu = [whamlet| <b> Upload Rabbit Image 
+                <div #wellCan style="float:right; display:inline;">
+                  <div .cancelBut #wellEdCan style="display:inline; float:right;">
+                   <a href=@{HomeR}> cancel </a>
+                     |]
+  let form = [whamlet|            
+                <form method=post enctype=#{enctype}>
+                  ^{widget}
+                 <input .btn type=submit value="Upload">
+      |]
+  baseForm "Upload Image" menu form
+-}
+
 addUsrForm::Html->MForm Handler (FormResult Usr, Widget) 
 addUsrForm extra = do
   (usrNameRes, usrNameView)<- mreq textField "hello" Nothing
@@ -69,7 +88,7 @@ postAddUR = do
   ((result, _), _) <-runFormPost addUsrForm 
   case result of
     FormSuccess usr -> 
-      runSqlite "test5.db3" $ do
+      runSqlite bunnyLuvDB $ do
         insert usr
         return ()
     _ -> return ()
@@ -134,7 +153,7 @@ postChangePassR = do
   ((result, _), _) <-runFormPost addUsrForm 
   case result of
     FormSuccess (Usr nme pss) -> 
-      runSqlite "test5.db3" $ do
+      runSqlite bunnyLuvDB $ do
         update $ \user -> do
           set user [UsrPassword =. val pss]
           where_ (user ^. UsrLoginName ==. val nme)
@@ -188,7 +207,7 @@ postDeleteUR = do
   ((result, _), _) <-runFormPost deleteUsrForm 
   case result of
     FormSuccess usrname -> 
-      runSqlite "test5.db3" $ do
+      runSqlite bunnyLuvDB $ do
         delete $ from $ \user -> do
           where_ (user ^. UsrLoginName ==. val usrname)
         return ()

@@ -76,7 +76,7 @@ reportbase atitle result = do
 
 
 
-doAdoptedReport = runSqlite "test5.db3" $ do
+doAdoptedReport = runSqlite bunnyLuvDB $ do
   zapt <- select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. AdoptedRabbit ==. tr ^. RabbitId)
     orderBy [desc ( tvv ^. AdoptedDate)]
@@ -92,7 +92,7 @@ getAdoptedViewR   = do
 
            
            
-doWellnessReport = runSqlite "test5.db3" $ do
+doWellnessReport = runSqlite bunnyLuvDB $ do
   zapt <- select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. WellnessRabbit ==. tr ^. RabbitId)
     orderBy [desc ( tvv ^.WellnessDate)]
@@ -106,7 +106,7 @@ getWellViewR   = do
    wellReport <-doWellnessReport
    reportbase "Wellness Report" (weReport wellReport)
 
-doVetVisits = runSqlite "test5.db3" $ do
+doVetVisits = runSqlite bunnyLuvDB $ do
   zapt <- select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. VetVisitRabbit ==. tr ^. RabbitId)
     orderBy [desc ( tvv ^. VetVisitDate)]

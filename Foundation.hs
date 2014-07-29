@@ -45,6 +45,9 @@ getImagePath = readTextFile "links/imagepath"
 getUploadDir = readTextFile "links/uploaddir"
 getBackup = readTextFile "/links/backup"
 
+bunnyLuvDB::Text
+bunnyLuvDB = "bunnyluv.db3"
+
 getImage::String->String->String
 getImage a b = a++b
 
@@ -303,7 +306,7 @@ $newline never
 
 usrInsert umap (Entity uId (Usr nme pss))  = Map.insert nme pss umap
 
-getUsrsDb = runSqlite "test5.db3" $ do
+getUsrsDb = runSqlite bunnyLuvDB $ do
     tusrs <- select $ from $ \person-> do
       return person
     return tusrs
@@ -331,13 +334,15 @@ initDB = do
   ct<-getCurrentTime
   tz<-getCurrentTimeZone
   let local_time = utcToLocalTime tz ct
-  withSqlitePool "test5.db3" openConnectionCount $ \pool -> do
+  withSqlitePool bunnyLuvDB openConnectionCount $ \pool -> do
    runResourceT $ runStderrLoggingT $ flip runSqlPool pool $ do
         runMigration migrateAll
+
         insert $ Usr "sharon" "bunnyluv"
         insert $ Usr "stuart" "jrr1jrr1"
         
-        insert $ Person "Michael" "Snoyman" "818-970-6052" "101 welby Way" "paris" "france" "12314"
+{-
+insert $ Person "Michael" "Snoyman" "818-970-6052" "101 welby Way" "paris" "france" "12314"
         stu<-insert sn
         luid<-insert $ lulu 
         chid<-insert $ Rabbit "Chester" "black bunny nice" (doparseTime "08/09/2001")  "Shelter" "West Valley Shelter" "M"  "Neutered" (Just (doparseTime "2/2/2003")) "Died" "07/08/2005" "Unknown Causes" (doparseTime "1/1/1998") Nothing
@@ -351,4 +356,5 @@ initDB = do
         insert $ VetVisit luid "Arden the Vet" (doparseTime "2/12/2014") "Needs to be altered" "Spayed" "Went Well" "Spade" (Just 295.45)
         insert $ VetVisit chid "We Like Pet" (doparseTime "3/22/2014") "Acting Sick" "Test indicate Pnenomia" "baytril prres" "Other" Nothing
         insert $ Adopted luid (doparseTime "2/14/2014") sn
+-}
         return ()

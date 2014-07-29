@@ -8,7 +8,7 @@
 #splash {
     float:left;
     display:block;
-    width:69%;
+    width:70%;
     border:none;
     text-shadow:2px 2px 1px #aaaaaa;
     font-family:-moz-fixed;

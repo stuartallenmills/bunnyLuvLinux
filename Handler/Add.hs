@@ -32,21 +32,21 @@ import FormUtils
 
 
 
-queryWellness rabID = runSqlite "test5.db3" $ do
+queryWellness rabID = runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. WellnessRabbit ==. val rabID)
      orderBy [desc (r ^. WellnessDate)]
      return (r)
   return zipt
 
-queryVetVisits rabID = runSqlite "test5.db3" $ do
+queryVetVisits rabID = runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. VetVisitRabbit ==. val rabID)
      orderBy [desc (r ^. VetVisitDate)]
      return (r)
   return zipt
 
-queryAdopted rabID = runSqlite "test5.db3" $ do
+queryAdopted rabID = runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. AdoptedRabbit ==. val rabID)
      return (r)
@@ -119,7 +119,7 @@ diedForm extra = do
 
 getDiedR::RabbitId->Handler Html
 getDiedR rabid= do
-    Just rab <- runSqlite "test5.db3" $ get rabid
+    Just rab <- runSqlite bunnyLuvDB $ get rabid
     (formWidget, enctype) <- generateFormPost diedForm 
     let menu = [whamlet|
               <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
@@ -140,7 +140,7 @@ postDiedR rabid = do
 
   case result of
     FormSuccess died -> do
-      runSqlite "test5.db3" $ do
+      runSqlite bunnyLuvDB $ do
         update $ \p -> do
           set p [RabbitStatus =. val "Died", RabbitStatusDate =. val ( (diedDate died)),
                  RabbitStatusNote =. val (diedNotes died) ]
@@ -209,7 +209,7 @@ postPostR = do
   ((result, _), _) <-runFormPost (rabbitForm (Nothing, Nothing))
   link<- case result of
     FormSuccess  rabi -> do
-      runSqlite "test5.db3" $ do
+      runSqlite bunnyLuvDB $ do
         rabid<-insert $ rabi
         return (ViewR rabid)
     _ -> return (HomeR)
@@ -222,7 +222,7 @@ postUpdateR rabID = do
 
   case result of
     FormSuccess rabi -> do
-      runSqlite "test5.db3" $ do
+      runSqlite bunnyLuvDB $ do
         _ <-replace  rabID rabi
         return ()
     _ -> return ()
@@ -248,7 +248,7 @@ getViewR rabId  = do
 
     admin <- isAdmin
     let showMenu = (admin==Authorized)
-    Just rab <-runSqlite "test5.db3"  $ do
+    Just rab <-runSqlite bunnyLuvDB  $ do
                   rabt<- get rabId
                   return rabt
     wellRs<-queryWellness rabId
@@ -348,7 +348,7 @@ getViewR rabId  = do
 
 getEditR::RabbitId->Handler Html
 getEditR rabID  = do
-    rabbit <-runSqlite "test5.db3"  $  get rabID
+    rabbit <-runSqlite bunnyLuvDB  $  get rabID
     wellRs<-queryWellness rabID
     (formWidget, enctype) <- generateFormPost (rabbitForm (rabbit, (Just wellRs)))
     let menu = [whamlet|

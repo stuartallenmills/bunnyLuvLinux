@@ -141,7 +141,7 @@ vetVisitForm rab rabid extra = do
         
 getVetVisitR ::RabbitId->Handler Html
 getVetVisitR rabid = do
-    Just rab <-runSqlite "test5.db3"  $ do
+    Just rab <-runSqlite bunnyLuvDB  $ do
                   rabt<- get rabid
                   return rabt
     (formWidget, enctype) <- generateFormPost (vetVisitForm rab rabid)
@@ -161,19 +161,19 @@ getVetVisitR rabid = do
 
 postVetPostR::RabbitId->Handler Html
 postVetPostR  rabID = do
-  Just rab <-runSqlite "test5.db3"  $ do
+  Just rab <-runSqlite bunnyLuvDB  $ do
                   rabt<- get rabID
                   return rabt
   (((result), _), _) <-runFormPost (vetVisitForm rab rabID)
 
   case result of
     FormSuccess vetVisit -> do
-      runSqlite "test5.db3" $ do
+      runSqlite bunnyLuvDB $ do
         _ <-insert  vetVisit
         return ()
       if (((vetVisitSpay vetVisit) == "Neutered") || ((vetVisitSpay vetVisit) == "Spayed"))
        then
-        runSqlite "test5.db3" $
+        runSqlite bunnyLuvDB $
          do  update $ \p -> do 
               set p [ RabbitAltered =. val (vetVisitSpay vetVisit), RabbitAlteredDate =. val (Just (vetVisitDate vetVisit))]
               where_ (p ^. RabbitId ==. val rabID)
@@ -182,7 +182,7 @@ postVetPostR  rabID = do
             return ();
       if ((vetVisitSpay vetVisit) == "Euthanized")
        then
-        runSqlite "test5.db3" $
+        runSqlite bunnyLuvDB $
          do  update $ \p -> do 
               set p [ RabbitStatus =. val (vetVisitSpay vetVisit), RabbitStatusDate =. val (showtime (vetVisitDate vetVisit))]
               where_ (p ^. RabbitId ==. val rabID)

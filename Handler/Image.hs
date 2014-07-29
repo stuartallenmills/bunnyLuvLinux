@@ -46,7 +46,7 @@ uploadForm  = renderDivs $ fileAFormReq "Image file"
 getImagesR::RabbitId-> Handler Html
 getImagesR rabId = do
   ((_, widget), enctype) <-runFormPost uploadForm
-  Just rabbit <-runSqlite "test5.db3"  $ do get rabId
+  Just rabbit <-runSqlite bunnyLuvDB  $ do get rabId
   let menu = [whamlet| <b> Upload Rabbit Image for #{rabbitName rabbit}
                 <div #wellCan style="float:right; display:inline;">
                   <div .cancelBut #wellEdCan style="display:inline; float:right;">
@@ -68,7 +68,7 @@ postImagesR rabId = do
             -- save to image directory
             filename <- writeToServer file
 --            _ <- runDB $ insert (Image filename info date)
-            runSqlite "test5.db3" $ do
+            runSqlite bunnyLuvDB $ do
               update $ \p -> do
                set p [RabbitImage =. val (Just (pack filename))]
                where_ (p ^. RabbitId ==. val rabId)

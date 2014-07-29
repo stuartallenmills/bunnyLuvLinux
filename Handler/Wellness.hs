@@ -59,7 +59,7 @@ wellnessForm user rabID extra = do
 getWellnessR::RabbitId->Handler Html
 getWellnessR rabID  = do
     maid <- maybeAuthId
-    Just rabbit <-runSqlite "test5.db3"  $ do
+    Just rabbit <-runSqlite bunnyLuvDB  $ do
                   rabt<- get rabID
                   return rabt
     (wellnessWidget, enctype) <-generateFormPost (wellnessForm maid rabID)
@@ -85,7 +85,7 @@ postWellnessR rabID = do
   (((result), _), _) <-runFormPost (wellnessForm maid rabID)
   case result of
     FormSuccess wup -> do
-      runSqlite "test5.db3" $ do
+      runSqlite bunnyLuvDB $ do
         insert wup
         return ()
     _ -> return ()

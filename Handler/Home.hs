@@ -62,7 +62,7 @@ tform extra = do
                   
   return (nameRes, wid)
 
-queryAltered value =runSqlite "test5.db3" $ do
+queryAltered value =runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r->do
     if value=="No" then
      where_ ((r ^. RabbitAltered ==. val "No") ||. (r^. RabbitAltered ==. val "Unknown"))
@@ -73,28 +73,28 @@ queryAltered value =runSqlite "test5.db3" $ do
   return zipt
 
   
-query field value= runSqlite "test5.db3" $ do
+query field value= runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r->do
     where_ (r ^. field ==. val value)
     orderBy [asc (r ^. RabbitName)]
     return r
   return zipt
 
-queryStatus status = runSqlite "test5.db3" $ do
+queryStatus status = runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. RabbitStatus ==. val status)
      orderBy [asc (r ^. RabbitName)]
      return (r)
   return zipt
 
-querySource source = runSqlite "test5.db3" $ do
+querySource source = runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. RabbitSourceType ==. val source)
      orderBy [asc (r ^. RabbitName)]
      return (r)
   return zipt
 
-queryName name = runSqlite "test5.db3" $ do
+queryName name = runSqlite bunnyLuvDB $ do
   let (f,s) = T.splitAt 1 name
   let capName = append (T.toUpper f) s
   let lowName = append (T.toLower f) s

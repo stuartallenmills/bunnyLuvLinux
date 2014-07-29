@@ -93,7 +93,7 @@ adoptedForm rabID extra = do
 
 getAdoptedR ::RabbitId->Handler Html
 getAdoptedR rabid = do
-    Just rabbit <-runSqlite "test5.db3"  $ do
+    Just rabbit <-runSqlite bunnyLuvDB  $ do
                   rabt<- get rabid
                   return rabt
     (formWidget, enctype) <- generateFormPost (adoptedForm rabid)
@@ -117,7 +117,7 @@ postAdoptedR  rabID = do
 
   case result of
     FormSuccess adopted -> do
-      runSqlite "test5.db3" $ do
+      runSqlite bunnyLuvDB $ do
         _ <-insert  adopted
         update $ \p -> do
           set p [RabbitStatus =. val "Adopted", RabbitStatusDate =. val (showtime (adoptedDate adopted))]

@@ -11,12 +11,12 @@ import           Network.HTTP.Conduit (Manager, conduitManagerSettings, newManag
 import           Yesod.Auth
 import Dispatch ()
 import Foundation
-
+import Data.Text (unpack)
 
 
 main :: IO ()
 main = do
-    fe<-doesFileExist "test5.db3"
+    fe<-doesFileExist (unpack bunnyLuvDB)
     when (not fe) initDB
     manager <- newManager conduitManagerSettings
     warp 3050 $ App manager
