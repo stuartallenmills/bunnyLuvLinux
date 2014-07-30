@@ -2,19 +2,15 @@
   <ul>
    <li class='active'><a href=@{HomeR}><span>Home</span></a></li>
    <li id="rAddM"><a href=@{AddR}><span>Add</span></a>
-   <li class='has-sub'><a href='#'><span>Status</span></a>
+   <li #blStatus class='has-sub'><a href='#'><span>Status</span></a>
       <ul>
          <li><a href=@{QueryR "BunnyLuv"}><span>BunnyLuv</span></a></li>
          <li><a href=@{QueryR "Adopted"}><span>Adopted</span></a></li>
          <li><a href=@{QueryR "Euthanized"}><span>Euthanized</span></a></li>
-         <li><a href=@{AlteredR "No"}><span>Not Altered</span></a></li>
-         <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
-         <li class='last'><a href=@{QueryR "Died"}><span>Died</span></a></li>
-   <li class='has-sub'><a href='#'><span>Source</span></a>
-      <ul>
-         <li><a href=@{SourceR "Shelter"}><span>Shelter</span></a></li>
-         <li class='last'><a href=@{SourceR "Other"}><span>Other</span></a></li>
-   <li class='has-sub'><a href='#'><span>Age</span></a>
+         <li><a href=@{QueryR "Died"}><span>Died</span></a></li>
+         <li class='last'><a href=${QueryAllR}><span>All on file</span></a></li>
+
+   <li #blAge class='has-sub'><a href='#'><span>Age</span></a>
      <ul>
         <li><a href=@{AgesR 1}><span>1 year</span></a></li>
         <li><a href=@{AgesR 2}><span>2 year</span></a></li>
@@ -28,14 +24,17 @@
         <li class='last'><a href=@{AgesR 10}><span>10 year</span></a></li>
 
 
-   <li class='has-sub'><a href='#'><span>Reports</span></a>
+   <li #blReports class='has-sub'><a href='#'><span>Reports</span></a>
       <ul>
          <li><a href=@{VVViewR}><span>Vet Visits</span></a></li>
          <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>
-         <li class='last'><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
+         <li><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
+         <li><a href=@{AlteredR "No"}><span>Not Altered</span></a></li>
+         <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
+         <li><a href=@{SourceR "Shelter"}><span>Source: Shelter</span></a></li>
+         <li class='last'><a href=@{SourceR "Other"}><span>Source: Other</span></a></li>
    <li class='has-sub last' id="blAdmin"><a href='#'><span>Admin</span></a>
       <ul>
-         <li><a href='#'><span>Back up data</span></a></li>
          <li><a href=@{ChangePassR}><span>Change Password</span></a></li>
          <li><a href=@{DeleteUR}><span>Delete User</span></a></li>
          <li class='last'><a href=@{AddUR}><span>Add User</span></a></li>

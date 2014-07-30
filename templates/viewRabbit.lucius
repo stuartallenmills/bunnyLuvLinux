@@ -10,6 +10,27 @@
  margin-right:5px;
 }
 
+           
+               #vetvisits, #haswell {
+                background: #e0e0e0;
+                padding:5px;
+                float:left;
+                width:100%;
+                text-align:center;
+                border-bottom:1px solid #707080;
+              }
+              
+             #vetvisits:hover, #haswell:hover {
+                 cursor:pointer;
+                 background:#f0f0f0;
+              }
+
+             #showWell{
+                   display:none;
+                }
+             #showvv {
+                   display:none;
+             }
 #vrDiv {
  background:#fff;
  width:100%;
@@ -36,6 +57,8 @@
 
 #vrDiv #vrstatdate {
   float:right;
+  width:30%;
+  text-align:right;
 }
 
 #vrnamen {

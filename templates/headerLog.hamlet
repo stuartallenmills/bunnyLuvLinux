@@ -9,6 +9,6 @@
          <div #usrName> #{usr}  
          <a href=@{AuthR LogoutR}>logout</a>
       $nothing
-       <div #login style="float:right;">
+       <div #login style="float:right;" title="Login to administrator">
         <a href=@{AuthR LoginR}>login</a>
      <div #null></div>

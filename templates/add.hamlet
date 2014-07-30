@@ -16,13 +16,13 @@
                   <div .faddRw>
                    <div id="alteredF">
                       Altered: ^{fvInput alteredView}
-                   <div id="falteredDate">
-                      Altered Date: ^{fvInput alteredDateView} (leave blank if not known)
+                   <div .blDate id="falteredDate">
+                      Altered Date (m/d/yyyy): ^{fvInput alteredDateView} (leave blank if not known)
                   <div .faddRw>
                      <div #sourceTypeF>
                        Source Type: ^{fvInput sourceTypeView}
-                     <div #dateInF>
-                       Date In: ^{fvInput dateInView}
+                     <div .blDate #dateInF>
+                       Date In (m/d/yyyy): ^{fvInput dateInView}  
                   <div .faddRw>
                      <div #sourceF>
                        Source:   ^{fvInput sourceView}
@@ -30,8 +30,8 @@
                     <div #statusF>
                       Status:
                      ^{fvInput statusView}
-                    <div #statusDateF>   
-                      Status Date: ^{fvInput statusDateView}
+                    <div .blDate #statusDateF>   
+                      Status Date (m/d/yyyy): ^{fvInput statusDateView}  
                     <div #statusNoteF>
                       Status Notes: ^{fvInput statusNoteView}          
                   <input type=submit value="submit">

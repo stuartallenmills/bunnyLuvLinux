@@ -30,37 +30,12 @@ import Data.Time
 import Data.List (sortBy)
 import qualified Data.Text as T
 import Text.Julius
+import Utils
 
-fsource::Text
-fsource = "bob, shir"
+ageDiffMax::Integer
+ageDiffMax = 2
 
--- tform::Html->MForm Handler (FormResult Text, Widget)
--- tform extra =do
---   (nameRes, nameView) <- mreq (jqueryAutocompleteField  fsource) "help" Nothing
---   let wid = [whamlet|
---                 rabbit name:^{fvInput nameView}
---              |]
---   return (nameRes, wid) 
-                 
---gfrom = renderDivs $  areq (jqueryAutocompleteField )  "bbbb" Nothing
 
-tform::Html->MForm Handler (FormResult Text, Widget)
-tform extra = do
-  (nameRes, nameView) <- mreq textField "bbbb" Nothing
-  let wid =do
-                  [whamlet| #{extra}
-                     <div class=ui-widget style="font-size:1em; display:inline">
-                      <span style="font-size:85%;">
-                         <label for="hident2">name:</label></span> ^{fvInput nameView}
-                     <input #nameInput type=submit value="find">
-                    |]
-                  toWidget [lucius|
-                               ##{fvId nameView} {
-                                      font-size:0.9em;
-                                  }
-                      |]
-                  
-  return (nameRes, wid)
 
 queryAltered value =runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r->do
@@ -80,12 +55,6 @@ query field value= runSqlite bunnyLuvDB $ do
     return r
   return zipt
 
-queryStatus status = runSqlite bunnyLuvDB $ do
-  zipt<-select $ from $ \r ->do
-     where_ (r ^. RabbitStatus ==. val status)
-     orderBy [asc (r ^. RabbitName)]
-     return (r)
-  return zipt
 
 querySource source = runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r ->do
@@ -113,6 +82,13 @@ getAlteredR isAlt = do
      let ti = if (isAlt=="No") then "Not Altered" else "Altered"
      base ti  zinc
 
+getAllR = do
+    bl <-queryStatus "BunnyLuv"
+    ad <-queryStatus "Adopted"
+    di <-queryStatus "Died"
+    eu <-queryStatus "Euthanized"
+    let zinc = bl++ad++di++eu
+    base "All Rabbits" zinc
   
 getQueryR status  = do
      zinc<- queryStatus status
@@ -127,11 +103,18 @@ getSourceR source  = do
 doRabbitRow::Day->RabbitId->Rabbit->Widget
 doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow") 
 
+goEdit (Entity rabid rabbit) =
+  redirect (ViewR rabid)
+  
 getShowNameR::Text->Handler Html
 getShowNameR name = do
   zinc<-queryName name
-  let ti = append "Name: " name
-  base (toHtml ti) zinc
+  page<- if (length zinc)== 1 then
+           goEdit (Prelude.head zinc)
+         else do        
+    let ti = append "Name: " name
+    base (toHtml ti) zinc
+  return page
    
 getTestR :: Handler Html
 getTestR = do
@@ -144,38 +127,16 @@ getTestR = do
 
 postNameR::Handler Html 
 postNameR = do
-  ((result,_), _) <- runFormPost tform
+  ((result,_), _) <- runFormPost getNameForm
   case result of
     FormSuccess name -> (redirect (ShowNameR name))
     _ -> redirect (HomeR)
 
-narray::Text
-narray ="[\"Chester\", \"Chloe\", \"Cooper\", \"Joan\", \"Lulu\"]"
-tarray::[Text]
-tarray = ["Chester", "Chloe", "Cooper", "Joan"]
 
-gostring::[T.Text]->T.Text
-gostring alist = out where
-           temp= foldl (\accum x-> T.append( T.append (T.append "\"" x) "\",") accum) T.empty alist
-           out = T.append "["  (T.append (T.take ((T.length temp) - 1) temp) "]")
 
-getName::Entity Rabbit->Text
-getName (Entity rabId rab) = rabbitName rab
 
-getNames::[Entity Rabbit]->[Text]
-getNames  = map getName 
-
-getNamesDB:: IO [Text]
-getNamesDB = do
-     rabs<-queryStatus "BunnyLuv"
-     return (getNames rabs)
-{-
-                           $( "#hident2" ).on( "autocompleteselect" , function() {
-                              alert("Tags changed");
-                             });
- -}
 base atitle result = do 
-     (formWidget, enctype) <- generateFormPost tform
+     (formWidget, enctype) <- generateFormPost getNameForm
      bnames <- liftIO getNamesDB
      impath <- liftIO getImagePath
      let imgpath = unpack impath
@@ -184,6 +145,10 @@ base atitle result = do
      auth <- isAdmin
      let isAuth=(auth==Authorized)
      today<- liftIO $ getCurrentDay
+     let numBuns = length result
+     
+     let numBunsStr = " : ( " ++ (show numBuns) ++ " )"
+     
      defaultLayout $ do
         setTitle atitle
         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
@@ -191,23 +156,22 @@ base atitle result = do
         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
         toWidget [julius| $( document ).ready(function(){
                              if (#{isAuth}) { 
-                              $( "#cssmenu li:eq(1)" ).show(); 
+                              $( "#blReports" ).show(); 
+                              $( "#blStatus" ).show();
+                              $( "#blSource" ).show();      
+                              $( "#rAddM" ).show();   
                               $( "#blAdmin" ).show(); }
                              else {
-                              $( "#cssmenu li:eq(1)" ).hide(); 
+                              $( "#blReports" ).hide(); 
+                              $( "#blStatus" ).hide();
+                              $( "#blSource" ).hide();      
+                              $( "#rAddM" ).hide(); 
                               $( "#blAdmin" ).hide(); }
                            });
+
                   $(function() {
-   
-                   $( "#hident2" ).autocomplete({
-                      source: #{rawJS (gostring bnames)},
-                      minLength: 1,
-                      select: function (event, ui) {
-                          $( "#hident2" ).val (ui.item.label);
-                          $( "#rName" ).submit()
-                        }
-                    });
-                   });
+                     $( document ).tooltip();
+                     });
                               
                              |]
         toWidget [lucius| #atitleD {
@@ -219,25 +183,19 @@ base atitle result = do
                                 padding-top:5px;
                                 border-bottom:thin solid #404040;
                             }
-                           #rName {
-                              padding:0;
-                              border:none;
-                              margin:0;
-                              float:right;
-                             }
-                           #rName input {
-                              display:inline;
+
+                           .ui-tooltip-content {
+                              font-size:0.8em;
                            }
                       
               |]
 
         [whamlet|
-         <form #rName method=post action=@{NameR} enctype=#{enctype}>
-           ^{formWidget}
+         ^{getNameWidget bnames formWidget enctype}
          ^{headerLogWid imgpath maid}
          ^{mainMenu}
          <div #atitleD> 
-              <b> #{atitle} 
+              <b> #{atitle} #{numBunsStr}
 
          <div #rabbitContainer>
      $forall Entity rabbitid rabbit <- result
@@ -247,15 +205,14 @@ base atitle result = do
 
 getHomeR :: Handler Html
 getHomeR = do
-    bl <-queryStatus "BunnyLuv"
-    ad <-queryStatus "Adopted"
-    di <-queryStatus "Died"
-    eu <-queryStatus "Euthanized"
-    let zinc = bl++ad++di++eu
-    base "All Rabbits" zinc
+    zinc <-queryStatus "BunnyLuv"
+    base "BunnyLuv Rabbits" zinc
 
 ageDiff::Day->Entity Rabbit->(Integer, Entity Rabbit)
 ageDiff bday rabE@(Entity _ rab) = ( abs (diffDays bday (rabbitBirthday rab)), rabE)
+
+clean::[(Integer, Entity Rabbit)]->[(Integer, Entity Rabbit)]
+clean  = filter (\x->fst x <=ageDiffMax) 
 
 sortImp::(Integer, Entity Rabbit)->(Integer, Entity Rabbit)->Ordering
 sortImp (a, r1) (b, r2)
@@ -268,7 +225,8 @@ extractRabb (a, rabE) = rabE
 sortEnt::Day->[Entity Rabbit]->[Entity Rabbit]
 sortEnt bday rabs = nrabs where
         ageDiffs = map (ageDiff bday) rabs
-        sorted =  (sortBy sortImp ageDiffs)
+        cleaned = clean ageDiffs
+        sorted =  (sortBy sortImp cleaned)
         nrabs = map extractRabb sorted
   
 getAgesR::Integer->Handler Html

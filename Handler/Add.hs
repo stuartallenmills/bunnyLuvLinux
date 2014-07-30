@@ -28,7 +28,9 @@ import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time.Calendar
+import Text.Julius
 import FormUtils
+import Utils
 
 
 
@@ -66,13 +68,13 @@ opttest mrab field= case mrab of
 
 showWellness wellness =   $(widgetFileNoReload def "showwellness")
 
-testDateIn now  Nothing = Just now
+testDateIn now  Nothing = Nothing
 testDateIn now (Just rab)  = Just (showtime (rabbitDateIn rab))
 
 getDateIn Nothing = Nothing
 getDateIn (Just rab) = Just (rabbitDateIn rab)
 
-testStatusDate now Nothing = Just now
+testStatusDate now Nothing = Nothing
 testStatusDate now (Just rab) = Just (rabbitStatusDate rab)
 
 testAlteredDate::Maybe Rabbit -> Maybe (Maybe Text)
@@ -183,7 +185,41 @@ rabbitForm (mrab, rabID) extra = do
     let alteredDate = text2dateM alteredDateRes 
     let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> date <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> alteredDate <*> statusRes <*> statusDateRes <*> statusNoteRes <*> bday  <*> imgNoteRes
  --   let rabbitRes = rabbitRes1 <*> (FormResult (Just True)) <*> (FormResult Nothing) Nothing
-    let awid=  $(widgetFileNoReload def "add")
+    let awid= do
+         $(widgetFileNoReload def "add")
+         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
+         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
+
+         toWidget [julius|
+                    $(function () {
+                         $( "#hident3" ).change (function() {
+                             $( "#hident13" ).val( $( "#hident3" ).val());                    
+                             });
+                            });
+                         $(function () {
+                          $( ".blDate :input" ).change (function() {
+                             var str = $( ".blDate :input" ).val();
+                              var res = str.split("/");
+                             if (res.length != 3) {
+                                alert("Date must be m/d/yyyy");
+                                $( ".blDate :input" ).clearQueue();
+                                $( ".blDate :input" ).val("");
+                                $( ".blDate :input").focus();
+                             } else {
+                               var yr = res [2];
+                               if (yr.length !=4) {
+                                alert("Year must have 4 characters: yyyy");
+                                $( ".blDate :input" ).clearQueue();
+                                $( ".blDate :input").val("");
+                                $( ".blDate :input").focus();
+                              }
+                             }                          
+                             });
+                            });
+
+                         |]
+                  
     return (rabbitUpdateRes, awid)
 
 
@@ -232,7 +268,7 @@ postUpdateR rabID = do
 
 
 
-viewRab imgpath rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
+viewRab showMenu not_dead not_adopted rabId imgpath rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
 
 
 
@@ -242,6 +278,8 @@ showadopted rabbit adopteds = $(widgetFileNoReload def "showadopted");
 
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
+    (formWidget, enctype)<- generateFormPost getNameForm
+    bnames <- liftIO getNamesDB
     maid <- maybeAuthId
     impath <- liftIO getImagePath
     let imgpath = unpack impath
@@ -266,74 +304,28 @@ getViewR rabId  = do
     let not_dead = not ((rabbitStatus rab == "Died") || (rabbitStatus rab == "Euthanized"))
     let not_adopted = not (rabbitStatus rab == "Adopted")
     defaultLayout $ do
-         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
-         addScriptRemote "//code.jquery.com/jquery-1.10.2.js"
          addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
          addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
-         toWidget [lucius|
-             
-               #vetvisits, #haswell {
-                background: #e0e0e0;
-                padding:5px;
-                float:left;
-                width:100%;
-                text-align:center;
-                border-bottom:1px solid #707080;
-              }
-              
-             #vetvisits:hover, #haswell:hover {
-                 cursor:pointer;
-                 background:#f0f0f0;
-              }
-
-             #showWell{
-                   display:none;
-                }
-             #showvv {
-                   display:none;
-             }
-            |]
+ 
          toWidget [julius|
-                     $(function() {
-            $( "#accordion" ).accordion();
-             });
+           $(function() {
             $("#vetvisits").click(function() {
                 $("#showvv").toggle();
              });
+            });
+           $(function() {
             $("#haswell").click(function() {
                $("#showWell").toggle();             
              });
-          |]
-
+            });
+          |] 
          [whamlet|
-            <div #ablank style="color:#ffffff; float:right">  
-                 This is a test
-            ^{headerLogWid imgpath maid}
-              <div #eTitle .subTitle >
-               <b> View Rabbit </b>
-               $if showMenu
-                <div #vrButD style="float:right; display:inline;">
-                  <div .cancelBut #vrHome style="display:inline; float:right;">
-                    <a href=@{HomeR}> cancel </a>
-                  <div .cancelBut #vrImage style="display:inline; float:right;">
-                    <a href=@{ImagesR rabId }> image </a>
-                  <div .cancelBut #vrEdit style="display:inline; float:right;">
-                   <a href=@{EditR rabId}> edit </a>
-                  $if not_dead
-                   <div .cancelBut #vrDied style="display:inline; float:right;">
-                    <a href=@{DiedR rabId}> died </a>
-                   <div .cancelBut #vrVet  style="display:inline; float:right;">
-                    <a href=@{VetVisitR rabId}> vet </a>
-                   $if not_adopted
-                    <div .cancelBut #vrAdopt  style="display:inline; float:right;">
-                     <a href=@{AdoptedR rabId}> adopt </a>
-                    <div .cancelBut #vrWell style="display:inline; float:right;">
-                     <a href=@{WellnessR rabId}>wellness </a>
-                    
-             <div #viewRabbitBlock>
-              ^{viewRab imgpath rab yrs mnths}
+            ^{getNameWidget bnames formWidget enctype}
+            ^{headerLogWid imgpath maid}          
+            ^{viewRab showMenu not_dead not_adopted rabId imgpath rab yrs mnths}
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}
