@@ -71,7 +71,9 @@ getNameForm extra = do
                                #getNameDiv {
                                   float:right;
                                 }
-
+                             .ui-autocomplete {
+                                   z-index:100;
+                                 }
                              .ui-menu-item {
                                       font-size:0.8em;
                                 }
@@ -97,10 +99,8 @@ getNameWidget bnames wid enctype = do
             |]
          toWidget [julius|
                   $( document ).ready(function() { 
-                   alert("Executing autocomplete")
-                   $( "#getName" ).autocomplete({
+                    $( "#getName" ).autocomplete({
                       source: #{rawJS (gostring bnames)},
-                      minLength: 1,
                       select: function (event, ui) {
                           $( "#getName" ).val (ui.item.label);
                           $( "#formName" ).submit()

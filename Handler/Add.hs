@@ -304,12 +304,11 @@ getViewR rabId  = do
     let not_dead = not ((rabbitStatus rab == "Died") || (rabbitStatus rab == "Euthanized"))
     let not_adopted = not (rabbitStatus rab == "Adopted")
     defaultLayout $ do
-         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
-         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
-         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
- 
+         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
+         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" 
          toWidget [julius|
            $(function() {
             $("#vetvisits").click(function() {
@@ -320,7 +319,7 @@ getViewR rabId  = do
             $("#haswell").click(function() {
                $("#showWell").toggle();             
              });
-            });
+            });           
           |] 
          [whamlet|
             ^{getNameWidget bnames formWidget enctype}
