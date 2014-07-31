@@ -33,10 +33,66 @@ import Text.Julius
 import Utils
 
 ageDiffMax::Integer
-ageDiffMax = 2
+ageDiffMax = 2 * 365  -- 2 years in days
 
+getAgeForm::Html->MForm Handler (FormResult Integer, Widget)
+getAgeForm extras= do
+  let fs = FieldSettings "sNamel" (Just "Find rabbit") (Just "getAge") (Just "stName") []
+  (ageRes,ageView) <- mreq intField fs  Nothing
+  let awid = do
+        [whamlet| #{extras}
+             <div #getAgeDiv>
+               <label for="getAge">Age: </label> ^{fvInput ageView} yrs
+               <input #agesub type=submit value="find" sytle="float:none; margin-top:10px;">
+         |]
+        toWidget [lucius|
+                    ##{fvId ageView} {
+                             width:4em;
+                        }
+                  |]
+  return(ageRes, awid)
 
+getAgeWidget wid enctype = do
+      [whamlet|
+        <form #ageForm method=post action=@{GetAgeR} enctype=#{enctype}>
+            ^{wid}
+          |]
+      toWidget [lucius|
+           #ageForm {
+                 background:#efefef;           
+                 padding:10px;
+                 border:thin solid #7f7f7f;
+                 margin:0;
+                 position:absolute;
+                 width:25%;
+                 transform: translate(80%, -45px);
+                 box-shadow: 2px 2px 3px #2f2f2f;
+                 z-index:100;
+                 display:none;
+               }
+           #ageForm:after {
+                 display:none;
+            }
+           #ageForm input {
+               display:inline;
+             }
+         |]
+      toWidget [julius|
+                $( "#blAge" ).click(function() {
+                   $( "#ageForm" ).show();
+                  });
+           |]
+                 
+        
 
+postGetAgeR::Handler Html
+postGetAgeR  = do
+  ((result, _), _) <- runFormPost getAgeForm
+  link<-case result of
+       FormSuccess  age ->return (AgesR age)
+       _ -> return HomeR
+  redirect link 
+  
 queryAltered value =runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r->do
     if value=="No" then
@@ -137,6 +193,7 @@ postNameR = do
 
 base atitle result = do 
      (formWidget, enctype) <- generateFormPost getNameForm
+     (ageWidget, age_enctype) <-generateFormPost getAgeForm
      bnames <- liftIO getNamesDB
      impath <- liftIO getImagePath
      let imgpath = unpack impath
@@ -194,6 +251,7 @@ base atitle result = do
          ^{getNameWidget bnames formWidget enctype}
          ^{headerLogWid imgpath maid}
          ^{mainMenu}
+         ^{getAgeWidget ageWidget age_enctype}
          <div #atitleD> 
               <b> #{atitle} #{numBunsStr}
 
@@ -212,7 +270,7 @@ ageDiff::Day->Entity Rabbit->(Integer, Entity Rabbit)
 ageDiff bday rabE@(Entity _ rab) = ( abs (diffDays bday (rabbitBirthday rab)), rabE)
 
 clean::[(Integer, Entity Rabbit)]->[(Integer, Entity Rabbit)]
-clean  = filter (\x->fst x <=ageDiffMax) 
+clean  = filter (\(a,_)-> a <= ageDiffMax) 
 
 sortImp::(Integer, Entity Rabbit)->(Integer, Entity Rabbit)->Ordering
 sortImp (a, r1) (b, r2)
@@ -235,6 +293,6 @@ getAgesR yrs = do
     today <- liftIO getCurrentDay
     let bday = addDays (yrs*(-365)) today
     let result = sortEnt bday b1
-    let ageTit= "Age: "++(show yrs)
+    let ageTit= "Rabbits within 2 years of age: "++(show yrs)
     base (toHtml ageTit) result
  

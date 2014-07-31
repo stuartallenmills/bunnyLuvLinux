@@ -8,7 +8,7 @@
          <li><a href=@{QueryR "Adopted"}><span>Adopted</span></a></li>
          <li><a href=@{QueryR "Euthanized"}><span>Euthanized</span></a></li>
          <li><a href=@{QueryR "Died"}><span>Died</span></a></li>
-         <li class='last'><a href=${QueryAllR}><span>All on file</span></a></li>
+         <li class='last'><a href=@{AllR}><span>All on file</span></a></li>
 
    <li #blAge class='has-sub'><a href='#'><span>Age</span></a>
      <ul>

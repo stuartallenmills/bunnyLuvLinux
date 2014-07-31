@@ -22,6 +22,7 @@
 /changePass             ChangePassR GET POST
 /delU                   DeleteUR GET POST
 /ages/#Integer           AgesR GET
+/getAge                 GetAgeR POST
 /name/#Text             ShowNameR GET
 /getName                NameR POST
 /all                    AllR GET
