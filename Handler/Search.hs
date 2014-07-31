@@ -68,7 +68,7 @@ searchForm extra = do
               <div #startDate>
                 <label .topL for="startD">Intake start date: </label>  ^{fvInput startDateView}   (leave blank if no start date)
               <div #stopDate>
-               <label .topL for="endD">Intake end date : </label> ^{fvInput endDateView}   (leave blank if no start date)
+               <label .topL for="endD">Intake end date : </label> ^{fvInput endDateView}   (leave blank if no end date)
               <div #blInc>
                 <label .topL for="blD"> Include BunnyLuv rabbits: </label> ^{fvInput iBlView}
               <div #diedInc>
@@ -101,7 +101,7 @@ searchForm extra = do
 
                 #gsearchForm .topL {
                    display:inline-block;
-                   width:45%;
+                   width:35%;
                  }
                 #gsearchForm label {
                     margin-right:10px;
@@ -134,7 +134,6 @@ doEnd Nothing = doparseTime "12/30/2200"
 doEnd (Just date) = date
 
 dstate r tsome = (r ^. RabbitDateIn <=. val tsome)
-
 querySearch (Search start stop bl died adopt euth shelt tother) = runSqlite bunnyLuvDB $ do
  let sh = if shelt then "Shelter" else "None"
  let ot = if tother then "Other" else "None"
@@ -180,7 +179,23 @@ querySearch (Search start stop bl died adopt euth shelt tother) = runSqlite bunn
               return r
         else return []
  return (rbl++rd++radop ++ reuth)
-    
+
+getDay Nothing = "None"
+getDay (Just date) = showtime date
+
+parseSearch::Search->(String, String)
+parseSearch (Search sday eday bl dd ad eu sh ot) = (datestring, outstring) where
+  tstartDate = "Start date: " ++ (unpack (getDay sday))
+  tendDate = ", End date: " ++ (unpack (getDay eday))
+  bls = if bl then ", BunnyLuv" else ""
+  dds = if dd then ", Died" else ""
+  ads = if ad then ", Adopted" else ""
+  eus = if eu then ", Euthanized" else ""
+  shs = if sh then ", From shelter" else ""
+  ots = if ot then ", From other" else ""
+  datestring = "Search: " ++ tstartDate++tendDate
+  outstring = bls++dds++ads++eus++shs++ots
+  
              
 postSearchR::Handler Html
 postSearchR = do
@@ -188,6 +203,8 @@ postSearchR = do
   case result of
     FormSuccess  search  -> do
         res <- querySearch search
-        base "Rabbits by Intake Dates" res
+        let (st, en) = parseSearch search
+        let cap = toHtml (pack (st++en))       
+        base cap res
     _ -> redirect HomeR
  
