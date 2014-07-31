@@ -226,10 +226,10 @@ showtime time = pack (formatTime defaultTimeLocale "%m/%d/%Y" time)
 showfiletime time = (formatTime defaultTimeLocale "%m_%d_%Y" time)
 
 text2date::FormResult Text -> FormResult Day
-text2date tdate =  fmap (doparseTime.unpack) tdate
+text2date  =  fmap (doparseTime.unpack) 
 
 text2dateM::FormResult (Maybe Text)->FormResult (Maybe Day)
-text2dateM tdateM= fmap (fmap (doparseTime.unpack)) tdateM
+text2dateM = fmap (fmap (doparseTime.unpack)) 
 
 getLocalTime:: IO (LocalTime)
 getLocalTime = do 

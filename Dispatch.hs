@@ -16,6 +16,7 @@ import Handler.Wellness
 import Handler.Image
 import Handler.Reports
 import Handler.Admin
+import Handler.Search
 
 
 mkYesodDispatch "App" resourcesApp

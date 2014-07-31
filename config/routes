@@ -26,3 +26,4 @@
 /name/#Text             ShowNameR GET
 /getName                NameR POST
 /all                    AllR GET
+/search                 SearchR GET POST
