@@ -14,7 +14,7 @@ import Conduit
 import Data.Conduit
 import Data.Conduit.Binary
 import Data.Default
-import Yesod hiding ((!=.), (==.), (=.), (>=.), (<=.), update)
+import Yesod hiding ((!=.), (==.), (=.), (>=.), (<=.), (||.), update)
 import Yesod.Default.Util
 import Foundation
 import Yesod.Auth
@@ -34,15 +34,15 @@ import Utils
 import BaseForm
 
 data Search = Search {
-               startDate::Maybe Day,
-               endDate:: Maybe Day
-{-             , dead::Bool,
-               bunnyluv::Bool,
-               adopted::Bool,
-               euthanized::Bool
+               startDate::Maybe Day
+              , endDate:: Maybe Day
+              , bunnyluv::Bool
+              , dead::Bool
+              , adopted::Bool
+              , euthanized::Bool
                ,shelter::Bool
                ,other::Bool
--}               
+               
 
                  }
 
@@ -51,22 +51,60 @@ field txt id = FieldSettings txt (Just txt) (Just id) (Just id) []
 searchForm::Html -> MForm Handler (FormResult Search, Widget)
 searchForm extra = do
     (startDateRes, startDateView) <- mopt textField (field "astart" "startD") Nothing
-    (endDateRes, endDateView) <-mopt textField (field "aend" "endD") Nothing
+    (endDateRes, endDateView) <- mopt textField (field "aend" "endD") Nothing
+    (iBlRes, iBlView) <- mreq boolField (field "abl" "blD") (Just True)
+    (iDiedRes, iDiedView) <- mreq boolField (field "adied" "diedD") (Just True)
+    (iAdoptRes, iAdoptView) <- mreq boolField (field "aadopt" "adoptD") (Just True)
+    (iEuthRes, iEuthView) <- mreq boolField (field "aeuth" "euthD") (Just True)
+    (iSheltRes, iSheltView) <- mreq boolField (field "ashelt" "sheltD") (Just True)
+    (iOtherRes, iOtherView) <- mreq boolField (field "aother" "otherD") (Just True)
     let tstartDate = text2dateM startDateRes
     let tendDate =   text2dateM endDateRes
-    let searchRes = Search <$> tstartDate <*> tendDate
+    let searchRes = Search <$> tstartDate <*> tendDate <*> iBlRes <*> iDiedRes <*> iAdoptRes <*> iEuthRes <*> iSheltRes <*> iOtherRes
     let searchw = do
           [whamlet|
               #{extra}
+             <div #gsearchForm>
               <div #startDate>
-                Start date (leave blank if no start date):  ^{fvInput startDateView}
+                <label .topL for="startD">Intake start date: </label>  ^{fvInput startDateView}   (leave blank if no start date)
               <div #stopDate>
-                End date (leave blank if no end date): ^{fvInput endDateView}
-             <input type=submit value="submit">
+               <label .topL for="endD">Intake end date : </label> ^{fvInput endDateView}   (leave blank if no start date)
+              <div #blInc>
+                <label .topL for="blD"> Include BunnyLuv rabbits: </label> ^{fvInput iBlView}
+              <div #diedInc>
+                 <label .topL for="diedD"> Include rabbits that died: </label> ^{fvInput iDiedView}
+              <div #adoptInc>
+                 <label .topL for="adoptD"> Include adopted rabbits: </label> ^{fvInput iAdoptView}
+              <div #euthInc>
+                 <label .topL for="euthD"> Include euthanized rabbits: </label> ^{fvInput iEuthView}
+              <div #sheltInc>
+                 <label .topL for="sheltD">Include rabbits from shelter: </label> ^{fvInput iSheltView}
+              <div #otherInc>
+                 <label .topL for="otherD">Include rabbits not from shelter: </label> ^{fvInput iOtherView}
+
+              <input type=submit value="submit">
                         |]
           toWidget [lucius|
                 ##{fvId startDateView} {
                       width:7em;
+                 }
+                ##{fvId endDateView} {
+                    width:7em;
+                 }
+                #gsearchForm input {
+                    display:inline;
+                 }
+                #gsearchForm div {
+                   margin-top:10px;
+                   margin-bottom:10px;
+                 }
+
+                #gsearchForm .topL {
+                   display:inline-block;
+                   width:45%;
+                 }
+                #gsearchForm label {
+                    margin-right:10px;
                  }
               |]
     return (searchRes, searchw)
@@ -95,12 +133,53 @@ doEnd::Maybe Day->Day
 doEnd Nothing = doparseTime "12/30/2200"
 doEnd (Just date) = date
 
-querySearch (Search start stop) = runSqlite bunnyLuvDB $ 
- select $ from $ \r -> do
-    where_ ((r ^. RabbitDateIn >=. val (doStart start)) &&.
-           (r ^. RabbitDateIn <=. val (doEnd stop)) )
-    orderBy [asc (r ^. RabbitDateIn)]
-    return r
+dstate r tsome = (r ^. RabbitDateIn <=. val tsome)
+
+querySearch (Search start stop bl died adopt euth shelt tother) = runSqlite bunnyLuvDB $ do
+ let sh = if shelt then "Shelter" else "None"
+ let ot = if tother then "Other" else "None"
+ rbl<- if bl then
+        select $ from $ \r -> do
+              where_ ((r ^. RabbitDateIn >=. val (doStart start)) &&.
+               (r ^. RabbitDateIn <=. val (doEnd stop)) &&.
+                (r ^. RabbitStatus ==. val "BunnyLuv")  &&.
+                ( (r ^. RabbitSourceType ==. val sh) ||. (r ^. RabbitSourceType ==. val ot)) 
+               
+                     )
+              orderBy [asc (r ^. RabbitDateIn)]
+              return r
+        else return []
+ rd<- if died then
+        select $ from $ \r -> do
+              where_ ((r ^. RabbitDateIn >=. val (doStart start)) &&.
+               (r ^. RabbitDateIn <=. val (doEnd stop)) &&.
+               (r ^. RabbitStatus ==. val "Died") &&.
+               ( (r ^. RabbitSourceType ==. val sh) ||. (r ^. RabbitSourceType ==. val ot))
+                     )
+              orderBy [asc (r ^. RabbitDateIn)]
+              return r
+        else return []
+ radop<- if adopt then
+        select $ from $ \r -> do
+              where_ ((r ^. RabbitDateIn >=. val (doStart start)) &&.
+               (r ^. RabbitDateIn <=. val (doEnd stop)) &&.
+               (r ^. RabbitStatus ==. val "Adopted") &&.
+               ( (r ^. RabbitSourceType ==. val sh) ||. (r ^. RabbitSourceType ==. val ot))
+                     )
+              orderBy [asc (r ^. RabbitDateIn)]
+              return r
+        else return []
+ reuth<- if euth then
+        select $ from $ \r -> do
+              where_ ((r ^. RabbitDateIn >=. val (doStart start)) &&.
+               (r ^. RabbitDateIn <=. val (doEnd stop)) &&.
+               (r ^. RabbitStatus ==. val "Euthenized")&&.
+               ( (r ^. RabbitSourceType ==. val sh) ||. (r ^. RabbitSourceType ==. val ot))
+                     )
+              orderBy [asc (r ^. RabbitDateIn)]
+              return r
+        else return []
+ return (rbl++rd++radop ++ reuth)
     
              
 postSearchR::Handler Html
