@@ -33,15 +33,23 @@ import Text.Julius
 import Utils
 import BaseForm
 
+getAges yrs diffMnths= do
+    b1 <-queryStatus "BunnyLuv"
+    today <- liftIO getCurrentDay
+    let bday = addDays (yrs*(-365)) today
+    let mnthDays = 31*diffMnths
+    let result = sortEnt mnthDays bday b1
+    let ageTit= "Rabbits within " ++ (show diffMnths) ++ " months of age "++(show yrs)
+    base (toHtml ageTit) result
+
 
 
 postGetAgeR::Handler Html
 postGetAgeR  = do
   ((result, _), _) <- runFormPost getAgeForm
-  link<-case result of
-       FormSuccess  age ->return (AgesR age)
-       _ -> return HomeR
-  redirect link 
+  case result of
+       FormSuccess (AgeSearch age ageDiffMnths) ->getAges age ageDiffMnths
+       _ -> redirect HomeR
   
 queryAltered value =runSqlite bunnyLuvDB $ do
   zipt<-select $ from $ \r->do
@@ -148,8 +156,8 @@ getHomeR = do
 ageDiff::Day->Entity Rabbit->(Integer, Entity Rabbit)
 ageDiff bday rabE@(Entity _ rab) = ( abs (diffDays bday (rabbitBirthday rab)), rabE)
 
-clean::[(Integer, Entity Rabbit)]->[(Integer, Entity Rabbit)]
-clean  = filter (\(a,_)-> a <= ageDiffMax) 
+clean::Integer->[(Integer, Entity Rabbit)]->[(Integer, Entity Rabbit)]
+clean ageDiff = filter (\(a,_)-> a <= ageDiff) 
 
 sortImp::(Integer, Entity Rabbit)->(Integer, Entity Rabbit)->Ordering
 sortImp (a, r1) (b, r2)
@@ -159,10 +167,10 @@ sortImp (a, r1) (b, r2)
 
 extractRabb (a, rabE) = rabE
                   
-sortEnt::Day->[Entity Rabbit]->[Entity Rabbit]
-sortEnt bday rabs = nrabs where
+sortEnt::Integer->Day->[Entity Rabbit]->[Entity Rabbit]
+sortEnt ageRange bday rabs = nrabs where
         ageDiffs = map (ageDiff bday) rabs
-        cleaned = clean ageDiffs
+        cleaned = clean ageRange ageDiffs
         sorted =  (sortBy sortImp cleaned)
         nrabs = map extractRabb sorted
   
@@ -171,7 +179,7 @@ getAgesR yrs = do
     b1 <-queryStatus "BunnyLuv"
     today <- liftIO getCurrentDay
     let bday = addDays (yrs*(-365)) today
-    let result = sortEnt bday b1
+    let result = sortEnt ageDiffMax bday b1
     let ageTit= "Rabbits within 2 years of age "++(show yrs)
     base (toHtml ageTit) result
  

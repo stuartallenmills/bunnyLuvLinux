@@ -31,27 +31,61 @@ import Data.List (sortBy)
 import qualified Data.Text as T
 import Text.Julius
 import Utils
+import Control.Applicative
 
 
 ageDiffMax::Integer
 ageDiffMax = 2 * 365  -- 2 years in days
 
-getAgeForm::Html->MForm Handler (FormResult Integer, Widget)
+data AgeSearch = AgeSearch { agesearchAge::Integer
+                             ,  agesearchDiff::Integer
+                                }
+
+getAgeForm::Html->MForm Handler (FormResult AgeSearch, Widget)
 getAgeForm extras= do
   let fs = FieldSettings "sNamel" (Just "Find rabbit") (Just "getAge") (Just "stName") []
   (ageRes,ageView) <- mreq intField fs  Nothing
+  (ageDiffRes, ageDiffView) <-mreq intField "bbb" (Just 12)
+  let agesch = AgeSearch <$> ageRes <*> ageDiffRes
   let awid = do
+        $(widgetFileNoReload def "cancelButton")
         [whamlet| #{extras}
              <div #getAgeDiv>
+              <div #ageTitle style="margin-bottom:8px;">
+                Find rabbits by age:
+              <div #ageInD>
                <label for="getAge">Age: </label> ^{fvInput ageView} yrs
-               <input #agesub type=submit value="find" sytle="float:none; margin-top:10px;">
+              <div #ageDiffD>
+               <label for="ageDiff">Plus/Minus: </label> ^{fvInput ageDiffView} mnths
+              <div .cancelBut #ageCan style="text-align:left; float:right;">
+                                    <a href=@{HomeR}> cancel</a>
+              <input #agesub type=submit value="find" sytle="float:none; margin-top:10px;">
          |]
         toWidget [lucius|
                     ##{fvId ageView} {
                              width:4em;
-                        }
+                      }
+                    ##{fvId ageDiffView} {
+                         width:4em;
+                      }
+                    #getAgeDiv div {
+                         margin-top:2px;
+                         margin-bottom:2px;
+                      }
+                    #getAgeDiv label {
+                             display:inline-block;
+                             width:40%;
+                      }
+                    #getAgeDiv .cancelBut {
+                           height:1.5em;
+                           width:3em;
+                           padding-left:1px;
+                     }
+                    #agesub {
+                       height: 1.7em;
+                      }
                   |]
-  return(ageRes, awid)
+  return(agesch, awid)
 
 getAgeWidget wid enctype = do
       [whamlet|
@@ -77,7 +111,7 @@ getAgeWidget wid enctype = do
            #ageForm input {
                display:inline;
              }
-         |]
+          |]
       toWidget [julius|
                 $( "#blAge" ).click(function() {
                    $( "#ageForm" ).show();

@@ -43,7 +43,8 @@ import Filesystem
 
 getImagePath = readTextFile "links/imagepath"
 getUploadDir = readTextFile "links/uploaddir"
-getBackup = readTextFile "/links/backup"
+getBackup = readTextFile "links/backup"
+getPort = readTextFile "links/port"
 
 bunnyLuvDB::Text
 bunnyLuvDB = "bunnyluv.db3"
