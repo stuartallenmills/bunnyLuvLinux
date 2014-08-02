@@ -31,12 +31,6 @@ import FormUtils
 
 
 
-
-
-headerWidget::Widget
-headerWidget = $(widgetFileNoReload def "header")
-
-
 adoptedForm::RabbitId->Html-> MForm Handler (FormResult Adopted, Widget)
 adoptedForm rabID extra = do
     local_time <- liftIO $ getLocalTime

@@ -1,24 +1,3 @@
-<div #eTitle .subTitle >
-               $if showMenu
-                <div #vrButD style="float:left; display:inline;">
-                  <div .cancelBut #vrHome style="display:inline; float:left;">
-                    <a href=@{HomeR}> home </a>
-                  <div .cancelBut #vrAdd style="display:inline; float:left;">
-                    <a href=@{AddR}>add</a>
-                  <div .cancelBut #vrEdit style="display:inline; float:left;">
-                   <a href=@{EditR rabId}> edit </a>
-                  <div .cancelBut #vrImage style="display:inline; float:left;">
-                    <a href=@{ImagesR rabId }> image </a>
-                  $if not_adopted
-                    <div .cancelBut #vrAdopt  style="display:inline; float:left;">
-                     <a href=@{AdoptedR rabId}> adopt </a>
-                  $if not_dead
-                   <div .cancelBut #vrDied style="display:inline; float:left;">
-                    <a href=@{DiedR rabId}> died </a>
-                   <div .cancelBut #vrVet  style="display:inline; float:left;">
-                    <a href=@{VetVisitR rabId}> vet </a>
-                   <div .cancelBut #vrWell style="display:inline; float:left;">
-                     <a href=@{WellnessR rabId}>wellness </a>       
 <div #vrDiv>
  <div #vrCore>
    $maybe img <- (rabbitImage rab)

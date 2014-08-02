@@ -214,7 +214,7 @@ mainMenu = do
 -- header
         
 headerLogWid imgpath maid = $(widgetFileNoReload def "headerLog")
-headerwidget = $(widgetFileNoReload def "header")
+headerwidget imgpath = $(widgetFileNoReload def "header")
 
 
 --  TIME ROUTINES 
@@ -287,8 +287,9 @@ authBunnyluv =
     dispatch _ _ = notFound
     url = PluginR "bunnyluv" []
     login authToMaster = do
+        imgpath<- liftIO getImagePath
         msg <- getMessage
-        headerwidget
+        headerwidget (unpack imgpath)
         toWidget 
            [whamlet|
 $newline never

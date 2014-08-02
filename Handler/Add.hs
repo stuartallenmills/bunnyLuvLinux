@@ -268,9 +268,10 @@ postUpdateR rabID = do
 
 
 
-viewRab showMenu not_dead not_adopted rabId imgpath rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
+viewRab imgpath rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
 
 
+viewRabMenu showMenu not_dead not_adopted rabId = $(widgetFileNoReload def "editmenu")
 
 showvetvisit rabbit vetVisits = $(widgetFileNoReload def "showvetvisit");
 
@@ -323,8 +324,9 @@ getViewR rabId  = do
           |] 
          [whamlet|
             ^{getNameWidget bnames formWidget enctype}
-            ^{headerLogWid imgpath maid}          
-            ^{viewRab showMenu not_dead not_adopted rabId imgpath rab yrs mnths}
+            ^{headerLogWid imgpath maid}    
+            ^{viewRabMenu showMenu not_dead not_adopted rabId}      
+            ^{viewRab  imgpath rab yrs mnths}
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}

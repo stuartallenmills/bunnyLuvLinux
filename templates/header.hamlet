@@ -1,6 +1,6 @@
      <div class="title" >
       <div #headimg>
-       <img src="http://192.168.1.128:3000/images/bunnyluv_img.gif" width="80px">
+       <img src= src=#{getImage imgpath "bunnyluv_img.gif"} width="80px">
       <div #splash>  
        <h2> BunnyLuv Rabbit Database
      <div #null></div>

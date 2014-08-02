@@ -33,12 +33,6 @@ import FormUtils
 
 
 
-
-headerWidget::Widget
-headerWidget = $(widgetFileNoReload def "header")
-
-    
-
 uploadForm :: Html -> MForm Handler  (FormResult (FileInfo), Widget)
 uploadForm  = renderDivs $ fileAFormReq "Image file"
   

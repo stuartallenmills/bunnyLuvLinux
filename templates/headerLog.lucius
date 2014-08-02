@@ -9,6 +9,7 @@
     float:left;
     display:block;
     width:73%;
+    height:50px;
     border:none;
     text-shadow:2px 2px 1px #aaaaaa;
     font-family:-moz-fixed;
