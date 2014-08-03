@@ -124,7 +124,7 @@ getDiedR rabid= do
     Just rab <- runSqlite bunnyLuvDB $ get rabid
     (formWidget, enctype) <- generateFormPost diedForm 
     let menu = [whamlet|
-              <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
+              <div #addCance style="float:inherit; text-align:left; margin:10px;">
                 <b> Death Report for #{rabbitName rab}
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabid}> cancel </a>
@@ -228,7 +228,7 @@ getAddR = do
   (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing,Nothing))
   let menu = 
            [whamlet|
-             <div #addCance style="text-align:left; margin-top:5px; margin-bottom:8px;">
+              <div #addCance style="float:inherit; text-align:left; margin:10px;">
                 <b> Add Rabbit
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
                    <a href=@{HomeR}> cancel </a>
@@ -271,7 +271,7 @@ postUpdateR rabID = do
 viewRab imgpath rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
 
 
-viewRabMenu showMenu not_dead not_adopted rabId = $(widgetFileNoReload def "editmenu")
+viewRabMenu showMenu not_dead not_adopted not_altered rabId = $(widgetFileNoReload def "editmenu")
 
 showvetvisit rabbit vetVisits = $(widgetFileNoReload def "showvetvisit");
 
@@ -304,6 +304,7 @@ getViewR rabId  = do
     let had_well = (length wellRs > 0)
     let not_dead = not ((rabbitStatus rab == "Died") || (rabbitStatus rab == "Euthanized"))
     let not_adopted = not (rabbitStatus rab == "Adopted")
+    let not_altered = not ((rabbitAltered rab=="Spayed") || (rabbitAltered rab == "Neutered"))
     defaultLayout $ do
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
@@ -325,7 +326,7 @@ getViewR rabId  = do
          [whamlet|
             ^{getNameWidget bnames formWidget enctype}
             ^{headerLogWid imgpath maid}    
-            ^{viewRabMenu showMenu not_dead not_adopted rabId}      
+            ^{viewRabMenu showMenu not_dead not_adopted not_altered rabId}      
             ^{viewRab  imgpath rab yrs mnths}
               $if showMenu
                $if was_adopted
@@ -345,7 +346,7 @@ getEditR rabID  = do
     wellRs<-queryWellness rabID
     (formWidget, enctype) <- generateFormPost (rabbitForm (rabbit, (Just wellRs)))
     let menu = [whamlet|
-              <div #eTitle .subTitle>
+              <div #addCance style="float:inherit; text-align:left; margin:10px;">
                 <b> Edit Rabbit
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabID}> cancel </a>

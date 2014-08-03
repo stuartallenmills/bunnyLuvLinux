@@ -160,7 +160,7 @@ instance Yesod App where
   isAuthorized (EditR _) _ = isAdmin
   isAuthorized (WellnessR _) _ = isAdmin
   isAuthorized (DiedR _) _ = isAdmin
-  isAuthorized (VetVisitR _) _ = isAdmin
+  isAuthorized (VetVisitR _ _) _ = isAdmin
   isAuthorized (AdoptedR _) _ = isAdmin
   isAuthorized (UpdateR _) True = isAdmin
   isAuthorized (ImagesR _) _ = isAdmin
@@ -268,7 +268,8 @@ getCurrentMonths today rab = mnths where
 -- END  TIME ROUTINE
 
 -- Authorization
-
+-- canbutton::Widget
+-- canbutton =  $(widgetFileNoReload def "cancelButton")
 
 authBunnyluv :: YesodAuth m => AuthPlugin m
 authBunnyluv =
@@ -290,12 +291,21 @@ authBunnyluv =
         imgpath<- liftIO getImagePath
         msg <- getMessage
         headerwidget (unpack imgpath)
+        $(widgetFileNoReload def "cancelButton")
         toWidget 
            [whamlet|
 $newline never
-<div #logTitle>
+ <div #logTitle style="float:inherit; margin:10px;">
     <b> BunnyLuv Login
+    <div .cancelBut #rabEdCan style="display:inline; float:right;">
+          <a href="/"> cancel </a>
+
 <form method="post" action="@{authToMaster url}">
+    <div>
+      You must have a valid account to login
+    <div>
+      If you do not have an account ask an adminstrator to create one for you
+    <div #login>
     <p>Username: #
      <input type="text" name="ident">
     <p>Password: #

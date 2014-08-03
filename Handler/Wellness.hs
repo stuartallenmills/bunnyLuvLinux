@@ -64,7 +64,7 @@ getWellnessR rabID  = do
                   return rabt
     (wellnessWidget, enctype) <-generateFormPost (wellnessForm maid rabID)
     let menu = [whamlet|
-                <div #eTitle .subTitle>
+               <div #addCance style="float:inherit; text-align:left; margin:10px;">
                 <b> Wellness Report for &nbsp;  #{rabbitName rabbit}
                 <div #wellCan style="float:right; display:inline;">
                   <div .cancelBut #wellEdCan style="display:inline; float:right;">

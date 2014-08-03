@@ -2,11 +2,11 @@ $if showMenu
  <div id=editmenu>
   <ul>
    <li class='active'><a href=@{HomeR}><span>Home</span></a></li>
-   <li id="rAddM"><a href=@{AddR}><span>Add</span></a>
+   <li id="rAddM"><a href=@{AddR} title="Add a new rabbit"><span>Add</span></a>
    $if not_dead
     <li #blChStatus class='has-sub'><a href='#'><span>Change Status</span></a>
       <ul>
-         <li><a href=@{VetVisitR rabId}><span>Euthanized</span></a></li>
+         <li><a href=@{VetVisitR rabId "Euth"}><span>Euthanized</span></a></li>
          <li><a href=@{DiedR rabId}><span>Died</span></a></li>
          $if not_adopted
           <li class='last'><a href=@{AdoptedR rabId}><span>Adopted</span></a></li>
@@ -15,10 +15,12 @@ $if showMenu
     <li #blHealth class='has-sub'><a href='#'><span>Add Health</span></a>
       <ul>
          <li><a href=@{WellnessR rabId}><span>New Wellness Report</span></a></li>
-         <li class=><a href=@{VetVisitR rabId}><span>Enter Vet Visit</span></a></li>
-         <li class='last'><a href=@{VetVisitR rabId}><span>Altered</span></a></li>
+         <li class=><a href=@{VetVisitR rabId "General"}><span>Enter Vet Visit</span></a></li>
+         $if not_altered
+          <li><a href=@{VetVisitR rabId "Altered"}><span>Altered</span></a></li>
+         <li class='last'><a href=@{VetVisitR rabId "Euth"}><span>Euthanized</span></a></li>
 
-   <li class='has-sub last' id="blEdit"><a href='#'><span>Edit</span></a>
+   <li class='has-sub last' id="blEdit"><a href='#' title="Edit Intake Information"><span>Edit</span></a>
       <ul>
          <li><a href=@{ImagesR rabId}><span>Set Image</span></a></li>
          <li class='last'><a href=@{EditR rabId}><span>Edit Intake Information</span></a></li>

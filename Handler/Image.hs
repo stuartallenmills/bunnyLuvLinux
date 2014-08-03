@@ -41,7 +41,10 @@ getImagesR::RabbitId-> Handler Html
 getImagesR rabId = do
   ((_, widget), enctype) <-runFormPost uploadForm
   Just rabbit <-runSqlite bunnyLuvDB  $ do get rabId
-  let menu = [whamlet| <b> Upload Rabbit Image for #{rabbitName rabbit}
+  let menu = [whamlet|
+              <div #addCance style="float:inherit; text-align:left; margin:10px;">
+
+                <b> Upload Rabbit Image for #{rabbitName rabbit}
                 <div #wellCan style="float:right; display:inline;">
                   <div .cancelBut #wellEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabId }> cancel </a>

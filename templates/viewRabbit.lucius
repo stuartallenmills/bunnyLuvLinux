@@ -57,7 +57,7 @@
 
 #vrDiv #vrstatdate {
   float:right;
-  width:30%;
+  width:22%;
   text-align:right;
 }
 
@@ -136,7 +136,7 @@
 }
 
 #vrstatdate {
-  width:40%;
+  width:22%;
 }
 
 #vrstatnoe {

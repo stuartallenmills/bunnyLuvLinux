@@ -38,17 +38,24 @@ testAltered rab | (((rabbitAltered rab)=="Spayed") || ((rabbitAltered rab)=="Neu
 setSources::Rabbit->[(Text,Text)]
 setSources rab = [("Other","Other")]++(testAltered rab) ++ [("Euthanized","Euthanized")]
 
-
-vetVisitForm::Rabbit-> RabbitId->Html-> MForm Handler (FormResult VetVisit, Widget)
-vetVisitForm rab rabid extra = do
+parseTask rab task
+          | task=="Euth" = (Just "Euthanized")
+          | task=="Altered" = astring
+          | otherwise = Nothing
+ where
+   alt = testAltered rab
+   astring = if null alt then Nothing else (Just (fst (Prelude.head alt)))
+                        
+vetVisitForm::Text->Rabbit-> RabbitId->Html-> MForm Handler (FormResult VetVisit, Widget)
+vetVisitForm task rab rabid extra = do
     local_time <- liftIO $ getLocalTime
     let stime = showtime (localDay local_time)
     (vvDateRes, vvDateView)<-mreq textField "nope" (Just stime)
     (vvVetRes, vvVetView)<-mreq (selectFieldList vets) "nope" Nothing
     (vvProblemRes, vvProblemView)<-mreq textField "nopte" Nothing
-    (vvProceduresRes, vvProceduresView)<-mreq textField "n" Nothing
+    (vvProceduresRes, vvProceduresView)<-mreq textField "n" (parseTask rab task)
     (vvNotesRes, vvNotesView)<-mreq textField "n" Nothing
-    (vvSpayRes, vvSpayView)<-mreq (selectFieldList (setSources rab)) "n" Nothing
+    (vvSpayRes, vvSpayView)<-mreq (selectFieldList (setSources rab)) "n" (parseTask rab task)
     (vvCostRes, vvCostView)<-mopt doubleField "n" Nothing
     let date = text2date vvDateRes
     let vetvisitRes = VetVisit rabid <$> vvVetRes <*> date <*> vvProblemRes <*> vvProceduresRes <*> vvNotesRes <*> vvSpayRes <*> vvCostRes 
@@ -139,13 +146,15 @@ vetVisitForm rab rabid extra = do
             |]
     return (vetvisitRes, vwidget)
         
-getVetVisitR ::RabbitId->Handler Html
-getVetVisitR rabid = do
+getVetVisitR ::RabbitId->Text->Handler Html
+getVetVisitR rabid task = do
     Just rab <-runSqlite bunnyLuvDB  $ do
                   rabt<- get rabid
                   return rabt
-    (formWidget, enctype) <- generateFormPost (vetVisitForm rab rabid)
+    (formWidget, enctype) <- generateFormPost (vetVisitForm task rab rabid)
     let menu = [whamlet|
+              <div #addCance style="float:inherit; text-align:left; margin:10px;">
+
                 <b> Vet Visit for &nbsp; #{rabbitName rab}
                 <div #vvCan style="float:right; display:inline;">
                   <div .cancelBut #vvEdCan style="display:inline; float:right;">
@@ -161,10 +170,11 @@ getVetVisitR rabid = do
 
 postVetPostR::RabbitId->Handler Html
 postVetPostR  rabID = do
+  let task=""
   Just rab <-runSqlite bunnyLuvDB  $ do
                   rabt<- get rabID
                   return rabt
-  (((result), _), _) <-runFormPost (vetVisitForm rab rabID)
+  (((result), _), _) <-runFormPost (vetVisitForm task rab rabID)
 
   case result of
     FormSuccess vetVisit -> do

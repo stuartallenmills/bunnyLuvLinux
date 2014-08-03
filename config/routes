@@ -9,7 +9,7 @@
 /test                   TestR    GET
 /wellness/#RabbitId     WellnessR GET POST
 /view/#RabbitId         ViewR     GET
-/vet/#RabbitId          VetVisitR GET 
+/vet/#RabbitId/#Text          VetVisitR GET 
 /vetPost/#RabbitId      VetPostR POST
 /adopted/#RabbitId      AdoptedR GET POST
 /died/#RabbitId         DiedR GET POST

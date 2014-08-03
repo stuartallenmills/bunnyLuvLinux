@@ -92,7 +92,7 @@ getAdoptedR rabid = do
                   return rabt
     (formWidget, enctype) <- generateFormPost (adoptedForm rabid)
     let menu = [whamlet|
-              <div #addCance .subTitle>
+              <div #addCance style="float:inherit; text-align:left; margin:10px;">
                  <b> Adoption for &nbsp; #{rabbitName rabbit}
                 <div #adoptCan style="float:right; display:inline;">
                   <div .cancelBut #adoptEdCan style="display:inline; float:right;">
