@@ -18,6 +18,7 @@ $if showMenu
          <li class=><a href=@{VetVisitR rabId "General"}><span>Enter Vet Visit</span></a></li>
          $if not_altered
           <li><a href=@{VetVisitR rabId "Altered"}><span>Altered</span></a></li>
+         <li><a href=@{DiedR rabId}><span>Died</span></a></li>
          <li class='last'><a href=@{VetVisitR rabId "Euth"}><span>Euthanized</span></a></li>
 
    <li class='has-sub last' id="blEdit"><a href='#' title="Edit Intake Information"><span>Edit</span></a>
@@ -25,4 +26,7 @@ $if showMenu
          <li><a href=@{ImagesR rabId}><span>Set Image</span></a></li>
          <li class='last'><a href=@{EditR rabId}><span>Edit Intake Information</span></a></li>
          
-      
+$else
+  <div id=editmenu>
+   <ul>
+    <li class= 'last'><a href=@{HomeR}><span>Home</span></a></li>      

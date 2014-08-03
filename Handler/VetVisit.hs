@@ -45,16 +45,24 @@ parseTask rab task
  where
    alt = testAltered rab
    astring = if null alt then Nothing else (Just (fst (Prelude.head alt)))
-                        
+
+parseProb rab task
+        | task=="Altered" = Just "Not altered"
+        | otherwise = Nothing
+
+parseNotes rab task
+        | task == "Altered" = Just "none"
+        | otherwise = Nothing
+                      
 vetVisitForm::Text->Rabbit-> RabbitId->Html-> MForm Handler (FormResult VetVisit, Widget)
 vetVisitForm task rab rabid extra = do
     local_time <- liftIO $ getLocalTime
     let stime = showtime (localDay local_time)
     (vvDateRes, vvDateView)<-mreq textField "nope" (Just stime)
     (vvVetRes, vvVetView)<-mreq (selectFieldList vets) "nope" Nothing
-    (vvProblemRes, vvProblemView)<-mreq textField "nopte" Nothing
+    (vvProblemRes, vvProblemView)<-mreq textField "nopte" (parseProb rab task)
     (vvProceduresRes, vvProceduresView)<-mreq textField "n" (parseTask rab task)
-    (vvNotesRes, vvNotesView)<-mreq textField "n" Nothing
+    (vvNotesRes, vvNotesView)<-mreq textField "n" (parseNotes rab task)
     (vvSpayRes, vvSpayView)<-mreq (selectFieldList (setSources rab)) "n" (parseTask rab task)
     (vvCostRes, vvCostView)<-mopt doubleField "n" Nothing
     let date = text2date vvDateRes

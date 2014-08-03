@@ -334,7 +334,7 @@ getViewR rabId  = do
                $if had_visits 
                  <div #vetvisits style="float:left;"> <b> Vet Visits </b> </div>
                  ^{showvetvisit rab vetvisits}
-                $if had_well
+               $if had_well
                  <div #haswell style="float:left;"><b> Wellness </b> </div>
                  ^{showWellness wellRs}               
            |]
