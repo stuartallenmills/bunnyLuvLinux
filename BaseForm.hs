@@ -122,7 +122,7 @@ getAgeWidget wid enctype = do
 doRabbitRow::Day->RabbitId->Rabbit->Widget
 doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow") 
 
-base atitle result = do 
+base atitle result  = do 
      (formWidget, enctype) <- generateFormPost getNameForm
      (ageWidget, age_enctype) <-generateFormPost getAgeForm
      bnames <- liftIO getNamesDB
@@ -160,7 +160,23 @@ base atitle result = do
                   $(function() {
                      $( document ).tooltip();
                      });
-                              
+
+                  $( "#doprint" ).click(function() {
+                       alert("click");
+                       if (!window.opener)
+                          window.open(window.location.href,"_blank","");
+                       });
+                  
+                   $(function() {
+                        if (window.opener) {
+                            document.getElementById( "doprint" ).innerHTML = "Don't Print";
+                            document.getElementById( "doprint" ).style.display="none";
+                            document.getElementById ( "cssmenu" ).style.display = "none";
+                            document.getElementById ( "title" ).style.display = "none";
+                            document.getElementById ( "formName" ).style.display = "none";
+                              }
+                           });
+                      
                              |]
         toWidget [lucius| #atitleD {
                                 width:100%;
@@ -183,6 +199,8 @@ base atitle result = do
          ^{headerLogWid imgpath maid}
          ^{mainMenu}
          ^{getAgeWidget ageWidget age_enctype}
+         <div #doprint> Print
+
          <div #atitleD> 
               <b> #{atitle} #{numBunsStr}
 
