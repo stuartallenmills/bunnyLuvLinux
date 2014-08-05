@@ -1,18 +1,15 @@
                   $( "#doprint" ).click(function() {
-                       if (!window.opener)
-                          var newwin=window.open("","_blank","");
-                          newwin.document.writeln("<head>  <link rel=\"stylesheet\" type=\"text/css\" href=\"http://192.168.1.128:8080/images/rabRowPrint.css\"> </head>");
+                       if (!window.opener) {
+                          var name = $( "#atitleD" ).text();
+                          var newwin=window.open("",name,"");
+                          newwin.document.writeln("<head>  <link rel=\"stylesheet\" type=\"text/css\" href=\"http://192.168.1.128:8080/images/rabRowPrint.css\"> ");
+                          newwin.document.writeln("<title> " + name + "<\/title> <\/head>");
                           newwin.document.writeln( $( "#formResults" ).html());
+                          newwin.document.writeln("<script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js\"><\/script>");
+                          newwin.document.writeln("<script> $( function() { window.print(); });<\/script>");
+                          newwin.document.write("");
+                          newwin.document.close();
+                          };
                        });
                   
-                   $(function() {
-                        if (window.opener) {
-                            document.getElementById( "doprint" ).innerHTML = "Don't Print";
-                            document.getElementById( "doprint" ).style.display="none";
-                            document.getElementById ( "cssmenu" ).style.display = "none";
-                            document.getElementById ( "title" ).style.display = "none";
-                            document.getElementById ( "formName" ).style.display = "none";
-                            window.print();
-                              }
-                           });
-                      
+ 
