@@ -3,6 +3,8 @@
        <a href=@{HomeR}> <img id="himg" src=#{getImage imgpath "bunnyluv_img.gif"}></a>
       <div #splash>  
        <h2> BunnyLuv Rabbit Tracker
+       <div #doprint style="float:right;">
+           print
       $maybe usr <-maid
        <div #usr style="float:right;">
          <div #loglabel>logged in as 

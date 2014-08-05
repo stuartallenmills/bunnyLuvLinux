@@ -1,0 +1,18 @@
+                  $( "#doprint" ).click(function() {
+                       if (!window.opener)
+                          var newwin=window.open("","_blank","");
+                          newwin.document.writeln("<head>  <link rel=\"stylesheet\" type=\"text/css\" href=\"http://192.168.1.128:8080/images/rabRowPrint.css\"> </head>");
+                          newwin.document.writeln( $( "#formResults" ).html());
+                       });
+                  
+                   $(function() {
+                        if (window.opener) {
+                            document.getElementById( "doprint" ).innerHTML = "Don't Print";
+                            document.getElementById( "doprint" ).style.display="none";
+                            document.getElementById ( "cssmenu" ).style.display = "none";
+                            document.getElementById ( "title" ).style.display = "none";
+                            document.getElementById ( "formName" ).style.display = "none";
+                            window.print();
+                              }
+                           });
+                      
