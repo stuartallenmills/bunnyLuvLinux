@@ -6,7 +6,7 @@
                           newwin.document.writeln("<title> " + name + "<\/title> <\/head>");
                           newwin.document.writeln( $( "#formResults" ).html());
                           newwin.document.writeln("<script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js\"><\/script>");
-                          newwin.document.writeln("<script> $( function() { window.print(); });<\/script>");
+                          newwin.document.writeln("<script> $( function() { window.print(); window.onfocus=function () {window.close();} });<\/script>");
                           newwin.document.write("");
                           newwin.document.close();
                           };
