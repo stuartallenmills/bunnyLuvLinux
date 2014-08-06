@@ -53,7 +53,8 @@ reportbase atitle result = do
                            });
                              |]
         [whamlet|
-         <div #dummy style="float:right; color:#ffffff;"> nothing here
+        <div #blHeaderD>
+         <div #dummy > nothing here
          ^{headerLogWid imgpath maid}
          ^{mainMenu}
         <div #formResults>

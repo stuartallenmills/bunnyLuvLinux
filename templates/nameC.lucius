@@ -1,3 +1,4 @@
+@media screen {
 div.nameC {
    position: relative;
    align:middle;
@@ -46,4 +47,32 @@ div.nameC a:hover {
    border-bottom-right-radius:-10px;
    border-bottom-left-radius:-10px;
    border-bottom:none;
+}
+
+}
+
+@media print {
+
+div.nameC {
+   position: relative;
+   align:middle;
+   width:24%;
+   font-weight:bold;
+   float:left;
+}
+
+
+div.nameC a {
+   text-decoration:none;
+   color:#0000000;
+   display:block;
+   width:100%;
+   height:100%;
+   text-overflow:clip;
+   padding-left:2px;
+}
+
+
+
+
 }

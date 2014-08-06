@@ -1,15 +1,16 @@
                   $( "#doprint" ).click(function() {
-                       if (!window.opener) {
+                       window.print();
+                       if (window.opener) {
                           var name = $( "#atitleD" ).text();
-                          var newwin=window.open("",name,"");
-                            newwin.focus();
+                          var newwin=window.open("",name,"width=800, height=600");
                          newwin.document.writeln("<head>  <link rel=\"stylesheet\" type=\"text/css\" href=\"http://192.168.1.128:8080/images/rabRowPrint.css\"> ");
-                          newwin.document.writeln("<title> " + name + "<\/title> <\/head>");
+                          newwin.document.writeln("<title> " + name + " <\/title> <\/head>");
                           newwin.document.writeln( $( "#formResults" ).html());
                           newwin.document.writeln("<script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js\"><\/script>");
                            newwin.document.writeln("<script> window.print(); window.onfocus=function (){window.close()} <\/script>");
                            newwin.document.close();
-                          };
+                           newwin.focus();
+                         };
                        });
                   
  

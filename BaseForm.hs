@@ -180,6 +180,7 @@ base atitle result  = do
               |]
 
         [whamlet|
+        <div #blHeaderD>
          ^{getNameWidget bnames formWidget enctype}
          ^{headerLogWid imgpath maid}
          ^{mainMenu}

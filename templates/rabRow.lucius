@@ -1,4 +1,4 @@
-
+@media screen {
 div.rabRow {
         width:100%;
         background:#fFfeff;
@@ -128,4 +128,98 @@ div.alteredC {
 
 #divAlteredD {
    width:25%;
+}
+
+}
+
+@media print {
+
+div.rabRow {
+        width:100%;
+        margin-right:0%;
+        margin-left:0%;
+        font-size:95%;
+        border-bottom:1px solid #7f7f7f;
+        float:left;
+}
+div.nameC {
+   position: relative;
+   align:middle;
+   width:24%;
+   height:100%;
+   font-weight:bold;
+   float:left;
+
+}
+
+
+
+div.nameC a {
+   text-decoration:none;
+   display:block;
+   width:100%;
+   height:100%;
+   text-overflow:clip;
+   padding-left:2px;
+
+}
+
+
+
+div.sexC {
+  width:5%;
+  text-align:center;
+  float:left;
+}
+
+div.row1, div.row2 {
+  width:100%;
+  border-bottom:1px solid #eeeeee;
+  float:left;
+}
+
+
+
+.dateInC {
+   width:24%;
+   float:left;
+}
+div.descC {
+   width:45%;
+   border-bottom:none;
+   float:left;
+}
+#ageIn {
+  width:29%;
+  border-bottom:none;
+   float:left;
+}
+
+#sourceType {
+  width:20%;
+}
+
+div.sourceC {
+   width:100%;
+ 
+}
+div.statusC {
+  height:100%;
+  width:12%;
+  text-align:center;
+   float:right;
+ }
+
+div.alteredC {
+  width:20%;
+  height:100%;
+  text-align:left;
+  float:left;
+}
+
+#divAlteredD {
+   width:25%;
+}
+
+
 }

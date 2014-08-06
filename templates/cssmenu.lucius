@@ -170,7 +170,7 @@
 #cssmenu ul ul li.has-sub:hover > a::after {
   border-left-color: #333333;
 }
-@media all and (max-width: 400px), only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 400px), only screen and (min--moz-device-pixel-ratio: 2) and (max-width: 400px), only screen and (-o-min-device-pixel-ratio: 2/1) and (max-width: 400px), only screen and (min-device-pixel-ratio: 2) and (max-width: 400px), only screen and (min-resolution: 192dpi) and (max-width: 400px), only screen and (min-resolution: 2dppx) and (max-width: 400px) {
+@media screen and (max-width: 400px), only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 400px), only screen and (min--moz-device-pixel-ratio: 2) and (max-width: 400px), only screen and (-o-min-device-pixel-ratio: 2/1) and (max-width: 400px), only screen and (min-device-pixel-ratio: 2) and (max-width: 400px), only screen and (min-resolution: 192dpi) and (max-width: 400px), only screen and (min-resolution: 2dppx) and (max-width: 400px) {
   #cssmenu {
     background: #39b1cc;
   }
@@ -256,4 +256,11 @@
   #cssmenu ul ul li.has-sub > a::after {
     display: none;
   }
+}
+
+@media print {
+  #cssmenu {
+    display:none;
+}
+
 }
