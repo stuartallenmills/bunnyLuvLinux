@@ -1,7 +1,6 @@
 
 div.rabRow {
         width:100%;
-        background:#fFfeff;
         margin-right:0%;
         margin-left:0%;
         font-size:95%;
@@ -12,51 +11,19 @@ div.nameC {
    position: relative;
    align:middle;
    width:24%;
-   height:100%;
-   background:#f8f5e1;
    font-weight:bold;
    float:left;
-   border:1px solid #7f7f7f;
-   border-top-right-radius:10px;
-   border-top-left-radius:10px;
-   border-bottom-right-radius:-10px;
-   border-bottom-left-radius:-10px;
-   border-bottom:none;
-   box-shadow:3px 1px 5px 1px #747260
 }
 
-div.nameC:hover {
-   background:#ffffff;
-
-}
 
 div.nameC a {
    text-decoration:none;
-   color:#1f0000;
    display:block;
    width:100%;
-   height:100%;
    text-overflow:clip;
-   border:1px solid #7f7f7f;
-   padding-left:2px;
-   border-top-right-radius:10px;
-   border-top-left-radius:10px;
-   border-bottom-right-radius:-10px;
-   border-bottom-left-radius:-10px;
-   border-bottom:none;
+   color:#000000;
 }
 
-div.nameC a:hover {
-   color:#2f1f1f;
-   background:#FFffff;
-   border:1px solid #7f7f7f;
-
-   border-top-right-radius:10px;
-   border-top-left-radius:10px;
-   border-bottom-right-radius:-10px;
-   border-bottom-left-radius:-10px;
-   border-bottom:none;
-}
 
 div.sexC {
   width:5%;
@@ -71,8 +38,6 @@ div.row1, div.row2 {
   float:left;
 }
 
-
-
 .dateInC {
    background:#fFfeff;
    width:24%;
@@ -80,15 +45,20 @@ div.row1, div.row2 {
 }
 div.descC {
    width:45%;
-   height:100%;
-   background:#fFfeff;
    border-bottom:none;
    float:left;
 }
+
+#atitleD {
+  text-align:center;
+  margin:10px;
+  padding:10px;
+  border-bottom:thin solid #000000;
+}
+
 #ageIn {
   width:29%;
   border-bottom:none;
-   background:#fFfeff;
    float:left;
 }
 
@@ -99,33 +69,179 @@ div.descC {
 
 div.sourceC {
    width:100%;
-   height:100%;
-   background:#fFfeff;
 }
 div.statusC {
-  height:100%;
   width:12%;
   text-align:center;
-  background:#fFfeff;
    float:right;
    padding-right:2px;
-   border:1px solid #7f7f7f;
-   border-top-right-radius:5px;
-   border-top-left-radius:5px;
-   border-bottom-right-radius:-10px;
-   border-bottom-left-radius:-10px;
-   border-bottom:none;
    padding-left:2px;
-   box-shadow:3px 1px 4px 1px #747260
 }
 div.alteredC {
   width:20%;
-  height:100%;
   text-align:left;
   float:left;
-  background:#fFfeff;
 }
 
 #divAlteredD {
    width:25%;
+}
+
+.wellRw {
+   width:100%;
+   border-bottom:1px dotted #999999;
+}
+   
+#swellTitle {
+   width:100%;
+   border-bottom:thin solid #7f7f7f;
+   float:left;
+}
+
+#showWell {
+  float:left;
+  width:100%;
+ 
+}
+
+#showWell div {
+  float:left;
+  margin:2px;
+}
+
+#swellR div {
+      float:left;
+}
+
+#swellR > div {
+    margin-bottom:0;
+    margin-top:0;
+}
+
+
+
+#swellR {
+      border-bottom:thin solid #7f7f7f;
+      width:100%;
+}
+
+#swellDateD {
+  width:30%;
+}
+
+#swellGroomedD {
+          width:20%;
+}
+
+#swellTempD {
+  width:17%;
+}
+#swellnessWeight {
+          width:35%;
+}
+
+#swellPerson {
+  width:20%;
+  text-align:right;
+  float:right;
+}
+
+#swellnessNoteD, #swellTreatD {
+   width:100%;
+}
+
+
+#showvv div {
+   float:left;
+   margin:2px;
+}
+
+#showvv #svvDateD {
+ float:right;
+ text-align:right;
+}
+
+#showvv #svvCost {
+  float:right;
+  text-align:right;
+}
+
+#svvRName {
+  width:30%;
+}
+#showVVTitle {
+   width:100%;
+   float:left;
+   border-bottom:thin solid #8f8f8f;
+}
+
+#svvR {
+  border-bottom:thin solid #7f7f7f;
+  width:100%;
+}
+
+.vvR {
+  width:100%;
+  border-bottom:1px dotted #999999;
+}
+
+#showvv { 
+   width:100%;
+   border-bottom:thin solid #7f7f7f;
+   float:left;
+   display:block;
+   margin-top: 5px;
+}
+
+#svvVet{
+    width:23%
+}
+
+ #svvSpay {
+    width:28%;
+}
+#svvProblem, #svvProcedure, #svvNotes {
+   width:95%;
+}
+
+#showTitleAd {
+   float:left;
+   width:100%;
+   border-bottom:thin solid #8f8f8f;
+}
+
+.sadRw {
+  width:100%;
+  border-bottom:1px dotted #999999;
+}
+
+#showAdopted div {
+   float:left;
+   margin:2px;
+}
+
+#showAdopted {
+   float:left;
+   border-bottom:thin solid #7f7f7f;
+   width:100%;
+   margin-top:5px;
+}
+
+#sadRow {
+   width:100%;
+   border-bottom:thin solid: #8f8f8f;
+}
+
+#showAdopted #sadDate {
+ width:25%;
+ text-align:right;
+ float:right;
+}
+
+#showAdopted #saPhone {
+  text-align:right;
+  float:right;
+}
+#saName {
+  width:80%;
 }

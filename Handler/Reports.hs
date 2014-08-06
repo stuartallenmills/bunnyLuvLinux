@@ -56,6 +56,7 @@ reportbase atitle result = do
          <div #dummy style="float:right; color:#ffffff;"> nothing here
          ^{headerLogWid imgpath maid}
          ^{mainMenu}
+        <div #formResults>
          <div #atitleD> 
               <b> #{atitle} 
          ^{result}
