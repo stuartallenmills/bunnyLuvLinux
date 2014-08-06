@@ -257,3 +257,10 @@
     display: none;
   }
 }
+
+@media print {
+
+ #editmenu {
+   display:none;
+ }
+}

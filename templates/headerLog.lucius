@@ -58,7 +58,7 @@
 }
 
 #doprint {
-  margin-top:15px;
+  margin-top:7px;
   display:inline-block;
   float:right;
 }
@@ -68,6 +68,9 @@
   background:#f8f8f8;
 }
 
+#pimg {
+  height:22px;
+}
 
 #himg {
   width:88px;

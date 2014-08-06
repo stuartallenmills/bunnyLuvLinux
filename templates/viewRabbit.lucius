@@ -1,3 +1,4 @@
+
 .prow {
    width:68%;
    border-bottom:1px dashed #AAAACC;
@@ -57,7 +58,7 @@
 
 #vrDiv #vrstatdate {
   float:right;
-  width:22%;
+  width:30%;
   text-align:right;
 }
 
@@ -142,3 +143,17 @@
 #vrstatnoe {
   width:50%
 }
+
+@media screen {
+ 
+#showvv {
+  display:none;
+}
+
+#showWell {
+  display:none;
+}
+
+
+}
+

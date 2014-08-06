@@ -324,10 +324,11 @@ getViewR rabId  = do
             });           
           |] 
          [whamlet|
+           <div #blHeaderD>
             ^{getNameWidget bnames formWidget enctype}
             ^{headerLogWid imgpath maid}    
             ^{viewRabMenu showMenu not_dead not_adopted not_altered rabId}      
-            ^{viewRab  imgpath rab yrs mnths}
+           ^{viewRab  imgpath rab yrs mnths}
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}

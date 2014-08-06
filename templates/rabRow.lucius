@@ -141,6 +141,7 @@ div.rabRow {
         font-size:95%;
         border-bottom:1px solid #7f7f7f;
         float:left;
+        margin-bottom:2px;
 }
 div.nameC {
    position: relative;
@@ -175,6 +176,7 @@ div.sexC {
 div.row1, div.row2 {
   width:100%;
   border-bottom:1px solid #eeeeee;
+  margin-bottom:2px;
   float:left;
 }
 
