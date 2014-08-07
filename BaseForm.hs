@@ -125,7 +125,7 @@ doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow")
 base atitle result  = do 
      (formWidget, enctype) <- generateFormPost getNameForm
      (ageWidget, age_enctype) <-generateFormPost getAgeForm
-     bnames <- liftIO getNamesDB
+     bnames <-  getNamesDB
      impath <- liftIO getImagePath
      let imgpath = unpack impath
      msg <-getMessage

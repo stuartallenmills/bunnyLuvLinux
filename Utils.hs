@@ -31,7 +31,7 @@ import Data.List (sortBy)
 import qualified Data.Text as T
 import Text.Julius
 
-queryStatus status = runSqlite bunnyLuvDB $ do
+queryStatus status = runDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. RabbitStatus ==. val status)
      orderBy [asc (r ^. RabbitName)]
@@ -49,7 +49,7 @@ getName (Entity rabId rab) = rabbitName rab
 getNames::[Entity Rabbit]->[Text]
 getNames  = map getName 
 
-getNamesDB:: IO [Text]
+getNamesDB:: Handler [Text]
 getNamesDB = do
      rabs<-queryStatus "BunnyLuv"
      return (getNames rabs)

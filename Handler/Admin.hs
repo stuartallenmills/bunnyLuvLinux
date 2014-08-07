@@ -88,7 +88,7 @@ postAddUR = do
   ((result, _), _) <-runFormPost addUsrForm 
   case result of
     FormSuccess usr -> 
-      runSqlite bunnyLuvDB $ do
+      runSqlite usrsDB $ do
         insert usr
         return ()
     _ -> return ()
@@ -153,7 +153,7 @@ postChangePassR = do
   ((result, _), _) <-runFormPost addUsrForm 
   case result of
     FormSuccess (Usr nme pss) -> 
-      runSqlite bunnyLuvDB $ do
+      runSqlite usrsDB $ do
         update $ \user -> do
           set user [UsrPassword =. val pss]
           where_ (user ^. UsrLoginName ==. val nme)
@@ -207,7 +207,7 @@ postDeleteUR = do
   ((result, _), _) <-runFormPost deleteUsrForm 
   case result of
     FormSuccess usrname -> 
-      runSqlite bunnyLuvDB $ do
+      runSqlite usrsDB $ do
         delete $ from $ \user -> do
           where_ (user ^. UsrLoginName ==. val usrname)
         return ()

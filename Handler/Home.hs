@@ -51,7 +51,7 @@ postGetAgeR  = do
        FormSuccess (AgeSearch age ageDiffMnths) ->getAges age ageDiffMnths
        _ -> redirect HomeR
   
-queryAltered value =runSqlite bunnyLuvDB $ do
+queryAltered value = runDB $ do
   zipt<-select $ from $ \r->do
     if value=="No" then
      where_ ((r ^. RabbitAltered ==. val "No") ||. (r^. RabbitAltered ==. val "Unknown"))
@@ -62,7 +62,7 @@ queryAltered value =runSqlite bunnyLuvDB $ do
   return zipt
 
   
-query field value= runSqlite bunnyLuvDB $ do
+query field value= runDB $ do
   zipt<-select $ from $ \r->do
     where_ (r ^. field ==. val value)
     orderBy [asc (r ^. RabbitName)]
@@ -70,14 +70,14 @@ query field value= runSqlite bunnyLuvDB $ do
   return zipt
 
 
-querySource source = runSqlite bunnyLuvDB $ do
+querySource source = runDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. RabbitSourceType ==. val source)
      orderBy [asc (r ^. RabbitName)]
      return (r)
   return zipt
 
-queryName name = runSqlite bunnyLuvDB $ do
+queryName name = runDB $ do
   let (f,s) = T.splitAt 1 name
   let capName = append (T.toUpper f) s
   let lowName = append (T.toLower f) s

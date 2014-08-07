@@ -25,6 +25,7 @@ import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase,
        share, sqlSettings)
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
+import Control.Monad (liftM)
 import Text.Printf
 import Control.Monad.Trans.Resource (runResourceT)
 import Control.Monad.Logger (runStderrLoggingT)
@@ -49,8 +50,20 @@ getPort = readTextFile "links/port"
 bunnyLuvDB::Text
 bunnyLuvDB = "bunnyluv.db3"
 
+usrsDB::Text
+usrsDB = "usrs.db3"
+
 getImage::String->String->String
 getImage a b = a++b
+
+share [mkPersist sqlSettings, mkMigrate "migrateUsr"] [persistLowerCase|
+Usr
+    loginName Text
+    password Text
+    UniqueLoginName loginName
+    deriving Show
+
+|]
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Person
@@ -64,10 +77,10 @@ Person
     PhoneKey phone
     deriving Show
 
-Usr
-    loginName Text
+User
+    loginNamet Text
     password Text
-    UniqueLoginName loginName
+    UniqueLoginNamet loginNamet
     deriving Show
 
 
@@ -148,6 +161,7 @@ showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
 
 data App = App
   { httpManager :: Manager
+    ,connection :: ConnectionPool
   }
 
 mkYesodData "App" $(parseRoutesFile "config/routes")
@@ -175,27 +189,19 @@ instance Yesod App where
 instance RenderMessage App FormMessage where
   renderMessage _ _ = defaultFormMessage
 
+-- DB
+instance YesodPersist App where
+  type YesodPersistBackend App = SqlPersistT
+  runDB db = do
+    App manager pool <- getYesod
+    runSqlPool db pool
 
 
-
--- AUTHORIZATION
-instance YesodAuth App where
-    type AuthId App = Text
-    getAuthId = return . Just . credsIdent
-
-    loginDest _ = HomeR
-    logoutDest _ = HomeR
-
-    authPlugins _ = [authBunnyluv]
-
-    authHttpManager = httpManager
-
-    maybeAuthId = lookupSession "_ID"
 
 -- authenication
 isAdmin::HandlerT App IO AuthResult
 isAdmin = do
-    usrsMap <- liftIO $ getUsrs
+    usrsMap <- liftIO  getUsrs
     mu <- maybeAuthId
     return $ case mu of
         Nothing -> Unauthorized "You must log in to an authorized account" --AuthenticationRequired
@@ -270,6 +276,20 @@ getCurrentMonths today rab = mnths where
 -- Authorization
 -- canbutton::Widget
 -- canbutton =  $(widgetFileNoReload def "cancelButton")
+-- AUTHORIZATION
+     
+instance YesodAuth App where
+    type AuthId App = Text
+    getAuthId = return . Just . credsIdent
+
+    loginDest _ = HomeR
+    logoutDest _ = HomeR
+
+    authPlugins _ = [authBunnyluv]
+
+    authHttpManager = httpManager
+
+    maybeAuthId = lookupSession "_ID"
 
 authBunnyluv :: YesodAuth m => AuthPlugin m
 authBunnyluv =
@@ -277,7 +297,7 @@ authBunnyluv =
   where
     dispatch "POST" [] = do
         ident <- lift $ runInputPost $ ireq textField "ident"
-        usrsMap <- liftIO  getUsrs
+        usrsMap <-  liftIO  getUsrs
         let isOnFile = Map.member ident usrsMap
         let upass = if isOnFile then usrsMap Map.! ident else "guest"
         pass <-lift $ runInputPost $ ireq passwordField "pass"
@@ -318,14 +338,15 @@ $newline never
 
 usrInsert umap (Entity uId (Usr nme pss))  = Map.insert nme pss umap
 
-getUsrsDb = runSqlite bunnyLuvDB $ do
+getUsrsDb::IO [Entity Usr]
+getUsrsDb = runSqlite usrsDB $ do
     tusrs <- select $ from $ \person-> do
       return person
     return tusrs
 
 getUsrs  :: IO (UsrMap)
 getUsrs  = do
-    tusrs <- getUsrsDb
+    tusrs <-  getUsrsDb
     return $  foldl (\accum eusr->usrInsert accum eusr) Map.empty tusrs
     
                                      

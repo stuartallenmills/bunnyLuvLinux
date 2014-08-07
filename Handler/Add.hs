@@ -34,21 +34,21 @@ import Utils
 
 
 
-queryWellness rabID = runSqlite bunnyLuvDB $ do
+queryWellness rabID = runDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. WellnessRabbit ==. val rabID)
      orderBy [desc (r ^. WellnessDate)]
      return (r)
   return zipt
 
-queryVetVisits rabID = runSqlite bunnyLuvDB $ do
+queryVetVisits rabID = runDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. VetVisitRabbit ==. val rabID)
      orderBy [desc (r ^. VetVisitDate)]
      return (r)
   return zipt
 
-queryAdopted rabID = runSqlite bunnyLuvDB $ do
+queryAdopted rabID = runDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. AdoptedRabbit ==. val rabID)
      return (r)
@@ -121,7 +121,7 @@ diedForm extra = do
 
 getDiedR::RabbitId->Handler Html
 getDiedR rabid= do
-    Just rab <- runSqlite bunnyLuvDB $ get rabid
+    Just rab <- runDB $ get rabid
     (formWidget, enctype) <- generateFormPost diedForm 
     let menu = [whamlet|
               <div #addCance style="float:inherit; text-align:left; margin:10px;">
@@ -142,7 +142,7 @@ postDiedR rabid = do
 
   case result of
     FormSuccess died -> do
-      runSqlite bunnyLuvDB $ do
+       runDB $ do
         update $ \p -> do
           set p [RabbitStatus =. val "Died", RabbitStatusDate =. val ( (diedDate died)),
                  RabbitStatusNote =. val (diedNotes died) ]
@@ -245,7 +245,7 @@ postPostR = do
   ((result, _), _) <-runFormPost (rabbitForm (Nothing, Nothing))
   link<- case result of
     FormSuccess  rabi -> do
-      runSqlite bunnyLuvDB $ do
+     runDB $ do
         rabid<-insert $ rabi
         return (ViewR rabid)
     _ -> return (HomeR)
@@ -258,7 +258,7 @@ postUpdateR rabID = do
 
   case result of
     FormSuccess rabi -> do
-      runSqlite bunnyLuvDB $ do
+      runDB $ do
         _ <-replace  rabID rabi
         return ()
     _ -> return ()
@@ -280,14 +280,14 @@ showadopted rabbit adopteds = $(widgetFileNoReload def "showadopted");
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
     (formWidget, enctype)<- generateFormPost getNameForm
-    bnames <- liftIO getNamesDB
+    bnames <-  getNamesDB
     maid <- maybeAuthId
     impath <- liftIO getImagePath
     let imgpath = unpack impath
 
     admin <- isAdmin
     let showMenu = (admin==Authorized)
-    Just rab <-runSqlite bunnyLuvDB  $ do
+    Just rab <-runDB  $ do
                   rabt<- get rabId
                   return rabt
     wellRs<-queryWellness rabId
@@ -343,7 +343,7 @@ getViewR rabId  = do
 
 getEditR::RabbitId->Handler Html
 getEditR rabID  = do
-    rabbit <-runSqlite bunnyLuvDB  $  get rabID
+    rabbit <-runDB  $  get rabID
     wellRs<-queryWellness rabID
     (formWidget, enctype) <- generateFormPost (rabbitForm (rabbit, (Just wellRs)))
     let menu = [whamlet|
