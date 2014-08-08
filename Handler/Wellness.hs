@@ -20,7 +20,6 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack)
 import Database.Esqueleto
-import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
@@ -59,7 +58,7 @@ wellnessForm user rabID extra = do
 getWellnessR::RabbitId->Handler Html
 getWellnessR rabID  = do
     maid <- maybeAuthId
-    Just rabbit <-runSqlite bunnyLuvDB  $ do
+    Just rabbit <-runDB  $ do
                   rabt<- get rabID
                   return rabt
     (wellnessWidget, enctype) <-generateFormPost (wellnessForm maid rabID)
@@ -85,7 +84,7 @@ postWellnessR rabID = do
   (((result), _), _) <-runFormPost (wellnessForm maid rabID)
   case result of
     FormSuccess wup -> do
-      runSqlite bunnyLuvDB $ do
+      runDB $ do
         insert wup
         return ()
     _ -> return ()

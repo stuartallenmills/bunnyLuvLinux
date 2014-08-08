@@ -20,7 +20,6 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack, pack)
 import Database.Esqueleto
-import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
@@ -79,7 +78,7 @@ reportbase atitle result = do
 
 
 
-doAdoptedReport = runSqlite bunnyLuvDB $ do
+doAdoptedReport = runDB $ do
   zapt <- select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. AdoptedRabbit ==. tr ^. RabbitId)
     orderBy [desc ( tvv ^. AdoptedDate)]
@@ -95,7 +94,7 @@ getAdoptedViewR   = do
 
            
            
-doWellnessReport = runSqlite bunnyLuvDB $ do
+doWellnessReport = runDB $ do
   zapt <- select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. WellnessRabbit ==. tr ^. RabbitId)
     orderBy [desc ( tvv ^.WellnessDate)]
@@ -109,7 +108,7 @@ getWellViewR   = do
    wellReport <-doWellnessReport
    reportbase "Wellness Report" (weReport wellReport)
 
-doVetVisits = runSqlite bunnyLuvDB $ do
+doVetVisits = runDB $ do
   zapt <- select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. VetVisitRabbit ==. tr ^. RabbitId)
     orderBy [desc ( tvv ^. VetVisitDate)]

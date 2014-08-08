@@ -50,6 +50,9 @@ getPort = readTextFile "links/port"
 bunnyLuvDB::Text
 bunnyLuvDB = "bunnyluv.db3"
 
+demoDB::Text
+demoDB = "demo.db3"
+
 usrsDB::Text
 usrsDB = "usrs.db3"
 
@@ -75,12 +78,6 @@ Person
     state  Text
     zip    Text
     PhoneKey phone
-    deriving Show
-
-User
-    loginNamet Text
-    password Text
-    UniqueLoginNamet loginNamet
     deriving Show
 
 
@@ -162,6 +159,7 @@ showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
 data App = App
   { httpManager :: Manager
     ,connection :: ConnectionPool
+    ,democonnection::ConnectionPool
   }
 
 mkYesodData "App" $(parseRoutesFile "config/routes")
@@ -190,11 +188,17 @@ instance RenderMessage App FormMessage where
   renderMessage _ _ = defaultFormMessage
 
 -- DB
+
+
 instance YesodPersist App where
   type YesodPersistBackend App = SqlPersistT
   runDB db = do
-    App manager pool <- getYesod
-    runSqlPool db pool
+    mname <- maybeAuthId
+    App manager pool pool2 <- getYesod
+    let thepool = case mname of
+          Just "demo" -> pool2
+          _      -> pool
+    runSqlPool db thepool
 
 
 

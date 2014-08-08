@@ -20,7 +20,6 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack, pack)
 import Database.Esqueleto
-import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
@@ -134,7 +133,7 @@ doEnd Nothing = doparseTime "12/30/2200"
 doEnd (Just date) = date
 
 dstate r tsome = (r ^. RabbitDateIn <=. val tsome)
-querySearch (Search start stop bl died adopt euth shelt tother) = runSqlite bunnyLuvDB $ do
+querySearch (Search start stop bl died adopt euth shelt tother) = runDB $ do
  let sh = if shelt then "Shelter" else "None"
  let ot = if tother then "Other" else "None"
  rbl<- if bl then

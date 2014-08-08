@@ -20,7 +20,6 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack, pack)
 import Database.Esqueleto
-import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
@@ -280,6 +279,7 @@ showadopted rabbit adopteds = $(widgetFileNoReload def "showadopted");
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
     (formWidget, enctype)<- generateFormPost getNameForm
+ --   bnames <-  getNamesDB
     bnames <-  getNamesDB
     maid <- maybeAuthId
     impath <- liftIO getImagePath

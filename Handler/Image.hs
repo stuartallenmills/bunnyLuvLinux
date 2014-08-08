@@ -20,7 +20,7 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack, pack)
 import Database.Esqueleto
-import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
+import Database.Persist.Sqlite ( runMigrationSilent)
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
@@ -40,7 +40,7 @@ uploadForm  = renderDivs $ fileAFormReq "Image file"
 getImagesR::RabbitId-> Handler Html
 getImagesR rabId = do
   ((_, widget), enctype) <-runFormPost uploadForm
-  Just rabbit <-runSqlite bunnyLuvDB  $ do get rabId
+  Just rabbit <-runDB  $ do get rabId
   let menu = [whamlet|
               <div #addCance style="float:inherit; text-align:left; margin:10px;">
 
@@ -65,7 +65,7 @@ postImagesR rabId = do
             -- save to image directory
             filename <- writeToServer file
 --            _ <- runDB $ insert (Image filename info date)
-            runSqlite bunnyLuvDB $ do
+            runDB $ do
               update $ \p -> do
                set p [RabbitImage =. val (Just (pack filename))]
                where_ (p ^. RabbitId ==. val rabId)

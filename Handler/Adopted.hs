@@ -20,7 +20,7 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack)
 import Database.Esqueleto
-import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
+import Database.Persist.Sqlite ( runMigrationSilent)
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
@@ -87,7 +87,7 @@ adoptedForm rabID extra = do
 
 getAdoptedR ::RabbitId->Handler Html
 getAdoptedR rabid = do
-    Just rabbit <-runSqlite bunnyLuvDB  $ do
+    Just rabbit <-runDB  $ do
                   rabt<- get rabid
                   return rabt
     (formWidget, enctype) <- generateFormPost (adoptedForm rabid)
@@ -111,7 +111,7 @@ postAdoptedR  rabID = do
 
   case result of
     FormSuccess adopted -> do
-      runSqlite bunnyLuvDB $ do
+      runDB $ do
         _ <-insert  adopted
         update $ \p -> do
           set p [RabbitStatus =. val "Adopted", RabbitStatusDate =. val (showtime (adoptedDate adopted))]

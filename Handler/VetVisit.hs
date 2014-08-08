@@ -20,7 +20,6 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack)
 import Database.Esqueleto
-import Database.Persist.Sqlite (runSqlite, runMigrationSilent)
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
@@ -156,7 +155,7 @@ vetVisitForm task rab rabid extra = do
         
 getVetVisitR ::RabbitId->Text->Handler Html
 getVetVisitR rabid task = do
-    Just rab <-runSqlite bunnyLuvDB  $ do
+    Just rab <- runDB  $ do
                   rabt<- get rabid
                   return rabt
     (formWidget, enctype) <- generateFormPost (vetVisitForm task rab rabid)
@@ -179,19 +178,19 @@ getVetVisitR rabid task = do
 postVetPostR::RabbitId->Handler Html
 postVetPostR  rabID = do
   let task=""
-  Just rab <-runSqlite bunnyLuvDB  $ do
+  Just rab <- runDB  $ do
                   rabt<- get rabID
                   return rabt
   (((result), _), _) <-runFormPost (vetVisitForm task rab rabID)
 
   case result of
     FormSuccess vetVisit -> do
-      runSqlite bunnyLuvDB $ do
+      runDB $ do
         _ <-insert  vetVisit
         return ()
       if (((vetVisitSpay vetVisit) == "Neutered") || ((vetVisitSpay vetVisit) == "Spayed"))
        then
-        runSqlite bunnyLuvDB $
+        runDB  $
          do  update $ \p -> do 
               set p [ RabbitAltered =. val (vetVisitSpay vetVisit), RabbitAlteredDate =. val (Just (vetVisitDate vetVisit))]
               where_ (p ^. RabbitId ==. val rabID)
@@ -200,7 +199,7 @@ postVetPostR  rabID = do
             return ();
       if ((vetVisitSpay vetVisit) == "Euthanized")
        then
-        runSqlite bunnyLuvDB $
+        runDB $
          do  update $ \p -> do 
               set p [ RabbitStatus =. val (vetVisitSpay vetVisit), RabbitStatusDate =. val (showtime (vetVisitDate vetVisit))]
               where_ (p ^. RabbitId ==. val rabID)
