@@ -197,11 +197,11 @@ rabbitForm (mrab, rabID) extra = do
                              });
                             });
                          $(function () {
-                          $( ".blDate :input" ).change (function() {
-                             var str = $( ".blDate :input" ).val();
-                              var res = str.split("/");
+                          $( "#hident3" ).change (function() {
+                             var str = $( "#hident3" ).val();
+                             var res = str.split("/");
                              if (res.length != 3) {
-                                alert("Date must be m/d/yyyy");
+                                alert("Date must be m/d/yyyy - not "+ str);
                                 $( ".blDate :input" ).clearQueue();
                                 $( ".blDate :input" ).val("");
                                 $( ".blDate :input").focus();
