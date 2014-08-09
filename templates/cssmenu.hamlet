@@ -25,6 +25,11 @@
          <li class='last'><a href=@{SourceR "Other"}><span>Source: Other</span></a></li>
    <li class='has-sub last' id="blAdmin"><a href='#'><span>Admin</span></a>
       <ul>
+       $if mode
+         <li><a href='#'><span>Change Password (demo disabled)</span></a></li>
+         <li><a href='#'><span>Delete User</span></a></li>
+         <li class='last'><a href='#'><span>Add User</span></a></li>
+       $else
          <li><a href=@{ChangePassR}><span>Change Password</span></a></li>
          <li><a href=@{DeleteUR}><span>Delete User</span></a></li>
          <li class='last'><a href=@{AddUR}><span>Add User</span></a></li>

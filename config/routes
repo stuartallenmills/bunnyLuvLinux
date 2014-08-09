@@ -6,7 +6,6 @@
 /updateRab/#RabbitId    UpdateR  POST
 /query/#Text            QueryR   GET
 /source/#Text           SourceR  GET
-/test                   TestR    GET
 /wellness/#RabbitId     WellnessR GET POST
 /view/#RabbitId         ViewR     GET
 /vet/#RabbitId/#Text          VetVisitR GET 

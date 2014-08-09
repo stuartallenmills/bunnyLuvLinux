@@ -131,8 +131,9 @@ base atitle result  = do
      msg <-getMessage
      maid <- maybeAuthId
      auth <- isAdmin
+     let mode =  (maid == Just "demo")
      let isAuth=(auth==Authorized)
-     today<- liftIO $ getCurrentDay
+     today<- liftIO getCurrentDay
      let numBuns = length result
      
      let numBunsStr = "  : (found " ++ (show numBuns) ++ " )"
@@ -156,11 +157,12 @@ base atitle result  = do
                               $( "#rAddM" ).hide(); 
                               $( "#blAdmin" ).hide(); }
                            });
-
+                  
                   $(function() {
                      $( document ).tooltip();
                      });
 
+ 
 
                              |]
         toWidget [lucius| #atitleD {
@@ -183,7 +185,7 @@ base atitle result  = do
         <div #blHeaderD>
          ^{getNameWidget bnames formWidget enctype}
          ^{headerLogWid imgpath maid}
-         ^{mainMenu}
+         ^{mainMenu mode}
          ^{getAgeWidget ageWidget age_enctype}
         <div #formResults>
          <div #atitleD> 

@@ -129,14 +129,6 @@ getShowNameR name = do
     base (toHtml ti) zinc
   return page
    
-getTestR :: Handler Html
-getTestR = 
-  defaultLayout $ do
-     setTitle "Test"
-     [whamlet|
-      ^{mainMenu}
-      <div>This is a test of the something
-            |]
 
 postNameR::Handler Html 
 postNameR = do

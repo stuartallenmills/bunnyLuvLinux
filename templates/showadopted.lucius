@@ -32,8 +32,8 @@
 }
 
 #showAdopted #saPhone {
-  text-align:right;
-  float:right;
+  float:left;
+  width:50%;
 }
 #saName {
   width:80%;

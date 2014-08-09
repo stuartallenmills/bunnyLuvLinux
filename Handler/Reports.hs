@@ -36,7 +36,7 @@ reportbase atitle result = do
      auth <- isAdmin
      impath <- liftIO getImagePath
      let imgpath = unpack impath
-
+     let mode = (maid == Just "demo")
      let isAuth=(auth==Authorized)
      today<- liftIO $ getCurrentDay
      defaultLayout $ do
@@ -55,7 +55,7 @@ reportbase atitle result = do
         <div #blHeaderD>
          <div #dummy > nothing here
          ^{headerLogWid imgpath maid}
-         ^{mainMenu}
+         ^{mainMenu mode}
         <div #formResults>
          <div #atitleD> 
               <b> #{atitle} 

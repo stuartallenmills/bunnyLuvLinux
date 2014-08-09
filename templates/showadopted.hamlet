@@ -14,14 +14,31 @@
            #{personFirstName (adoptedPerson adR)} 
         <div #saLName>
            #{personLastName (adoptedPerson adR)}
+     <div .sadRw>
       <div #saPhone>
-         #{personPhone (adoptedPerson adR)}
+        (h): #{personPhone (adoptedPerson adR)}
+      $maybe mobile<- personMobile (adoptedPerson adR)
+        <div #maPhone>
+        (m): #{mobile}
+        
      <div .sadRw>
       <div #saStreet>
-         #{personStreet (adoptedPerson adR)}, 
+         #{personStreet (adoptedPerson adR)},
+      $maybe apt <- personApt (adoptedPerson adR)
+       <div #apt>
+         &nbsp; Apt #{apt}
+     <div .sadRw>
       <div #saCity>
          #{personCity (adoptedPerson adR)}, 
       <div #saState>
           #{personState (adoptedPerson adR)}
       <div #saZip>
          &nbsp; #{personZip (adoptedPerson adR)}
+     $maybe email <- personEmail (adoptedPerson adR)
+      <div .sadRw>
+        <div #aemail>
+          email: #{email}
+     $maybe notes <- adoptedNotes adR
+      <div .sadRw>
+        <div #anotes>
+          Notes: #{notes}

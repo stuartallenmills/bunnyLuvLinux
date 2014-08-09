@@ -73,10 +73,13 @@ Person
     firstName Text
     lastName Text
     phone Text
+    mobile Text Maybe
     street Text
+    apt Text Maybe
     city   Text
     state  Text
     zip    Text
+    email  Text Maybe
     PhoneKey phone
     deriving Show
 
@@ -85,6 +88,7 @@ Adopted
     rabbit RabbitId
     date Day
     person Person
+    notes Text Maybe
     deriving Show
 
 Weight 
@@ -213,13 +217,13 @@ isAdmin = do
           else  Unauthorized "Your account is  not authorized"
 
 --  HTML  CSS ELEMENTS
-cssmenuWidget::Widget
-cssmenuWidget = $(widgetFileNoReload def "cssmenu")
+cssmenuWidget::Bool->Widget
+cssmenuWidget mode = $(widgetFileNoReload def "cssmenu")
 
-mainMenu::Widget
-mainMenu = do
+mainMenu::Bool->Widget
+mainMenu mode= do
           addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
-          cssmenuWidget
+          cssmenuWidget mode
 
 -- header
         
@@ -362,9 +366,6 @@ getUsrs  = do
 
 -- Database init
 
-sn = Person "Stuart" "Mills" "818-884-5537" "23425 Kilty" "West Hills" "CA" "91307"
-lulu = Rabbit "Lulu" "white terrorist" (doparseTime "11/10/2009") "Shelter" "East valley shelter"
-       "F" "No" Nothing   "Adopted" "11/11/2011" "Sharon Mills" (doparseTime "1/1/2007") (Just "Test1.jpg")
 
 openConnectionCount :: Int
 openConnectionCount = 10

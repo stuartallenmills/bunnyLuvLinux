@@ -38,24 +38,51 @@ adoptedForm rabID extra = do
     (adoptedDateRes, adoptedDateView)<-mreq textField "nope" (Just stime)
     (adoptedFirstNameRes, adoptedFirstNameView)<-mreq textField "nope" Nothing
     (adoptedLastNameRes, adoptedLastNameView)<-mreq textField "nope" Nothing
-    (adpotedPhoneRes, adoptedPhoneView)<-mreq textField "nope" Nothing
+    (adoptedPhoneRes, adoptedPhoneView)<-mreq textField "nope" Nothing
+    (adoptedMobileRes, adoptedMobileView)<-mopt textField "noop" Nothing
     (adoptedStreetRes, adoptedStreetView)<-mreq textField "nope" Nothing
+    (adoptedAptRes, adoptedAptView)<-mopt textField "noop" Nothing
     (adoptedCityRes, adoptedCityView)<-mreq textField "nope" Nothing
     (adoptedStateRes,adoptedStateView)<-mreq textField "nope" Nothing
     (adoptedZipRes, adoptedZipView)<-mreq textField "nope" Nothing
+    (adoptedEmailRes, adoptedEmailView)<-mopt textField "nope" Nothing
+    (adoptedNotesRes, adoptedNotesView)<-mopt textField "nope" Nothing
     let date = fmap (doparseTime.unpack) adoptedDateRes
     let adoptedRes = Adopted rabID <$> date <*> (Person <$> adoptedFirstNameRes <*>
-                        adoptedLastNameRes <*>  adpotedPhoneRes <*> adoptedStreetRes <*>
-                         adoptedCityRes <*> adoptedStateRes <*> adoptedZipRes)
+                        adoptedLastNameRes <*>  adoptedPhoneRes <*>
+                         adoptedMobileRes <*> adoptedStreetRes <*> adoptedAptRes <*>
+                         adoptedCityRes <*> adoptedStateRes <*> adoptedZipRes <*>
+                         adoptedEmailRes) <*> adoptedNotesRes
 
     let adoptwid = do
           toWidget
             [lucius|
+                     #fadopted input {
+                       display:inline;
+                      }
+                     #fadopted div {
+                       float:left;
+                       margin:5px;
+                     }
+
+                     #fadopted #add, #fadopted #phones, #fadopted #statezip {
+                                margin-left:0;
+                     }
+                     #faDate, #faCity, #statezip, #phones, #anotes, #email {
+                        width:90%;
+                     }
+                     #faState, #faHPhone {
+                        width:50%;
+                     }
                      #fadopted { width:100%;}
                      ##{fvId adoptedFirstNameView} {width:20em}
                      ##{fvId adoptedLastNameView} {width:20em}
                      ##{fvId adoptedStreetView} {width:25em}
                      ##{fvId adoptedCityView} {width:25em}
+                     ##{fvId adoptedNotesView} {width:25em;}
+                     ##{fvId adoptedEmailView} {width:25em;}
+                     ##{fvId adoptedPhoneView} {width:8em;}
+                     ##{fvId adoptedMobileView} {width:8em;}
              |]
 
           [whamlet|
@@ -63,21 +90,34 @@ adoptedForm rabID extra = do
                    <div #fadopted>
                      <div #faDate>
                       Date: ^{fvInput adoptedDateView}
-                     <div #faPhone>
-                      Phone:  ^{fvInput adoptedPhoneView}
                      <div #faPersonFirst>
                       First Name : ^{fvInput adoptedFirstNameView} 
                      <div #faPersonLast>
                       Last Name :   ^{fvInput adoptedLastNameView}
-                     <div #faStreet>
-                      Street: ^{fvInput adoptedStreetView}
+                     <div #add>
+                      <div #faStreet>
+                       Street: ^{fvInput adoptedStreetView}
+                      <div #apt>
+                         Apt: ^{fvInput adoptedAptView}
                      <div #faCity>
                       City : ^{fvInput adoptedCityView}
-                     <div #faState>
-                      State : ^{fvInput adoptedStateView}
-                     <div #faZip>
-                      Zip : ^{fvInput adoptedZipView}
-                    <input type=submit value="submit">
+                     <div #statezip>
+                      <div #faState>
+                        State : ^{fvInput adoptedStateView}
+                      <div #faZip>
+                        Zip : ^{fvInput adoptedZipView}
+                     <div #phones>
+                      <div #faHPhone>
+                       Home Phone:  ^{fvInput adoptedPhoneView}
+                      <div #faMPhone>
+                       Mobile : ^{fvInput adoptedMobileView}
+                     <div #email>
+                       Email: ^{fvInput adoptedEmailView}
+                     <div #anotes>
+                       Notes: ^{fvInput adoptedNotesView}
+                 <br>
+                 <div #submit>
+                   <input type=submit value="submit">
         |]
 
     return (adoptedRes, adoptwid)
