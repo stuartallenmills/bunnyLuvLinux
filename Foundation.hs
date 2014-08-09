@@ -326,9 +326,10 @@ $newline never
 
 <form method="post" action="@{authToMaster url}">
     <div>
-      You must have a valid account to login
+      You must have a valid account to login to the Rabbit Tracker
     <div>
-      If you do not have an account ask an adminstrator to create one for you
+      If you need an account an adminstrator must create one for you.
+
     <div #login>
     <p>Username: #
      <input type="text" name="ident">
@@ -338,6 +339,10 @@ $newline never
     <input type="submit" value="Login">
     $maybe tmsg <-msg
        <p> #{ tmsg}
+    <div>
+      To access the training/demo Rabbit Tracker as an administrator login with
+    <div>
+      user "demo" and password "demo".  
 |]
 
 usrInsert umap (Entity uId (Usr nme pss))  = Map.insert nme pss umap

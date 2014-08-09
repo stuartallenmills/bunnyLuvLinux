@@ -191,20 +191,42 @@ rabbitForm (mrab, rabID) extra = do
          addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
 
          toWidget [julius|
+                     $(function () {
+                               if ( $( "#hident6" ).val() == "2") {
+                                 $( "#hident7 option[value='3']" ).remove();
+                                 }
+                               else {
+                                 $( "#hident7 option[value='4']" ).remove();
+                                 }
+                              });
+
                     $(function () {
                          $( "#hident3" ).change (function() {
                              $( "#hident13" ).val( $( "#hident3" ).val());                    
                              });
                             });
-                         $(function () {
+                     $(function () {
+                          $( "#hident6" ).change (function() {
+                               if ( $( "#hident6" ).val() == "2") {
+                                 $( "#hident7 option[value='3']" ).remove();
+                                 $( "#hident7" ).append ("<option value='4'>Neutered</option>");
+                                }
+                               else {
+                                 $( "#hident7 option[value='4']" ).remove();
+                                 $( "#hident7" ).append ("<option value='3'>Spayed</option>");
+                                 }
+
+                              });
+                            });
+                     $(function () {
                           $( "#hident3" ).change (function() {
                              var str = $( "#hident3" ).val();
                              var res = str.split("/");
                              if (res.length != 3) {
                                 alert("Date must be m/d/yyyy - not "+ str);
-                                $( ".blDate :input" ).clearQueue();
-                                $( ".blDate :input" ).val("");
-                                $( ".blDate :input").focus();
+                                $( "#hident3" ).clearQueue();
+                                $( "#hident3" ).val("");
+                                $( "#hident3").focus();
                              } else {
                                var yr = res [2];
                                if (yr.length !=4) {
