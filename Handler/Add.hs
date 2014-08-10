@@ -337,11 +337,15 @@ getViewR rabId  = do
            $(function() {
             $("#vetvisits").click(function() {
                 $("#showvv").toggle();
-             });
+                $( "#vvRArrow" ).toggle();
+                $( "#vvDArrow" ).toggle();
+              });
             });
            $(function() {
             $("#haswell").click(function() {
-               $("#showWell").toggle();             
+               $("#showWell").toggle();   
+               $( "#wDArrow" ).toggle();
+               $( "#wRArrow" ).toggle();          
              });
             });           
           |] 
@@ -355,13 +359,42 @@ getViewR rabId  = do
                $if was_adopted
                    ^{showadopted rab adopteds}
                $if had_visits 
-                 <div #vetvisits style="float:left;" title="Show/Hide Vet Visits" > <b> Vet Visits </b> </div>
+                 <div #vetvisits style="float:left;" title="Show/Hide Vet Visits" >
+                    <div id="vvRArrow" class=arrow-right>
+                    <div id="vvDArrow" class=arrow-down> 
+                   <b> Vet Visits </b> 
                  ^{showvetvisit rab vetvisits}
                $if had_well
-                 <div #haswell style="float:left;" title="Show/Hide Wellness Reports"> <b> Wellness </b> </div>
+                 <div #haswell style="float:left;" title="Show/Hide Wellness Reports"> 
+                    <div id="wDArrow" class=arrow-down>
+                    <div id="wRArrow" class=arrow-right>
+                   <b> Wellness </b>
                  ^{showWellness wellRs}               
            |]
+         toWidget [lucius|
+.arrow-right {
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid black;
+    border-top: 10px solid transparent;
+    display: inline-block;
+    float: left;
+    height: 0;
+    width: 0;
+}
 
+
+.arrow-down {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid;
+    display: none;
+    float: left;
+    height: 0;
+    width: 0;
+    transform:translateY(5px);
+}
+
+|]
 
 getEditR::RabbitId->Handler Html
 getEditR rabID  = do
