@@ -4,13 +4,13 @@
       <div #splash>  
        <h2> BunnyLuv Rabbit Tracker
        <div #doprint style="float:right;">
-           <img id="pimg" src=#{getImage imgpath "printer.png"}>
+           <img id="pimg" src=#{getImage imgpath "printer.png"} title="Print page">
       $maybe usr <-maid
        <div #usr style="float:right;">
          <div #loglabel>logged in as 
          <div #usrName> #{usr}  
          <a href=@{AuthR LogoutR}>logout</a>
       $nothing
-       <div #login style="float:right;" title="Login to administrator">
+       <div #login style="float:right;" title="BunnyLuv Staff">
         <a href=@{AuthR LoginR}>login</a>
      <div #null></div>

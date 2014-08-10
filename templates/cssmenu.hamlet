@@ -1,8 +1,8 @@
 <div id=cssmenu>
   <ul>
    <li class='active'><a href=@{HomeR}><span>Home</span></a></li>
-   <li id="rAddM"><a href=@{AddR}><span>Add</span></a>
-   <li #blStatus class='has-sub'><a href='#'><span>Status</span></a>
+   <li id="rAddM"><a href=@{AddR}><span title="Add New Rabbit">Add</span></a>
+   <li #blStatus class='has-sub'><a href='#'><span title="Find Rabbits by status ">Status</span></a>
       <ul>
          <li><a href=@{QueryR "BunnyLuv"}><span>BunnyLuv</span></a></li>
          <li><a href=@{QueryR "Adopted"}><span>Adopted</span></a></li>
@@ -10,7 +10,7 @@
          <li><a href=@{QueryR "Died"}><span>Died</span></a></li>
          <li class='last'><a href=@{AllR}><span>All on file</span></a></li>
 
-   <li #blAge><a href='#'><span>Age</span></a>
+   <li #blAge><a href='#'><span title="Find Rabbits by Age">Age</span></a>
 
 
    <li #blReports class='has-sub'><a href='#'><span>Reports</span></a>
@@ -20,15 +20,15 @@
          <li><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
          <li><a href=@{AlteredR "No"}><span>Not Altered</span></a></li>
          <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
-         <li><a href=@{SearchR}><span>General Search</span></a></li>
+         <li><a href=@{SearchR}><span ttile="Search by date and status>General Search</span></a></li>
          <li><a href=@{SourceR "Shelter"}><span>Source: Shelter</span></a></li>
          <li class='last'><a href=@{SourceR "Other"}><span>Source: Other</span></a></li>
    <li class='has-sub last' id="blAdmin"><a href='#'><span>Admin</span></a>
       <ul>
        $if mode
-         <li><a href='#'><span>Change Password (demo disabled)</span></a></li>
-         <li><a href='#'><span>Delete User</span></a></li>
-         <li class='last'><a href='#'><span>Add User</span></a></li>
+         <li><a href='#'><span title="Disabled for Demo">Change Password </span></a></li>
+         <li><a href='#'><span  title="Disabled for Demo">Delete User</span></a></li>
+         <li class='last'><a href='#'><span  title="Disabled for Demo">Add User</span></a></li>
        $else
          <li><a href=@{ChangePassR}><span>Change Password</span></a></li>
          <li><a href=@{DeleteUR}><span>Delete User</span></a></li>

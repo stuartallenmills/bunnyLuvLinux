@@ -1,5 +1,11 @@
 @media screen {
 
+                           .ui-tooltip {
+                              font-size:70%;
+                              background:#FFFFEF;
+                           }
+                      
+
 #headimg {
       float:left;
       display:block;

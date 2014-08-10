@@ -157,11 +157,23 @@ base atitle result  = do
                               $( "#rAddM" ).hide(); 
                               $( "#blAdmin" ).hide(); }
                            });
-                  
-                  $(function() {
-                     $( document ).tooltip();
-                     });
 
+  $(function() {
+    $( document ).tooltip({
+      position: {
+        my: "center bottom-20",
+        at: "center top",
+        using: function( position, feedback ) {
+          $( this ).css( position );
+          $( "<div>" )
+            .addClass( "arrow" )
+            .addClass( feedback.vertical )
+            .addClass( feedback.horizontal )
+            .appendTo( this );
+        }
+      }
+    });
+  });
  
 
                              |]
@@ -175,8 +187,9 @@ base atitle result  = do
                                 border-bottom:thin solid #404040;
                             }
 
-                           .ui-tooltip-content {
-                              font-size:0.8em;
+                           .ui-tooltip {
+                              font-size:70%;
+                              background:#FFFFEF;
                            }
                       
               |]

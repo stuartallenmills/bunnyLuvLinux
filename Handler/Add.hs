@@ -355,10 +355,10 @@ getViewR rabId  = do
                $if was_adopted
                    ^{showadopted rab adopteds}
                $if had_visits 
-                 <div #vetvisits style="float:left;"> <b> Vet Visits </b> </div>
+                 <div #vetvisits style="float:left;" title="Show/Hide Vet Visits" > <b> Vet Visits </b> </div>
                  ^{showvetvisit rab vetvisits}
                $if had_well
-                 <div #haswell style="float:left;"><b> Wellness </b> </div>
+                 <div #haswell style="float:left;" title="Show/Hide Wellness Reports"> <b> Wellness </b> </div>
                  ^{showWellness wellRs}               
            |]
 
