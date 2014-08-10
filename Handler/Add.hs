@@ -373,6 +373,7 @@ getViewR rabId  = do
            |]
          toWidget [lucius|
 .arrow-right {
+    padding-left:10px;
     border-bottom: 10px solid transparent;
     border-left: 10px solid black;
     border-top: 10px solid transparent;

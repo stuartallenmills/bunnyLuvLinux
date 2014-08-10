@@ -7,8 +7,8 @@
   $(function() {
     $( document ).tooltip({
       position: {
-        my: "center bottom-20",
-        at: "center top",
+        my: "right bottom-10",
+        at: "left top",
         using: function( position, feedback ) {
           $( this ).css( position );
           $( "<div>" )

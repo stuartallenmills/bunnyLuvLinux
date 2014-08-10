@@ -20,7 +20,7 @@
          <li><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
          <li><a href=@{AlteredR "No"}><span>Not Altered</span></a></li>
          <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
-         <li><a href=@{SearchR}><span ttile="Search by date and status>General Search</span></a></li>
+         <li><a href=@{SearchR}><span ttile="Search by date and status">Intake Date/Status</span></a></li>
          <li><a href=@{SourceR "Shelter"}><span>Source: Shelter</span></a></li>
          <li class='last'><a href=@{SourceR "Other"}><span>Source: Other</span></a></li>
    <li class='has-sub last' id="blAdmin"><a href='#'><span>Admin</span></a>

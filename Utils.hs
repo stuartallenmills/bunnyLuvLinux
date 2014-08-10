@@ -55,11 +55,11 @@ getNamesDB = do
 
 getNameForm::Html->MForm Handler (FormResult Text, Widget)
 getNameForm extra = do
-  let fs = FieldSettings "sNamel" (Just "Find rabbit") (Just "getName") (Just "stName") []
+  let fs = FieldSettings "sNamel" (Just "Find rabbit by name") (Just "getName") (Just "nameField") []
   (nameRes, nameView) <- mreq textField fs  Nothing
   let wid =do
                   [whamlet| #{extra}
-                     <div class=ui-widget #getNameDiv style="font-size:1em; display:inline">
+                     <div class=ui-widget #getNameDiv style="font-size:1em; display:inline" title="Find rabbit by name">
                          <label style="font-size:0.8em;" for="getName" >name: </label>  ^{fvInput nameView}
                      <input #nameIn type=submit value="find" style="display:none;">
                     |]
@@ -98,6 +98,7 @@ getNameWidget bnames wid enctype = do
             |]
          toWidget [julius|
                   $( document ).ready(function() { 
+                    $( "#getName" ).attr("title", "Find rabbit by name");
                     $( "#getName" ).autocomplete({
                       source: #{rawJS (gostring bnames)},
                       select: function (event, ui) {
