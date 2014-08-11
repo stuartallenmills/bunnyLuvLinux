@@ -186,11 +186,12 @@ base atitle result  = do
                                 padding-top:5px;
                                 border-bottom:thin solid #404040;
                             }
-
-                           .ui-tooltip {
-                              font-size:70%;
-                              background:#FFFFEF;
-                           }
+                         @media print {
+                             .ui-tooltip {
+                               display:none;
+                             }  
+                           }                     
+                          
                       
               |]
 

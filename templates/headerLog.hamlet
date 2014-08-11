@@ -3,8 +3,13 @@
        <a href=@{HomeR}> <img id="himg" src=@{StaticR bunnyluv_gif}></a>
       <div #splash>  
        <h2> BunnyLuv Rabbit Tracker
-       <div #doprint style="float:right;">
-           <img id="pimg" src=@{StaticR printer_png} title="Print page">
+       
+       <div #adoprint style="float:right; display:inline;" >
+
+        <div #doprint style="float:right;">
+           <img id="pimg" src=@{StaticR printer_png}>
+        <div #printlabel style="float:right; display:inline; font-size:80%; margin-top:11px; margin-right:5px; color:#6f6f6f;">
+          print      
       $maybe usr <-maid
        <div #usr style="float:right;">
          <div #loglabel>logged in as 
