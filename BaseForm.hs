@@ -120,7 +120,9 @@ getAgeWidget wid enctype = do
                  
  
 doRabbitRow::Day->RabbitId->Rabbit->Widget
-doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow") 
+doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow")
+doRabbitRows::Day->[Entity Rabbit]->Widget
+doRabbitRows today result = $(widgetFileNoReload def "rabbitRows")
 
 base atitle result  = do 
      (formWidget, enctype) <- generateFormPost getNameForm
@@ -186,12 +188,7 @@ base atitle result  = do
                                 padding-top:5px;
                                 border-bottom:thin solid #404040;
                             }
-                         @media print {
-                             .ui-tooltip {
-                               display:none;
-                             }  
-                           }                     
-                          
+
                       
               |]
 
@@ -204,8 +201,6 @@ base atitle result  = do
         <div #formResults>
          <div #atitleD> 
               <b> #{atitle} #{numBunsStr}
-
-         $forall Entity rabbitid rabbit <- result
-           ^{doRabbitRow today rabbitid rabbit }
+         ^{doRabbitRows today result}
                 |]
 

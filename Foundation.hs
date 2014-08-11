@@ -227,6 +227,9 @@ mainMenu mode= do
           addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
           cssmenuWidget mode
 
+nameWidget::Widget
+nameWidget = $(widgetFileNoReload def "nameC")
+
 -- header
         
 headerLogWid imgpath maid = do

@@ -103,21 +103,14 @@ div.sourceC {
    background:#fFfeff;
 }
 div.statusC {
-  height:100%;
   width:12%;
   text-align:center;
   background:#fFfeff;
    float:right;
    padding-right:2px;
-   border:1px solid #7f7f7f;
-   border-top-right-radius:5px;
-   border-top-left-radius:5px;
-   border-bottom-right-radius:-10px;
-   border-bottom-left-radius:-10px;
-   border-bottom:none;
-   padding-left:2px;
-   box-shadow:3px 1px 4px 1px #747260
+   font-weight:bold;
 }
+
 div.alteredC {
   width:20%;
   height:100%;

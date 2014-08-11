@@ -122,35 +122,6 @@ div.title {
   display:none;
 }
 
-#doprint {
- display:none;
-}
-.ui-tooltip {
-  display:none;
-}
 
-.ui-widget {
-   display:none;
-}
-
-.ui-tooltip.ui-widget.ui-corner-all.ui-widget-content {
-  display:none;
-}
-
-.ui-corner-all {
-  display:none;
-}
-
-.ui-widget-content {
-  display:none;
-}
-
-.ui-tooltip-content {
-  display:none;
-}
-
-title {
- display:none;
-}
 
 }
