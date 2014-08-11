@@ -31,16 +31,19 @@ import Text.Julius
 import FormUtils
 import Utils
 import BaseForm
+import Text.Printf
 
 data Search = Search {
                startDate::Maybe Day
               , endDate:: Maybe Day
-              , bunnyluv::Bool
-              , dead::Bool
-              , adopted::Bool
-              , euthanized::Bool
-               ,shelter::Bool
-               ,other::Bool
+              , bunnyluv::Maybe Bool
+              , dead::Maybe Bool
+              , adopted::Maybe Bool
+              , euthanized::Maybe Bool
+               ,shelter::Maybe Bool
+               ,other::Maybe Bool
+               ,source::Maybe Text
+               ,status::Maybe Text
                
 
                  }
@@ -51,15 +54,17 @@ searchForm::Html -> MForm Handler (FormResult Search, Widget)
 searchForm extra = do
     (startDateRes, startDateView) <- mopt textField (field "astart" "startD") Nothing
     (endDateRes, endDateView) <- mopt textField (field "aend" "endD") Nothing
-    (iBlRes, iBlView) <- mreq boolField (field "abl" "blD") (Just True)
-    (iDiedRes, iDiedView) <- mreq boolField (field "adied" "diedD") (Just True)
-    (iAdoptRes, iAdoptView) <- mreq boolField (field "aadopt" "adoptD") (Just True)
-    (iEuthRes, iEuthView) <- mreq boolField (field "aeuth" "euthD") (Just True)
-    (iSheltRes, iSheltView) <- mreq boolField (field "ashelt" "sheltD") (Just True)
-    (iOtherRes, iOtherView) <- mreq boolField (field "aother" "otherD") (Just True)
+    (iBlRes, iBlView) <- mopt checkBoxField (field "abl" "blD") (Just (Just True))
+    (iDiedRes, iDiedView) <- mopt checkBoxField (field "adied" "diedD") (Just (Just True))
+    (iAdoptRes, iAdoptView) <-mopt checkBoxField (field "aadopt" "adoptD") (Just (Just True))
+    (iEuthRes, iEuthView) <-mopt checkBoxField (field "aeuth" "euthD") (Just (Just True))
+    (iSheltRes, iSheltView) <- mopt checkBoxField (field "ashelt" "sheltD") (Just (Just True))
+    (iOtherRes, iOtherView) <-mopt checkBoxField (field "aother" "otherD") (Just (Just True))
+    (iSourceRes, iSourceView) <-mopt textField (field "asource" "sourceD") Nothing
+    (iStatusRes, iStatusView) <-mopt textField (field "astatus" "statusD") Nothing
     let tstartDate = text2dateM startDateRes
     let tendDate =   text2dateM endDateRes
-    let searchRes = Search <$> tstartDate <*> tendDate <*> iBlRes <*> iDiedRes <*> iAdoptRes <*> iEuthRes <*> iSheltRes <*> iOtherRes
+    let searchRes = Search <$> tstartDate <*> tendDate <*> iBlRes <*> iDiedRes <*> iAdoptRes <*> iEuthRes <*> iSheltRes <*> iOtherRes <*> iSourceRes <*> iStatusRes
     let searchw = do
           [whamlet|
               #{extra}
@@ -77,9 +82,13 @@ searchForm extra = do
               <div #euthInc>
                  <label .topL for="euthD"> Include euthanized rabbits: </label> ^{fvInput iEuthView}
               <div #sheltInc>
-                 <label .topL for="sheltD">Include rabbits from shelter: </label> ^{fvInput iSheltView}
+                 <label .topL for="sheltD">Include rabbits from shelters: </label> ^{fvInput iSheltView}
               <div #otherInc>
-                 <label .topL for="otherD">Include rabbits not from shelter: </label> ^{fvInput iOtherView}
+                 <label .topL for="otherD">Include rabbits not from shelters: </label> ^{fvInput iOtherView}
+              <div #sourcInc>
+                 <label .topL for="sourceD">Source text contains : </label> ^{fvInput iSourceView}
+              <div #statusInc>
+                 <label .topL for="statusD">Status text contains : </label> ^{fvInput iStatusView}
 
               <input type=submit value="submit">
                         |]
@@ -132,66 +141,61 @@ doEnd::Maybe Day->Day
 doEnd Nothing = doparseTime "12/30/2200"
 doEnd (Just date) = date
 
+doTest::Maybe Bool->Bool
+doTest Nothing = False;
+doTest (Just val) = val;
+
+goStr::Maybe Bool->Text->Text
+goStr val str = if doTest val then str else "ZZZ"
+
+testStat r stat = (r ^. RabbitStatus ==. val stat)
+
+doStat r bls dds ads eus = testStat r bls ||. testStat r dds ||. testStat r ads ||. testStat r eus
+
+doSource r sh ot = (r ^. RabbitSourceType ==. val sh) ||. (r ^. RabbitSourceType ==. val ot)
+
+doSourceContent r Nothing = (r ^. RabbitSource `like` val "%")
+doSourceContent r (Just theval) = (r ^. RabbitSource `like` (%)++. val theval ++. (%))
+
+doStatus r Nothing = (r ^. RabbitStatusNote `like` val "%")
+doStatus r (Just theval) = (r ^. RabbitStatusNote `like` (%)++. val theval ++. (%))
+
+                                
 dstate r tsome = (r ^. RabbitDateIn <=. val tsome)
-querySearch (Search start stop bl died adopt euth shelt tother) = runDB $ do
- let sh = if shelt then "Shelter" else "None"
- let ot = if tother then "Other" else "None"
- rbl<- if bl then
-        select $ from $ \r -> do
+querySearch (Search start stop bl died adopt euth shelt tother tsource tstat) = runDB $ do
+ let sh = if doTest shelt then "Shelter" else "None"
+ let ot = if doTest tother then "Other" else "None"
+ let bls = goStr bl "BunnyLuv"
+ let dds = goStr died "Died"
+ let ads = goStr adopt "Adopted"
+ let eus = goStr euth "Euthanized"
+ result<-    select $ from $ \r -> do
               where_ ((r ^. RabbitDateIn >=. val (doStart start)) &&.
                (r ^. RabbitDateIn <=. val (doEnd stop)) &&.
-                (r ^. RabbitStatus ==. val "BunnyLuv")  &&.
-                ( (r ^. RabbitSourceType ==. val sh) ||. (r ^. RabbitSourceType ==. val ot)) 
+                (doStat r bls dds ads eus) &&.
+                (doSource r sh ot) &&.
+                (doSourceContent r tsource) &&.
+                (doStatus r tstat)
                
                      )
-              orderBy [asc (r ^. RabbitDateIn)]
+              orderBy [asc (r ^. RabbitStatus), asc (r ^. RabbitDateIn)]
               return r
-        else return []
- rd<- if died then
-        select $ from $ \r -> do
-              where_ ((r ^. RabbitDateIn >=. val (doStart start)) &&.
-               (r ^. RabbitDateIn <=. val (doEnd stop)) &&.
-               (r ^. RabbitStatus ==. val "Died") &&.
-               ( (r ^. RabbitSourceType ==. val sh) ||. (r ^. RabbitSourceType ==. val ot))
-                     )
-              orderBy [asc (r ^. RabbitDateIn)]
-              return r
-        else return []
- radop<- if adopt then
-        select $ from $ \r -> do
-              where_ ((r ^. RabbitDateIn >=. val (doStart start)) &&.
-               (r ^. RabbitDateIn <=. val (doEnd stop)) &&.
-               (r ^. RabbitStatus ==. val "Adopted") &&.
-               ( (r ^. RabbitSourceType ==. val sh) ||. (r ^. RabbitSourceType ==. val ot))
-                     )
-              orderBy [asc (r ^. RabbitDateIn)]
-              return r
-        else return []
- reuth<- if euth then
-        select $ from $ \r -> do
-              where_ ((r ^. RabbitDateIn >=. val (doStart start)) &&.
-               (r ^. RabbitDateIn <=. val (doEnd stop)) &&.
-               (r ^. RabbitStatus ==. val "Euthenized")&&.
-               ( (r ^. RabbitSourceType ==. val sh) ||. (r ^. RabbitSourceType ==. val ot))
-                     )
-              orderBy [asc (r ^. RabbitDateIn)]
-              return r
-        else return []
- return (rbl++rd++radop ++ reuth)
+
+ return result
 
 getDay Nothing = "None"
 getDay (Just date) = showtime date
 
 parseSearch::Search->(String, String)
-parseSearch (Search sday eday bl dd ad eu sh ot) = (datestring, outstring) where
+parseSearch (Search sday eday bl dd ad eu sh ot tsource tstat) = (datestring, outstring) where
   tstartDate = "Start date: " ++ (unpack (getDay sday))
   tendDate = ", End date: " ++ (unpack (getDay eday))
-  bls = if bl then ", BunnyLuv" else ""
-  dds = if dd then ", Died" else ""
-  ads = if ad then ", Adopted" else ""
-  eus = if eu then ", Euthanized" else ""
-  shs = if sh then ", From shelter" else ""
-  ots = if ot then ", From other" else ""
+  bls = if doTest bl  then ", BunnyLuv" else ""
+  dds = if doTest dd  then ", Died" else ""
+  ads = if doTest ad  then ", Adopted" else ""
+  eus = if doTest eu  then ", Euthanized" else ""
+  shs = if doTest sh  then ", From shelter" else ""
+  ots = if doTest ot  then ", From other" else ""
   datestring = "Search: " ++ tstartDate++tendDate
   outstring = bls++dds++ads++eus++shs++ots
   
