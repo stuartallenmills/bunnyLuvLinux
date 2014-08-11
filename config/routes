@@ -1,4 +1,5 @@
 /                       HomeR    GET 
+/static                 StaticR Static getStatic
 /auth                   AuthR Auth getAuth
 /add                    AddR     GET 
 /putrab                 PostR    POST

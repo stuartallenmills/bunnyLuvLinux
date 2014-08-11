@@ -18,6 +18,7 @@ import Yesod hiding (parseTime)
 import Yesod.Default.Util
 import Yesod.Auth
 import Yesod.Auth.Message
+import Yesod.Static
 import Data.Text (Text, unpack)
 import Database.Esqueleto
 import Database.Persist.Sqlite --(runSqlite, runMigrationSilent, withSqlitePool)
@@ -157,13 +158,14 @@ type UsrMap = Map.Map Text Text
 showgroomed::Wellness->Text
 showgroomed wellR = if (wellnessGroomed wellR) then "Y" else "-"
 
-
+staticFiles "static"
                
 
 data App = App
   { httpManager :: Manager
     ,connection :: ConnectionPool
     ,democonnection::ConnectionPool
+    ,getStatic::Static
   }
 
 mkYesodData "App" $(parseRoutesFile "config/routes")
@@ -198,7 +200,7 @@ instance YesodPersist App where
   type YesodPersistBackend App = SqlPersistT
   runDB db = do
     mname <- maybeAuthId
-    App manager pool pool2 <- getYesod
+    App manager pool pool2 static <- getYesod
     let thepool = case mname of
           Just "demo" -> pool2
           _      -> pool

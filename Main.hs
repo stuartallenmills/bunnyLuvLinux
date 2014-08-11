@@ -9,6 +9,7 @@ import System.Directory
 import Control.Monad
 import           Network.HTTP.Conduit (Manager, conduitManagerSettings, newManager)
 import           Yesod.Auth
+import Yesod.Static
 import Dispatch ()
 import Foundation
 import Data.Text (unpack)
@@ -25,6 +26,7 @@ makeusers = do
 
 main :: IO ()
 main = do
+    static@(Static settings)<- static "static"
     fe<-doesFileExist (unpack bunnyLuvDB)
     tport <- getPort
     let prt = read (unpack tport) :: Int
@@ -39,4 +41,4 @@ main = do
       runSqlPersistMPool (runMigration migrateAll) pool
     withSqlitePool demoDB 10 $ \pool2-> do
       runSqlPersistMPool (runMigration migrateAll) pool2
-    warp  prt $ App  manager pool1 pool2
+    warp  prt $ App  manager pool1 pool2 static

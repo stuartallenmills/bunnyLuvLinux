@@ -47,6 +47,7 @@ executable bunnyLuv
                        , yesod-auth
                        , containers
                        , system-fileio
+                       , yesod-static
   hs-source-dirs:      .
   ghc-options:        
   extra-lib-dirs:      
