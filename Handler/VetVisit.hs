@@ -51,11 +51,13 @@ parseProb rab task
 
 parseNotes rab task
         | task == "Altered" = Just "none"
+        | task == "Euth" = Just "none"
         | otherwise = Nothing
                       
 vetVisitForm::Text->Rabbit-> RabbitId->Html-> MForm Handler (FormResult VetVisit, Widget)
 vetVisitForm task rab rabid extra = do
     local_time <- liftIO $ getLocalTime
+    let noteDis = if task /="Euth" then "block" else "none"::Text
     let stime = showtime (localDay local_time)
     (vvDateRes, vvDateView)<-mreq textField "nope" (Just stime)
     (vvVetRes, vvVetView)<-mreq (selectFieldList vets) "nope" Nothing
@@ -128,7 +130,11 @@ vetVisitForm task rab rabid extra = do
                  }
                  ##{fvId vvProceduresView} { width:30em; display:block; }
                  ##{fvId vvNotesView} {width:30em; display:block;}
-                 
+
+                 #fvNotes {
+                         display: #{noteDis};
+                    }
+                   
                  |]
          [whamlet|
             #{extra}
@@ -144,7 +150,7 @@ vetVisitForm task rab rabid extra = do
                 Cost:  ^{fvInput vvCostView}
             <div #fvBlock>
                <div #vfProblem>
-                   Problem:   ^{fvInput vvProblemView}
+                   Reason:   ^{fvInput vvProblemView}
               <div #vfProcedures>
                   Procedures:   ^{fvInput vvProceduresView}
               <div #fvNotes>
