@@ -137,8 +137,7 @@ base atitle result  = do
      let isAuth=(auth==Authorized)
      today<- liftIO getCurrentDay
      let numBuns = length result
-     
-     let numBunsStr = "  : (found " ++ (show numBuns) ++ " )"
+     let numBunsStr = "  : ("++ (show numBuns) ++ ")"
      
      defaultLayout $ do
         setTitle atitle
@@ -183,10 +182,11 @@ base atitle result  = do
                                 width:100%;
                                 float:left;
                                 text-align:center;
-                                background:#e8e8e8;
+                                background:#efefef;
                                 padding-bottom:5px;
                                 padding-top:5px;
                                 border-bottom:thin solid #404040;
+                                margin-bottom:5px;
                             }
 
                       
@@ -200,7 +200,8 @@ base atitle result  = do
          ^{getAgeWidget ageWidget age_enctype}
         <div #formResults>
          <div #atitleD> 
-              <b> #{atitle} #{numBunsStr}
+              <b> #{atitle} 
+            <div #foundcount style="float:right; font-size:90%; padding-right:5px;"> #{numBunsStr}
          ^{doRabbitRows today result}
                 |]
 

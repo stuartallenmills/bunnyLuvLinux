@@ -186,6 +186,42 @@ querySearch (Search start stop bl died adopt euth shelt tother tsource tstat) = 
 getDay Nothing = "None"
 getDay (Just date) = showtime date
 
+
+test:: Search-> Html
+test (Search sday eday bl dd ad eu sh ot tsource tstat)=
+  [shamlet|
+    <div #head style="font-size:90%; font-weight:normal; float:left; text-align:left; display:inline; width:85%; padding-left:5px;" >
+           <div #dates style="width:100%; float:left; border-bottom:1px solid #6f6f6f;" >
+            <div #startDS style="width:45%; float:left;" >
+             Start date: #{getDay sday}            
+            <div #endDS style="width:45%; float:left;" >
+              End date: #{getDay eday}
+          <div #statType style="width:85%; float:left;" >
+             Status/Source:&nbsp;
+             $if (doTest bl)
+                 BunnyLuv; 
+             $if (doTest dd)
+                 Died; 
+             $if (doTest ad)
+                 Adopted; 
+             $if  (doTest ad)
+                  Euthenized; 
+             $if (doTest sh)
+                  Shelter;
+             $if (doTest ot)
+                 &nbsp;Other
+          <div #txtF style="width:100%; border-top:1px solid #6f6f6f; float:left">
+              $maybe source <- tsource
+               <div #sourceS style="width:55%; float:left;">
+                    Source contains: #{source}
+              $maybe stat <- tstat 
+               <div #astatS sytle="width:45%; float:left;">
+                    Status contains: #{stat}
+           
+              
+
+  |]
+
 parseSearch::Search->(String, String)
 parseSearch (Search sday eday bl dd ad eu sh ot tsource tstat) = (datestring, outstring) where
   tstartDate = "Start date: " ++ (unpack (getDay sday))
@@ -208,6 +244,6 @@ postSearchR = do
         res <- querySearch search
         let (st, en) = parseSearch search
         let cap = toHtml (pack (st++en))       
-        base cap res
+        base (test search) res
     _ -> redirect HomeR
  

@@ -114,6 +114,12 @@ VetVisit
    cost Double Maybe
    deriving Show
 
+Relation
+   rab1 Rabbit
+   rab2 Rabbit
+   kind::Text
+   deriving Show
+   
 Died
   date Text
   notes Text
