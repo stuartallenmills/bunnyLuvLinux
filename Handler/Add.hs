@@ -200,11 +200,7 @@ rabbitForm (mrab, rabID) extra = do
                                  }
                               });
 
-                    $(function () {
-                         $( "#hident3" ).change (function() {
-                             $( "#hident13" ).val( $( "#hident3" ).val());                    
-                             });
-                            });
+
                      $(function () {
                           $( "#hident6" ).change (function() {
                                if ( $( "#hident6" ).val() == "2") {
@@ -219,6 +215,32 @@ rabbitForm (mrab, rabID) extra = do
                               });
                             });
                      $(function () {
+                          $( ".blDate :input" ).change (function() {
+                             var str = $( this ).val();
+                             var res = str.split("/");
+                             if (res.length != 3) {
+                                alert("Date must be m/d/yyyy - not "+ str);
+                                $( ".blDate :input" ).val("");
+                                $(this ).focus();
+                             } else {
+                               var yr = res [2];
+                               if (yr.length !=4) {
+                                if (yr.length ==2) {
+                                    var newyr = "20"+yr;
+                                    var newdate = res[0]+"/"+res[1]+"/"+newyr;
+                                    $( this ).val(newdate);
+                                 }
+                                else {
+                                alert("Year must have 4 characters: yyyy");
+                                $( this ).val("");
+                                $( this ).focus();
+                              }
+                             }    
+                             }                          
+                             });
+                            });
+
+                     $(function () {
                           $( "#hident3" ).change (function() {
                              var str = $( "#hident3" ).val();
                              var res = str.split("/");
@@ -230,11 +252,23 @@ rabbitForm (mrab, rabID) extra = do
                              } else {
                                var yr = res [2];
                                if (yr.length !=4) {
+                                if (yr.length ==2) {
+                                    var newyr = "20"+yr;
+                                    var newdate = res[0]+"/"+res[1]+"/"+newyr;
+                                    $( "#hident3" ).val(newdate);
+                                    $( "#hident13" ).clearQueue();
+                                    $( "#hident13" ).val(newdate);
+                                 }
+                                else {
                                 alert("Year must have 4 characters: yyyy");
                                 $( ".blDate :input" ).clearQueue();
                                 $( ".blDate :input").val("");
                                 $( ".blDate :input").focus();
                               }
+                             } else {
+                                $( "#hident13" ).val(str);
+                               }
+                                     
                              }                          
                              });
                             });

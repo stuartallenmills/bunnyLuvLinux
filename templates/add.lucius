@@ -41,7 +41,7 @@
                      }
 
                      #falteredDate {
-                        width:60%;
+                        width:65%;
                       }
                      #dateInF {
                         width:40%;
@@ -50,20 +50,19 @@
                         width:60%;
                      }
                      #statusF {
-                        width:40%
+                        width:30%
                      }
                      #statusDateF {
                         width:40%
                      }
                      #statusNoteF {
-                        width:70%;
+                        width:100%;
                       }
                      #sourceTypeF {
-                           width:50%;
+                           width:35%;
                            float:left;
                       }
                      #dateInF {
-                           width 40%;
                            float:left;
                       }
                      #sourceF {
@@ -82,7 +81,7 @@
                             display:inline;
                      }
                      ##{fvId alteredDateView} {
-                         width:7em;
+                         width:6em;
                          display:inline;
                       }
                      ##{fvId sexView} {

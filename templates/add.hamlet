@@ -3,13 +3,19 @@
                   <div .faddRw>
                    <div id="nameF">
                      Name  ^{fvInput nameView}
-                   <div id="sexF">  
+                   <div id="sexF", style="float:right;">  
                       Sex : ^{fvInput sexView}
                   <div .faddRw>
+                     <div #sourceTypeF>
+                       Source Type: ^{fvInput sourceTypeView}
+                     <div .blDate #dateInF>
+                       Date In <span style="font-size:90%">(m/d/y) </span>: ^{fvInput dateInView}  
+                  <div .faddRw>
+                     <div #sourceF>
+                       Source:   ^{fvInput sourceView}
                   <div .faddRw>
                        Estimated Age at intake:  Yrs: ^{fvInput yrsIntakeView}
                        &nbsp; Mnths: ^{fvInput mnthsIntakeView}
-
                   <div .faddRw>
                    <div id="descF">
                       Desc:   ^{fvInput descView}
@@ -17,21 +23,20 @@
                    <div id="alteredF">
                       Altered: ^{fvInput alteredView}
                    <div .blDate id="falteredDate">
-                      Altered Date (m/d/yyyy): ^{fvInput alteredDateView} (leave blank if not known)
+                     <div .blLabel>
+                      Altered Date :
+                     <div .blInput>
+                         ^{fvInput alteredDateView} 
+                     <div #commnt style="font-size:90%; margin-left:5px;" >
+                        (leave blank if not known)
+
                   <div .faddRw>
-                     <div #sourceTypeF>
-                       Source Type: ^{fvInput sourceTypeView}
-                     <div .blDate #dateInF>
-                       Date In (m/d/yyyy): ^{fvInput dateInView}  
-                  <div .faddRw>
-                     <div #sourceF>
-                       Source:   ^{fvInput sourceView}
-                   <div .faddRw>
                     <div #statusF>
                       Status:
                      ^{fvInput statusView}
                     <div .blDate #statusDateF>   
-                      Status Date (m/d/yyyy): ^{fvInput statusDateView}  
+                      Status Date : ^{fvInput statusDateView} 
+                  <div .faddRw> 
                     <div #statusNoteF>
                       Status Notes: ^{fvInput statusNoteView}          
                   <input type=submit value="submit">
