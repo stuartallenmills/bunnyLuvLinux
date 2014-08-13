@@ -190,13 +190,13 @@ getDay (Just date) = showtime date
 test:: Search-> Html
 test (Search sday eday bl dd ad eu sh ot tsource tstat)=
   [shamlet|
-    <div #head style="font-size:90%; font-weight:normal; float:left; text-align:left; display:inline; width:85%; padding-left:5px;" >
-           <div #dates style="width:100%; float:left; border-bottom:1px solid #6f6f6f;" >
+    <div #head style="font-size:95%; font-weight:normal; float:left; text-align:left; display:inline; width:90%; padding-left:5px;" >
+           <div #dates style="width:100%; float:left; border-bottom:1px solid #6f6f6f; padding-bottom:2px;" >
             <div #startDS style="width:45%; float:left;" >
              Start date: #{getDay sday}            
             <div #endDS style="width:45%; float:left;" >
               End date: #{getDay eday}
-          <div #statType style="width:85%; float:left;" >
+          <div #statType style="width:85%; float:left; padding-bottom:2px;" >
              Status/Source:&nbsp;
              $if (doTest bl)
                  BunnyLuv; 

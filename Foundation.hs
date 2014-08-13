@@ -84,6 +84,11 @@ Person
     PhoneKey phone
     deriving Show
 
+Bonded
+  first RabbitId
+  second RabbitId
+  relation Text
+  deriving Show
 
 Adopted
     rabbit RabbitId

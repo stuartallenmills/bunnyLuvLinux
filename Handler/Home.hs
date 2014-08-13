@@ -76,6 +76,7 @@ querySource source = runDB $ do
      return (r)
   return zipt
 
+{-
 queryName name = runDB $ do
   let (f,s) = T.splitAt 1 name
   let capName = append (T.toUpper f) s
@@ -88,7 +89,7 @@ queryName name = runDB $ do
      orderBy [asc (r ^. RabbitName)]
      return r
   return zipt
-
+-}
 
 getAlteredR isAlt = do
      zinc<- queryAltered isAlt

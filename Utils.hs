@@ -37,6 +37,21 @@ queryStatus status = runDB $ do
      return (r)
   return zipt
 
+
+queryName name = runDB $ do
+  let (f,s) = T.splitAt 1 name
+  let capName = append (T.toUpper f) s
+  let lowName = append (T.toLower f) s
+      
+  zipt<-select $ from $ \r ->do
+     where_ ((like  (r ^. RabbitName)  ((%) ++. val capName ++. (%)) ) ||.
+             (like  (r ^. RabbitName)  ((%) ++. val lowName ++. (%)) ) 
+             )
+     orderBy [asc (r ^. RabbitName)]
+     return r
+  return zipt
+
+  
 gostring::[T.Text]->T.Text
 gostring alist = out where
            temp= foldl (\accum x-> T.append( T.append (T.append "\"" x) "\",") accum) T.empty alist
