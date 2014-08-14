@@ -105,7 +105,7 @@ diedForm extra = do
     let diedw = do
           [whamlet|
               #{extra}
-              <div #diedDate>
+              <div #diedDate .blDate>
                 Date:  ^{fvInput statusDateView}
               <div #diedNote>
                 Notes: ^{fvInput statusNoteView}
@@ -187,10 +187,9 @@ rabbitForm (mrab, rabID) extra = do
     let awid= do
          $(widgetFileNoReload def "add")
          addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
-         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
          addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
-
          toWidget [julius|
+
                      $(function () {
                                if ( $( "#hident6" ).val() == "2") {
                                  $( "#hident7 option[value='3']" ).remove();
@@ -214,66 +213,34 @@ rabbitForm (mrab, rabID) extra = do
 
                               });
                             });
-                     $(function () {
-                          $( ".blDate :input" ).change (function() {
-                             var str = $( this ).val();
-                             var res = str.split("/");
-                             if (res.length != 3) {
-                                alert("Date must be m/d/yyyy - not "+ str);
-                                $( ".blDate :input" ).val("");
-                                $(this ).focus();
-                             } else {
-                               var yr = res [2];
-                               if (yr.length !=4) {
-                                if (yr.length ==2) {
-                                    var newyr = "20"+yr;
-                                    var newdate = res[0]+"/"+res[1]+"/"+newyr;
-                                    $( this ).val(newdate);
-                                 }
-                                else {
-                                alert("Year must have 4 characters: yyyy");
-                                $( this ).val("");
-                                $( this ).focus();
-                              }
-                             }    
-                             }                          
-                             });
-                            });
 
                      $(function () {
                           $( "#hident3" ).change (function() {
                              var str = $( "#hident3" ).val();
-                             var res = str.split("/");
-                             if (res.length != 3) {
-                                alert("Date must be m/d/yyyy - not "+ str);
-                                $( "#hident3" ).clearQueue();
-                                $( "#hident3" ).val("");
-                                $( "#hident3").focus();
-                             } else {
-                               var yr = res [2];
-                               if (yr.length !=4) {
-                                if (yr.length ==2) {
-                                    var newyr = "20"+yr;
-                                    var newdate = res[0]+"/"+res[1]+"/"+newyr;
-                                    $( "#hident3" ).val(newdate);
-                                    $( "#hident13" ).clearQueue();
-                                    $( "#hident13" ).val(newdate);
-                                 }
-                                else {
-                                alert("Year must have 4 characters: yyyy");
-                                $( ".blDate :input" ).clearQueue();
-                                $( ".blDate :input").val("");
-                                $( ".blDate :input").focus();
-                              }
-                             } else {
-                                $( "#hident13" ).val(str);
-                               }
-                                     
-                             }                          
+                               { $( "#hident13" ).val(str);}
                              });
                             });
 
+
+          |]
+{-
+        
+         toWidget [julius|
+
+         
+
+
+
+                      
+                     $(function () {
+                          $( "#hident3" ).change (function() {
+                             alert("hident3 change");
+                             var str = $( "#hident3" ).val();
+                             $( "#hident13" ).val(str);
+                            }};
+
                          |]
+ -}
                   
     return (rabbitUpdateRes, awid)
 

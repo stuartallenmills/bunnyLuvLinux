@@ -51,6 +51,51 @@ baseForm ti menu form = do
   defaultLayout $ do
     setTitle ti
     $(widgetFileNoReload def "cancelbutton")
+    toWidget [julius|
+
+   function checkDate( astr ) {
+      var str =astr; 
+      var pat=/^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/]((19|20)[0-9][0-9]|[0-9][0-9])$/;
+    var res = str.match(pat);
+    if (res==null) {
+      alert("invalid date");
+      return "";
+    }
+    
+    var dtMonth=res[1];
+    var dtDay=res[2];
+    var adtYear=res[3];
+    if (adtYear.length == 2) 
+         {dtYear="20"+adtYear;} 
+    else {dtYear=adtYear;}
+
+    if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) {
+      alert("invalid date");
+      return "";
+    }
+
+  if (dtMonth == 2)
+     {
+     var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
+     if (dtDay> 29 || (dtDay ==29 && !isleap)) {
+          alert("invalid date");
+          return "";
+        }
+     }
+  return (dtMonth +"/"+ dtDay+"/"+dtYear);
+    
+  }
+
+
+                 $(function () {
+                          $( ".blDate :input" ).change (function() {
+                             var str = $( this ).val();
+                             var thedate= checkDate( str );
+                             $( this ).val( thedate );
+                             return;
+                            });
+                            });
+       |]
     [whamlet|
        <div #ablank style="color:#ffffff; float:right">  
                  This is a test

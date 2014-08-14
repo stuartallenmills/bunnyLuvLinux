@@ -1,0 +1,34 @@
+<div #showRabRows>
+^{nameWidget}
+ $forall ( Entity rabbitid rabbit) <- result
+    <div class="rabRow">
+     <div .row1>
+      <div class="nameC">
+             <a href=@{ViewR rabbitid}> #{rabbitName rabbit}
+      <div class="sexC">
+              #{rabbitSex rabbit}
+      <div class="descC">
+               #{rabbitDesc rabbit}
+      <div class="statusC">
+          #{rabbitStatus rabbit}
+     <div .row1>
+      <div .dateInC>
+           Date In:   #{showtime (rabbitDateIn rabbit)}
+      <div class="alteredC">
+          Altered:     #{rabbitAltered rabbit}
+
+      <div class="vwEstAge">
+          Estimated Age: #{getCurrentYears today rabbit} Yrs #{getCurrentMonths today rabbit} Mnths
+
+ <!--
+      <div class="alteredD">
+          Altered Date:
+           $maybe date <- rabbitAlteredDate rabbit
+              #{showtime date}
+           $nothing
+                &nbsp;-
+
+      <div .row1>
+      <div class="sourceC">
+        Source:      #{rabbitSource rabbit}
+-->

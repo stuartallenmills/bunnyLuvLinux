@@ -140,7 +140,7 @@ vetVisitForm task rab rabid extra = do
             #{extra}
            <div #fvVisit>
             <div #fvInline>
-              <div #fvDate>
+              <div #fvDate .blDate>
                 Date:  ^{fvInput vvDateView}
               <div #fvVet>
                 Vet:   ^{fvInput vvVetView}

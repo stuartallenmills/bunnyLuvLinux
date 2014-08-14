@@ -2,7 +2,7 @@
                      <div #wellness>
                       <div #fwellReportingPerson>
                         Reporting Person: ^{fvInput wellResponsibleView}
-                      <div #wellDate>
+                      <div #wellDate .blDate>
                         Date:  ^{fvInput wellDateView}
                       <div #wellWeight>
                         Weight: ^{fvInput wellLbsView} lbs.&nbsp ^{fvInput wellOzView} oz

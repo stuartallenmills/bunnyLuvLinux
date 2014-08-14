@@ -88,7 +88,7 @@ adoptedForm rabID extra = do
           [whamlet|
                     #{extra}
                    <div #fadopted>
-                     <div #faDate>
+                     <div #faDate .blDate>
                       Date: ^{fvInput adoptedDateView}
                      <div #faPersonFirst>
                       First Name : ^{fvInput adoptedFirstNameView} 
