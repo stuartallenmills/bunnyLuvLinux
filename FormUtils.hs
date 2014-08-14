@@ -85,13 +85,27 @@ baseForm ti menu form = do
   return (dtMonth +"/"+ dtDay+"/"+dtYear);
     
   }
-
+            $(function () {
+              $( ".blDate :input" ).keydown( function(e) {
+                   var keyCode = e.keyCode || e.which;
+                   if (keyCode==9) {
+                            var str = $( this ).val();
+                             var thedate= checkDate( str );
+                             $( this ).val( thedate );
+                             $( this ).change();
+                     if (thedate.length < 4) {
+                      e.preventDefault();
+                   $( this ).focus();
+                  }
+                   
+                 };
+                });
+                });
 
                  $(function () {
                           $( ".blDate :input" ).change (function() {
                              var str = $( this ).val();
-                             var thedate= checkDate( str );
-                             $( this ).val( thedate );
+                             $( this ).val( str );
                              return;
                             });
                             });
