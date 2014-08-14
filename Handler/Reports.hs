@@ -27,10 +27,15 @@ import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time.Calendar
+import AgeForm
+import Utils
 
 
 
 reportbase atitle result = do 
+     (formWidget, enctype) <- generateFormPost getNameForm
+     (ageWidget, age_enctype) <-generateFormPost getAgeForm
+     bnames <-  getNamesDB
      msg <-getMessage
      maid <- maybeAuthId
      auth <- isAdmin
@@ -53,9 +58,10 @@ reportbase atitle result = do
                              |]
         [whamlet|
         <div #blHeaderD>
-         <div #dummy > nothing here
+        ^{getNameWidget bnames formWidget enctype}
          ^{headerLogWid imgpath maid}
          ^{mainMenu mode}
+         ^{getAgeWidget ageWidget age_enctype}
         <div #formResults>
          <div #atitleD> 
               <b> #{atitle} 
