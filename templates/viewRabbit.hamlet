@@ -9,7 +9,8 @@
          <b> #{rabbitName rab} </b>
        <div #vrdatein title="Date In">
          <div .bllabel> Date In: 
-         #{showtime (rabbitDateIn rab)}
+         <div #adate style="float:right; text-align:right;">
+           #{showtime (rabbitDateIn rab)}
       <div .prow>
        <div #vrsex>
          <div .bllabel> Sex:&nbsp; 
@@ -27,9 +28,10 @@
          #{yrs} years #{mnths} months
        <div #valteredDate>
         <div .bllabel> Altered Date:
-        $maybe date <- rabbitAlteredDate rab
+        <div #altDate style="float:right">
+          $maybe date <- rabbitAlteredDate rab
               #{showtime date}
-        $nothing
+          $nothing
               &nbsp;-
    $nothing
     <div .vrRow>
@@ -43,8 +45,9 @@
         <div .bllabel> Altered: #
         \ #{rabbitAltered rab} 
      <div #vrdateinn>
-        <div .bllabel> Date in: #
-        \ #{showtime (rabbitDateIn rab)}
+        <div .bllabel> Date in: 
+        <div #adate style="float:right; text-align:right;">
+          #{showtime (rabbitDateIn rab)}
     <div .vrRow>
      <div #vrdesc>
        <div .bllabel> Desc: #
@@ -55,9 +58,10 @@
             #{yrs} years #{mnths} months
      <div #valteredDaten>
        <div .bllabel>  Altered Date: #
-       $maybe date <- rabbitAlteredDate rab
+       <div #altDate style="float:right">
+         $maybe date <- rabbitAlteredDate rab
               #{showtime date}
-       $nothing
+         $nothing
               &nbsp;-
    <div #vrSource>
     <div .vrRow>
@@ -71,7 +75,8 @@
          #{rabbitStatus rab}
       <div #vrstatdate>
           <div .bllabel>Status Date: 
-          #{rabbitStatusDate rab}
+          <div #astatdate style="float:right;">
+           #{rabbitStatusDate rab}
      <div #vrstatnote>
           <div .bllabel> Notes: 
           #{rabbitStatusNote rab}

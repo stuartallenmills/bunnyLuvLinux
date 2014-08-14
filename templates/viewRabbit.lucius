@@ -58,7 +58,7 @@
 
 #vrDiv #vrstatdate {
   float:right;
-  width:30%;
+  width:26%;
   text-align:right;
 }
 
@@ -118,14 +118,22 @@
 
 #vrDiv #valteredDate {
   float:right;
-  width:40%;
+  width:35%;
   text-align:right;
 }
 
 #vrDiv #vrdatein {
  float:right;
- width:40%;
+ width:35%;
  text-align:right;
+}
+
+#vrdateinn {
+  width:26%;
+}
+
+#valteredDaten {
+ width:26%;
 }
 
 #vrStatusBlk {
@@ -137,7 +145,7 @@
 }
 
 #vrstatdate {
-  width:22%;
+  width:26%;
 }
 
 #vrstatnoe {

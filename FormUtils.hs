@@ -90,6 +90,8 @@ baseForm ti menu form = do
                    var keyCode = e.keyCode || e.which;
                    if (keyCode==9) {
                             var str = $( this ).val();
+                            if (str.length<1 )
+                                 return;
                              var thedate= checkDate( str );
                              $( this ).val( thedate );
                              $( this ).change();
