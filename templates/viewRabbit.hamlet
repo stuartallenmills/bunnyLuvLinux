@@ -77,7 +77,21 @@
           <div .bllabel>Status Date: 
           <div #astatdate style="float:right;">
            #{rabbitStatusDate rab}
-     <div #vrstatnote>
+     <div .vrRow>
+      <div #vrstatnote>
           <div .bllabel> Notes: 
           #{rabbitStatusNote rab}
+     <div .vrRow>
+      <div #vrFriends>
+         <div .bllabel> Friends: #
+         $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <-bonded
+           $if relation == "Friend"
+            \ <a href=@{ViewR rabId}> #{rabbitName rabb} </a> &nbsp;
+     <div .vrRow>
+       <div #fam>
+         <div .bllabel> Family: #
+         $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <-bonded 
+             $if relation /= "Friend"
+              \  <a href=@{ViewR rabId}>#{rabbitName rabb}</a> (#{relation})  &nbsp;          
+  
        

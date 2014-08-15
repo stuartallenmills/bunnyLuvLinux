@@ -290,7 +290,7 @@ postUpdateR rabID = do
 
 
 
-viewRab imgpath rab yrs mnths = $(widgetFileNoReload def "viewRabbit")
+viewRab imgpath rab yrs mnths bonded = $(widgetFileNoReload def "viewRabbit")
 
 
 viewRabMenu showMenu not_dead not_adopted not_altered rabId = $(widgetFileNoReload def "editmenu")
@@ -316,6 +316,7 @@ getViewR rabId  = do
     wellRs<-queryWellness rabId
     vetvisits<-queryVetVisits rabId
     adopteds<-queryAdopted rabId
+    bonded<-queryGetBonded rabId
     local_time <- liftIO $ getLocalTime
     let today = localDay local_time
     let stime = showtime (today)
@@ -355,7 +356,7 @@ getViewR rabId  = do
             ^{getNameWidget bnames formWidget enctype}
             ^{headerLogWid imgpath maid}    
             ^{viewRabMenu showMenu not_dead not_adopted not_altered rabId}      
-           ^{viewRab  imgpath rab yrs mnths}
+           ^{viewRab  imgpath rab yrs mnths bonded}
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}

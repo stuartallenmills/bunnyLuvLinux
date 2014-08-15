@@ -137,7 +137,10 @@ getBondedR rabId = do
                    <a href=@{ViewR rabId}> cancel </a>
                |]
   let wWid =    [whamlet|
-      <div #cff>
+    <div #addff>
+     <form method=post action=@{BondedR rabId} enctype=#{enctype}>
+       ^{formWidget}
+    <div #cff>
        <div #tcff>
         Current friends and family:
        <div #clist>
@@ -152,8 +155,6 @@ getBondedR rabId = do
              $if relation /= "Friend"
               \  #{rabbitName rabb} (#{relation})  &nbsp;
             
-     <form method=post action=@{BondedR rabId} enctype=#{enctype}>
-       ^{formWidget}
      |]
   let jWid = toWidget [lucius| 
            #cff div {
@@ -162,6 +163,9 @@ getBondedR rabId = do
            #cff #fam {
                margin-bottom:15px;
              }
+           #cff #tcff {
+               margin-top:15px;
+           }
         |]
    
    
