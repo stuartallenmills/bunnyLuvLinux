@@ -27,3 +27,4 @@
 /getName                NameR POST
 /all                    AllR GET
 /search                 SearchR GET POST
+/bonded/#RabbitId       BondedR GET POST

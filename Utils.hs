@@ -30,6 +30,14 @@ import Data.List (sortBy)
 import qualified Data.Text as T
 import Text.Julius
 
+
+queryGetBonded rabId = runDB $ 
+  select $
+  from $ \(rab, bonded) -> do
+  where_ ((bonded ^.BondedFirst ==. val rabId) &&. (rab ^. RabbitId ==. bonded ^. BondedSecond))
+  return (rab, bonded)
+
+  
 queryStatus status = runDB $ do
   zipt<-select $ from $ \r ->do
      where_ (r ^. RabbitStatus ==. val status)
@@ -51,7 +59,10 @@ queryName name = runDB $ do
      return r
   return zipt
 
-  
+rabId2rab rabId = do
+         Just rab <- runDB $ get rabId
+         return rab
+         
 gostring::[T.Text]->T.Text
 gostring alist = out where
            temp= foldl (\accum x-> T.append( T.append (T.append "\"" x) "\",") accum) T.empty alist

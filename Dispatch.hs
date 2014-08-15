@@ -17,6 +17,7 @@ import Handler.Image
 import Handler.Reports
 import Handler.Admin
 import Handler.Search
+import Handler.Bonded
 
 
 mkYesodDispatch "App" resourcesApp
