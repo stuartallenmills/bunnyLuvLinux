@@ -30,6 +30,12 @@ import Data.Time.Calendar
 import AgeForm
 import Utils
 
+isProcedureAlter::VetVisit->Bool
+isProcedureAlter vvR = tval where
+  proce = vetVisitProcedures vvR
+  tval | proce =="Spayed" = True
+       | proce =="Neutered" = True
+       | otherwise = False
 
 
 reportbase atitle result = do 

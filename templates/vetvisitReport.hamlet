@@ -15,12 +15,19 @@
           \$#{cost}
          $nothing 
            &nbsp;-
-     <div .vvR>
-      <div #svvProblem>
-       Problem: #{vetVisitProblem vvR}
-     <div .vvR>
-      <div #svvProcedure>
-       Procedure: #{vetVisitProcedures vvR}
-     <div .vvR>
-       <div #svvNotes>
-        Notes: #{vetVisitNotes vvR}
+     $if (isProcedureAlter vvR)
+      <div .vvR>
+       <div #svvProcedure>
+        Procedure: #{vetVisitProcedures vvR}
+  
+     $else
+
+      <div .vvR>
+       <div #svvProblem>
+        Problem: #{vetVisitProblem vvR}
+      <div .vvR>
+       <div #svvProcedure>
+        Procedure: #{vetVisitProcedures vvR}
+      <div .vvR>
+        <div #svvNotes>
+         Notes: #{vetVisitNotes vvR}

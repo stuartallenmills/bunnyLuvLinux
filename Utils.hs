@@ -120,7 +120,8 @@ getNameWidget bnames wid enctype = do
             ^{wid}
            |]
          toWidget [lucius|
-                           #formName {
+                     @media screen {
+                          #formName {
                               padding:0;
                               border:none;
                               margin:0;
@@ -129,6 +130,13 @@ getNameWidget bnames wid enctype = do
                            #formName input {
                               display:inline;
                            }
+                         }
+                     @media print {
+                       #formName {
+                          display:none;
+                         }
+                     }
+
             |]
          toWidget [julius|
                   $( document ).ready(function() { 

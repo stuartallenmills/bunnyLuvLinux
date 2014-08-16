@@ -1,5 +1,4 @@
 
-
 .wellRw {
    width:100%;
    border-bottom:1px dotted #999999;
@@ -33,10 +32,6 @@
 
 
 
-#swellR {
-      border-bottom:thin solid #7f7f7f;
-      width:100%;
-}
 
 #showWell #swellDateD {
   width:25%;
@@ -62,3 +57,25 @@
 #swellnessNoteD, #swellTreatD {
    width:100%;
 }
+
+@media screen {
+
+#swellR {
+      border-bottom:thin solid #7f7f7f;
+      width:100%;
+ }
+
+}
+
+@media print {
+
+#swellR {
+      border-bottom:thin solid #7f7f7f;
+      border-top:thin solid #7f7f7f;
+      page-break-before:auto;
+      page-break-inside:avoid;
+      width:100%;
+ }
+
+}
+
