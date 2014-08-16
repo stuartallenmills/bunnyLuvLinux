@@ -84,6 +84,22 @@ Person
     PhoneKey phone
     deriving Show
 
+Treatment 
+   rabbit RabbitId
+   reason Text
+   start Day
+   stop  Day Maybe
+   deriving Show
+
+Instruction
+   treatment TreatmentId
+   desc Textarea
+   frequency Text
+   start Day
+   stop  Day Maybe
+   deriving Show
+
+
 Bonded
   first RabbitId
   second RabbitId

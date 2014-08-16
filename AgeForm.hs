@@ -63,9 +63,6 @@ getAgeForm extras= do
              <input #agesub type=submit value="find" sytle="float:none; margin-top:10px;">
          |]
         toWidget [lucius|
-                    #ageForm {
-                       width:225px;
-                     }
                     ##{fvId ageView} {
                              width:4em;
                       }
@@ -102,9 +99,9 @@ getAgeWidget wid enctype = do
                  padding:10px;
                  border:thin solid #7f7f7f;
                  margin:0;
+                 width:225px;
                  position:absolute;
-                 width:25%;
-                 transform: translate(80%, -45px);
+                 transform: translate(30%, -70px);
                  box-shadow: 2px 2px 3px #2f2f2f;
                  z-index:100;
                  display:none;

@@ -31,6 +31,14 @@ import qualified Data.Text as T
 import Text.Julius
 
 
+gbp numE alist accum | length alist<numE = accum++alist
+                     | otherwise = gbp numE l2 a2 where
+                         (l1, l2) = splitAt numE alist
+                         a2 = accum++l1
+                         
+groupByPage numEntries alist = gbp numEntries alist []
+    
+
 queryGetBonded rabId = runDB $ 
   select $
   from $ \(rab, bonded) -> do

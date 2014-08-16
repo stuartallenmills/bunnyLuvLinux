@@ -40,7 +40,7 @@ getAges yrs diffMnths= do
     let mnthDays = 31*diffMnths
     let result = sortEnt mnthDays bday b1
     let ageTit= "Rabbits within " ++ (show diffMnths) ++ " months of age "++(show yrs)
-    base (toHtml ageTit) result
+    base "Tabbit Age Results" (toHtml ageTit) result
 
 
 
@@ -95,7 +95,7 @@ queryName name = runDB $ do
 getAlteredR isAlt = do
      zinc<- queryAltered isAlt
      let ti = if (isAlt=="No") then "Not Altered" else "Altered"
-     base ti  zinc
+     base "Altered" ti  zinc
 
 getAllR = do
     bl <-queryStatus "BunnyLuv"
@@ -103,17 +103,17 @@ getAllR = do
     di <-queryStatus "Died"
     eu <-queryStatus "Euthanized"
     let zinc = bl++ad++di++eu
-    base "All Rabbits" zinc
+    base "All Rabbits" "All Rabbits" zinc
   
 getQueryR status  = do
      zinc<- queryStatus status
      let ti = append "Status: " status
-     base (toHtml ti) zinc
+     base (toHtml ti) (toHtml ti) zinc
      
 getSourceR source  = do
     zinc<- querySource source
     let ti = append "Source: " source
-    base (toHtml ti)  zinc
+    base (toHtml ti) (toHtml ti)  zinc
 
 doRabbitRow::Day->RabbitId->Rabbit->Widget
 doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow") 
@@ -128,7 +128,7 @@ getShowNameR name = do
            goEdit (Prelude.head zinc)
          else do        
     let ti = append "Name: " name
-    base (toHtml ti) zinc
+    base (toHtml ti)(toHtml ti) zinc
   return page
    
 
@@ -144,7 +144,7 @@ postNameR = do
 getHomeR :: Handler Html
 getHomeR = do
     zinc <-queryStatus "BunnyLuv"
-    base "BunnyLuv Rabbits" zinc
+    base "BunnyLuv Rabbits" "BunnyLuv Rabbits" zinc
 
 ageDiff::Day->Entity Rabbit->(Integer, Entity Rabbit)
 ageDiff bday rabE@(Entity _ rab) = ( abs (diffDays bday (rabbitBirthday rab)), rabE)
@@ -174,5 +174,5 @@ getAgesR yrs = do
     let bday = addDays (yrs*(-365)) today
     let result = sortEnt ageDiffMax bday b1
     let ageTit= "Rabbits within 2 years of age "++(show yrs)
-    base (toHtml ageTit) result
+    base "Rabbit Age" (toHtml ageTit) result
  

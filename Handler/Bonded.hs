@@ -166,6 +166,10 @@ getBondedR rabId = do
            #cff #tcff {
                margin-top:15px;
            }
+           .ui-menu-item {
+                 font-size:0.8em;
+              }
+
         |]
    
    

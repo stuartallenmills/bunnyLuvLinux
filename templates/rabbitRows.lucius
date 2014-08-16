@@ -81,14 +81,18 @@ div.alteredC {
 
 @media print {
 
-div.rabRow {
+.rabRow {
         width:100%;
         margin-right:0%;
         margin-left:0%;
         font-size:80%;
-        border-bottom:1px solid #7f7f7f;
+        border-bottom:1px solid #8f8f8f;
+        border-top:1px solid #8f8f8f;
         float:left;
         margin-bottom:2px;
+        page-break-before:auto;
+        page-break-inside:avoid;
+        display:inline-block;
 }
 div.nameC {
    position: relative;

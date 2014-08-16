@@ -42,7 +42,8 @@ doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow")
 doRabbitRows::Day->[Entity Rabbit]->Widget
 doRabbitRows today result = $(widgetFileNoReload def "rabbitRows")
 
-base atitle result  = do 
+base::Html->Html->[Entity Rabbit]->Handler Html
+base wtitle atitle result  = do 
      (formWidget, enctype) <- generateFormPost getNameForm
      (ageWidget, age_enctype) <-generateFormPost getAgeForm
      bnames <-  getNamesDB
@@ -58,7 +59,7 @@ base atitle result  = do
      let numBunsStr = "  : ("++ (show numBuns) ++ ")"
      
      defaultLayout $ do
-        setTitle atitle
+        setTitle wtitle
         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"

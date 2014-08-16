@@ -244,6 +244,6 @@ postSearchR = do
         res <- querySearch search
         let (st, en) = parseSearch search
         let cap = toHtml (pack (st++en))       
-        base (test search) res
+        base "Advanced Search" (test search) res
     _ -> redirect HomeR
  
