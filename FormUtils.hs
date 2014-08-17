@@ -34,9 +34,9 @@ queryTreatmentB rabId = runDB $
     orderBy [desc (t ^. TreatmentBStart)]
     return t
 
-queryTreatmentBbyTreat treatId = runDB &
+queryTreatmentBbyTreat treatId = runDB $
   select $ from $ \(treat, rab)->do
-     where_ (treat ^. ==. val treatId) &&. ( rab ^. RabbitID ==. treat ^. TreatmentBRabbit)
+     where_ ((treat ^. TreatmentBId ==. val treatId) &&. ( rab ^. RabbitId ==. treat ^. TreatmentBRabbit))
      return (treat, rab)
 
 sourceType::[(Text,Text)]

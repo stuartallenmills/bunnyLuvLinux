@@ -8,11 +8,11 @@ module Handler.Add where
 
 --this is a test 
 
-import qualified Data.ByteString.Lazy as L
+--import qualified Data.ByteString.Lazy as L
 import Conduit
 
-import Data.Conduit
-import Data.Conduit.Binary
+--import Data.Conduit
+--import Data.Conduit.Binary
 import Data.Default
 import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
@@ -20,14 +20,14 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack, pack)
 import Database.Esqueleto
-import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
-import Database.Persist.Sql (insert)
-import Control.Monad.IO.Class (liftIO)
-import Text.Printf
+--import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
+--import Database.Persist.Sql (insert)
+--import Control.Monad.IO.Class (liftIO)
+--import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time.Calendar
-import Text.Julius
+--import Text.Julius
 import FormUtils
 import Utils
 
@@ -39,18 +39,16 @@ queryWellness rabId = runDB $
      orderBy [desc (r ^. WellnessDate)]
      return r
 
-queryVetVisits rabId = runDB $ do
-  zipt<-select $ from $ \r ->do
+queryVetVisits rabId = runDB $ 
+ select $ from $ \r ->do
      where_ (r ^. VetVisitRabbit ==. val rabId)
      orderBy [desc (r ^. VetVisitDate)]
-     return (r)
-  return zipt
+     return r
 
-queryAdopted rabId = runDB $ do
-  zipt<-select $ from $ \r ->do
+queryAdopted rabId = runDB $ 
+ select $ from $ \r ->do
      where_ (r ^. AdoptedRabbit ==. val rabId)
-     return (r)
-  return zipt
+     return r
   
 test mrab field = case mrab of
                     Nothing->Nothing
@@ -136,13 +134,13 @@ getDiedR rabId= do
     
 postDiedR::RabbitId->Handler Html
 postDiedR rabId = do
-  ((result, _), _) <-runFormPost (diedForm )
+  ((result, _), _) <-runFormPost diedForm 
 
   case result of
-    FormSuccess died -> do
-       runDB $ do
+    FormSuccess died -> 
+       runDB $ 
         update $ \p -> do
-          set p [RabbitStatus =. val "Died", RabbitStatusDate =. val ( (diedDate died)),
+          set p [RabbitStatus =. val "Died", RabbitStatusDate =. val  (diedDate died),
                  RabbitStatusNote =. val (diedNotes died) ]
           where_ (p ^. RabbitId ==. val rabId)
           return ()
@@ -154,12 +152,12 @@ postDiedR rabId = do
 
 rabbitForm ::(Maybe Rabbit, Maybe [Entity Wellness])-> Html -> MForm Handler (FormResult Rabbit, Widget)
 rabbitForm (mrab, rabId) extra = do
-    local_time <- liftIO $ getLocalTime
+    local_time <- liftIO  getLocalTime
     let today = localDay local_time
-    let stime = showtime (today)
+    let stime = showtime today
     let tname = case mrab of 
           Nothing -> Nothing
-          Just rb -> (Just (rabbitName rb))
+          Just rb -> Just (rabbitName rb)
     (nameRes, nameView) <- mreq textField "this is not used" tname
     (dateInRes, dateInView) <-mreq textField "nope" (testDateIn stime mrab)
     (descRes, descView) <- mreq textField "neither is this"  (test mrab rabbitDesc)
@@ -265,17 +263,17 @@ postPostR::Handler Html
 postPostR = do
   ((result, _), _) <-runFormPost (rabbitForm (Nothing, Nothing))
   link<- case result of
-    FormSuccess  rabi -> do
+    FormSuccess  rabi -> 
      runDB $ do
-        rabId<-insert $ rabi
+        rabId<-insert  rabi
         return (ViewR rabId)
-    _ -> return (HomeR)
-  redirect (link)
+    _ -> return HomeR
+  redirect link
 
 -- update a rabbit 
 postUpdateR::RabbitId->Handler Html
 postUpdateR rabId = do
-  (((result), _), _) <-runFormPost (rabbitForm (Nothing,Nothing))
+  ((result, _), _) <-runFormPost (rabbitForm (Nothing,Nothing))
 
   case result of
     FormSuccess rabi -> do

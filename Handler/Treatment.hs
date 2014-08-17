@@ -1,5 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies, RankNTypes #-}
 {-# LANGUAGE QuasiQuotes, TemplateHaskell, TypeFamilies #-}
 {-# LANGUAGE OverloadedStrings, GADTs, FlexibleContexts #-}
@@ -85,7 +84,7 @@ getTreatmentR rabId  = do
     maid <- maybeAuthId
     treatments<-queryTreatmentB rabId
     let numtreats = length treatments
-    let treatment = if null treatments then Nothing else (Just (extractTreat (Prelude.head treatments)))
+    let treatment = if null treatments then Nothing else Just (extractTreat (Prelude.head treatments))
     Just rabbit <-runDB  $ get rabId
     (treatmentWid, enctype) <-generateFormPost (treatmentForm maid rabId treatment)
     let menu = [whamlet|
@@ -108,8 +107,8 @@ postTreatmentR::RabbitId->Handler Html
 postTreatmentR rabId = do
   maid <-maybeAuthId
   treatments<-queryTreatmentB rabId
-  let treatment = if null treatments then Nothing else (Just (extractTreat (Prelude.head treatments)))
-  ((tresult, _), _) <-runFormPost (treatmentForm maid rabId treatment)
+  let treatment = if null treatments then Nothing else Just (extractTreat (Prelude.head treatments))
+  ((tresult, _), _) <- runFormPost (treatmentForm maid rabId treatment)
   case tresult of
     FormSuccess atreatment -> do
       runDB $ do
@@ -122,4 +121,54 @@ postTreatmentR rabId = do
                           $maybe ms <-msg
                               ms
                       |]
- 
+
+getRabId (Entity treatId treat, Entity rabId rab) = rabId
+getTreatment (Entity treatId treat, Entity rabId rab) = treat
+getRabbit (Entity treatId treat, Entity rabId rab) = rab
+
+getEditTreatmentR::TreatmentBId->Handler Html
+getEditTreatmentR treatId = do
+  maid <-maybeAuthId
+  treatments<- queryTreatmentBbyTreat treatId
+  let treatrab = Prelude.head treatments
+  
+  let rabId = getRabId treatrab
+  let rabbit = getRabbit treatrab
+  let treatment = Just (getTreatment treatrab)
+  (treatmentWid, enctype) <-generateFormPost (treatmentForm maid rabId treatment)
+  let menu = [whamlet|
+               <div #addCance style="float:inherit; text-align:left; margin:10px;">
+                <b> Treatment  for &nbsp;  #{rabbitName rabbit}
+                <div #treatCan style="float:right; display:inline;">
+                  <div .cancelBut #wellEdCan style="display:inline; float:right;">
+                   <a href=@{ViewR rabId }> cancel </a>
+                |]
+  let form = [whamlet| 
+              <form method=post action=@{EditTreatmentR treatId} enctype=#{enctype}>
+                 ^{treatmentWid}
+            |]
+
+  baseForm "Treatment" menu form
+
+postEditTreatmentR::TreatmentBId->Handler Html
+postEditTreatmentR treatId = do
+  maid <-maybeAuthId
+  treatments<- queryTreatmentBbyTreat treatId
+  let treatrab = Prelude.head treatments
+  
+  let rabId = getRabId treatrab
+  let rabbit = getRabbit treatrab
+  let treatment = Just (getTreatment treatrab)
+  ((tresult, _), _) <- runFormPost (treatmentForm maid rabId treatment)
+  case tresult of
+    FormSuccess atreatment -> do
+      runDB $ do
+        replace treatId atreatment
+        return ()
+      redirect (ViewR rabId)
+    _ -> do
+          msg<-getMessage
+          defaultLayout [whamlet| Error in Posting Form  
+                          $maybe ms <-msg
+                              ms
+                      |]
