@@ -12,7 +12,7 @@
 }
 
            
-               #vetvisits, #haswell {
+               #vetvisits, #haswell, #vtreatments {
                 background: #e0e0e0;
                 padding:5px;
                 float:left;
@@ -21,7 +21,7 @@
                 border-bottom:1px solid #707080;
               }
               
-             #vetvisits:hover, #haswell:hover {
+             #vetvisits:hover, #haswell:hover #vtreatments:hover{
                  cursor:pointer;
                  background:#f0f0f0;
               }

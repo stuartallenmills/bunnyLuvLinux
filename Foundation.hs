@@ -94,11 +94,18 @@ Treatment
 Instruction
    treatment TreatmentId
    desc Textarea
-   frequency Text
+   frequency Text Maybe
    start Day
    stop  Day Maybe
    deriving Show
 
+TreatmentB
+   rabbit RabbitId
+   start  Day
+   reason Text
+   instruct Textarea
+   stop Day Maybe
+   deriving Show
 
 Bonded
   first RabbitId
@@ -275,6 +282,11 @@ showtime::Day->Text
 showtime time = pack (formatTime defaultTimeLocale "%m/%d/%Y" time)
 
 showfiletime time = (formatTime defaultTimeLocale "%m_%d_%Y" time)
+
+date2textM Nothing = Nothing
+date2TextM (Just day) = Just (showtime day)
+
+date2text day = showtime day;
 
 text2date::FormResult Text -> FormResult Day
 text2date  =  fmap (doparseTime.unpack) 

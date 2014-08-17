@@ -1,0 +1,13 @@
+
+
+##{fvId treatDateView}, ##{fvId treatStopView} {
+     width:7em;
+}
+
+##{fvId treatReasonView} {
+      width:35em;
+  }
+
+##{fvId treatTreatmentView} {
+      width:35em;
+}

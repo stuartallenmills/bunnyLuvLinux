@@ -34,9 +34,9 @@
                     <div #statusF>
                       Status:
                      ^{fvInput statusView}
-                    <div .blDate #statusDateF>   
+                    <div .blDate #statusDateF title="Change on Death, Adoption, Euth, or new Status Notes">   
                       Status Date : ^{fvInput statusDateView} 
                   <div .faddRw> 
-                    <div #statusNoteF>
+                    <div #statusNoteF title="Rabbit location, condition, personality">
                       Status Notes: ^{fvInput statusNoteView}          
                   <input type=submit value="submit">

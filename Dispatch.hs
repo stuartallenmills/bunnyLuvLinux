@@ -18,6 +18,7 @@ import Handler.Reports
 import Handler.Admin
 import Handler.Search
 import Handler.Bonded
+import Handler.Treatment
 
 
 mkYesodDispatch "App" resourcesApp

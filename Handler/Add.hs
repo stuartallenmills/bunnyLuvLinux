@@ -33,23 +33,22 @@ import Utils
 
 
 
-queryWellness rabID = runDB $ do
-  zipt<-select $ from $ \r ->do
-     where_ (r ^. WellnessRabbit ==. val rabID)
+queryWellness rabId = runDB $ 
+  select $ from $ \r ->do
+     where_ (r ^. WellnessRabbit ==. val rabId)
      orderBy [desc (r ^. WellnessDate)]
-     return (r)
-  return zipt
+     return r
 
-queryVetVisits rabID = runDB $ do
+queryVetVisits rabId = runDB $ do
   zipt<-select $ from $ \r ->do
-     where_ (r ^. VetVisitRabbit ==. val rabID)
+     where_ (r ^. VetVisitRabbit ==. val rabId)
      orderBy [desc (r ^. VetVisitDate)]
      return (r)
   return zipt
 
-queryAdopted rabID = runDB $ do
+queryAdopted rabId = runDB $ do
   zipt<-select $ from $ \r ->do
-     where_ (r ^. AdoptedRabbit ==. val rabID)
+     where_ (r ^. AdoptedRabbit ==. val rabId)
      return (r)
   return zipt
   
@@ -119,24 +118,24 @@ diedForm extra = do
     return (diedRes, diedw)
 
 getDiedR::RabbitId->Handler Html
-getDiedR rabid= do
-    Just rab <- runDB $ get rabid
+getDiedR rabId= do
+    Just rab <- runDB $ get rabId
     (formWidget, enctype) <- generateFormPost diedForm 
     let menu = [whamlet|
               <div #addCance style="float:inherit; text-align:left; margin:10px;">
                 <b> Death Report for #{rabbitName rab}
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
-                   <a href=@{ViewR rabid}> cancel </a>
+                   <a href=@{ViewR rabId}> cancel </a>
                 |]
     let form = [whamlet|
-                <form method=post action=@{DiedR rabid} enctype=#{enctype}>
+                <form method=post action=@{DiedR rabId} enctype=#{enctype}>
                  ^{formWidget}
                  |]
 
     baseForm "Died" menu form
     
 postDiedR::RabbitId->Handler Html
-postDiedR rabid = do
+postDiedR rabId = do
   ((result, _), _) <-runFormPost (diedForm )
 
   case result of
@@ -145,16 +144,16 @@ postDiedR rabid = do
         update $ \p -> do
           set p [RabbitStatus =. val "Died", RabbitStatusDate =. val ( (diedDate died)),
                  RabbitStatusNote =. val (diedNotes died) ]
-          where_ (p ^. RabbitId ==. val rabid)
+          where_ (p ^. RabbitId ==. val rabId)
           return ()
     _ -> return ()
 
-  redirect (ViewR rabid)
+  redirect (ViewR rabId)
 
 
 
 rabbitForm ::(Maybe Rabbit, Maybe [Entity Wellness])-> Html -> MForm Handler (FormResult Rabbit, Widget)
-rabbitForm (mrab, rabID) extra = do
+rabbitForm (mrab, rabId) extra = do
     local_time <- liftIO $ getLocalTime
     let today = localDay local_time
     let stime = showtime (today)
@@ -268,24 +267,24 @@ postPostR = do
   link<- case result of
     FormSuccess  rabi -> do
      runDB $ do
-        rabid<-insert $ rabi
-        return (ViewR rabid)
+        rabId<-insert $ rabi
+        return (ViewR rabId)
     _ -> return (HomeR)
   redirect (link)
 
 -- update a rabbit 
 postUpdateR::RabbitId->Handler Html
-postUpdateR rabID = do
+postUpdateR rabId = do
   (((result), _), _) <-runFormPost (rabbitForm (Nothing,Nothing))
 
   case result of
     FormSuccess rabi -> do
       runDB $ do
-        _ <-replace  rabID rabi
+        _ <-replace  rabId rabi
         return ()
     _ -> return ()
 
-  redirect (ViewR rabID)
+  redirect (ViewR rabId)
 
 
 
@@ -298,6 +297,8 @@ viewRabMenu showMenu not_dead not_adopted not_altered rabId = $(widgetFileNoRelo
 showvetvisit rabbit vetVisits = $(widgetFileNoReload def "showvetvisit");
 
 showadopted rabbit adopteds = $(widgetFileNoReload def "showadopted");
+
+showtreatments treatments = $(widgetFileNoReload def "showTreatments");
 
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
@@ -317,6 +318,7 @@ getViewR rabId  = do
     vetvisits<-queryVetVisits rabId
     adopteds<-queryAdopted rabId
     bonded<-queryGetBonded rabId
+    treatments<-queryTreatmentB rabId
     local_time <- liftIO $ getLocalTime
     let today = localDay local_time
     let stime = showtime (today)
@@ -326,6 +328,7 @@ getViewR rabId  = do
     let was_adopted = (length adopteds > 0)
     let had_visits = (length vetvisits >0)
     let had_well = (length wellRs > 0)
+    let had_treatments = (length treatments>0)
     let not_dead = not ((rabbitStatus rab == "Died") || (rabbitStatus rab == "Euthanized"))
     let not_adopted = not (rabbitStatus rab == "Adopted")
     let not_altered = not ((rabbitAltered rab=="Spayed") || (rabbitAltered rab == "Neutered"))
@@ -349,6 +352,13 @@ getViewR rabId  = do
                $( "#wDArrow" ).toggle();
                $( "#wRArrow" ).toggle();          
              });
+            }); 
+           $(function() {
+            $("#vtreatments").click(function() {
+               $("#showtreatments").toggle();   
+               $( "#tDArrow" ).toggle();
+               $( "#tRArrow" ).toggle();          
+             });
             });           
           |] 
          [whamlet|
@@ -360,7 +370,13 @@ getViewR rabId  = do
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}
-               $if had_visits 
+               $if had_treatments
+                 <div #vtreatments style="float:left;" title="Show/Hide Treatments" >
+                   <div id="tRArrow" class=arrow-right>
+                   <div id="tDArrow" class=arrow-down> 
+                  <b>Injury/Illness Treatments </b> 
+                 ^{showtreatments treatments}
+                $if had_visits 
                  <div #vetvisits style="float:left;" title="Show/Hide Vet Visits" >
                     <div id="vvRArrow" class=arrow-right>
                     <div id="vvDArrow" class=arrow-down> 
@@ -400,18 +416,18 @@ getViewR rabId  = do
 |]
 
 getEditR::RabbitId->Handler Html
-getEditR rabID  = do
-    rabbit <-runDB  $  get rabID
-    wellRs<-queryWellness rabID
+getEditR rabId  = do
+    rabbit <-runDB  $  get rabId
+    wellRs<-queryWellness rabId
     (formWidget, enctype) <- generateFormPost (rabbitForm (rabbit, (Just wellRs)))
     let menu = [whamlet|
               <div #addCance style="float:inherit; text-align:left; margin:10px;">
                 <b> Edit Rabbit
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
-                   <a href=@{ViewR rabID}> cancel </a>
+                   <a href=@{ViewR rabId}> cancel </a>
                |]
     let form = [whamlet|
-              <form method=post action=@{UpdateR rabID} enctype=#{enctype}>
+              <form method=post action=@{UpdateR rabId} enctype=#{enctype}>
                  ^{formWidget}
                  |]            
     baseForm "Edit Rabbit" menu form

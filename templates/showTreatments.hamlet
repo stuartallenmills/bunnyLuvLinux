@@ -1,0 +1,28 @@
+
+<div #showtreatments>
+
+ $forall (Entity treatId treat) <- treatments
+  <div .treatR>
+     <div #shrea >
+      <div .bllabel>
+         Reason:
+      <div #treatReason>
+       #{treatmentBReason treat}
+     <div #treatD>
+       <div .bllabel> Start: #
+       <div #tsdate> #{showtime (treatmentBStart treat)}
+  <div .treatR>
+     <div #treatT>
+       <div .bllabel> Treatment: #
+       <div #ttreat> #{treatmentBInstruct treat}
+  <div .treatR>
+     <div #tStop>
+       <div .bllabel> Stop: #
+       <div #tStopF>
+         $maybe sdate <- treatmentBStop treat
+            #{showtime sdate}
+         $nothing
+            Active
+     <div #editLink>
+        <div .cancelButton> edit
+       

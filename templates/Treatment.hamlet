@@ -1,0 +1,26 @@
+^{extra}
+
+<div #treatF>
+   <div #tstart>
+       <div .bllabel>
+           Start Date:
+       <div .blDate>
+           ^{fvInput treatDateView}
+   <div #treas>
+       <div .bllabel>
+         Reason:
+       <div #treas>
+         ^{fvInput treatReasonView}
+   <div #tinstruct>
+        <div .bllabel>
+          Treatment:
+        <div #ttreat>
+         ^{fvInput treatTreatmentView}
+   <div #tstop>
+        <div .bllabel>
+          Stop date:
+        <div .blDate>
+         ^{fvInput treatStopView}
+
+ <div #tsubmit>
+        <input type=submit value="submit">

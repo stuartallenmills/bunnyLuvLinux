@@ -1,0 +1,21 @@
+
+#showtreatments {
+    width:100%;
+    float:left;
+    display:none;
+}
+
+#showtreatments div {
+        float:left;
+}
+
+.treatR {
+   border-bottom:1px dashed #8f8f8f;
+   width:100%;
+   margin:5px;
+}
+
+#showtreatments #treatD, #showtreatments #editLink {
+   float:right;
+}
+

@@ -28,7 +28,16 @@ import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time.Calendar
 
+queryTreatmentB rabId = runDB $
+  select $ from $ \t ->do
+    where_ (t ^. TreatmentBRabbit ==. val rabId)
+    orderBy [desc (t ^. TreatmentBStart)]
+    return t
 
+queryTreatmentBbyTreat treatId = runDB &
+  select $ from $ \(treat, rab)->do
+     where_ (treat ^. ==. val treatId) &&. ( rab ^. RabbitID ==. treat ^. TreatmentBRabbit)
+     return (treat, rab)
 
 sourceType::[(Text,Text)]
 sourceType=[("Shelter","Shelter"), ("Other", "Other")]
@@ -58,7 +67,6 @@ baseForm ti menu form = do
       var pat=/^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/]((19|20)[0-9][0-9]|[0-9][0-9])$/;
     var res = str.match(pat);
     if (res==null) {
-      alert("invalid date");
       return "";
     }
     
@@ -70,15 +78,13 @@ baseForm ti menu form = do
     else {dtYear=adtYear;}
 
     if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) {
-      alert("invalid date");
-      return "";
+       return "";
     }
 
   if (dtMonth == 2)
      {
      var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
      if (dtDay> 29 || (dtDay ==29 && !isleap)) {
-          alert("invalid date");
           return "";
         }
      }
@@ -86,31 +92,24 @@ baseForm ti menu form = do
     
   }
             $(function () {
-              $( ".blDate :input" ).keydown( function(e) {
-                   var keyCode = e.keyCode || e.which;
-                   if (keyCode==9) {
-                            var str = $( this ).val();
-                            if (str.length<1 )
-                                 return;
-                             var thedate= checkDate( str );
-                             $( this ).val( thedate );
-                             $( this ).change();
-                     if (thedate.length < 4) {
-                      e.preventDefault();
-                   $( this ).focus();
-                  }
-                   
-                 };
+              $( ".blDate :input" ).blur ( function(e) {
+                 var str = $( this ).val();
+                 if (str.length < 1)
+                   return;
+                 var thedate = checkDate( str );
+                 $( this ).val ( thedate );
+                 $( this ).change();
+                 if (thedate.length < 4) {
+                   alert("Invalid Date");
+                   setTimeout (function() {
+                       $( this ).focus();
+                          }, 100);
+                 }
                 });
-                });
+               });
 
-                 $(function () {
-                          $( ".blDate :input" ).change (function() {
-                             var str = $( this ).val();
-                             $( this ).val( str );
-                             return;
-                            });
-                            });
+
+ 
        |]
     [whamlet|
        <div #ablank style="color:#ffffff; float:right">  

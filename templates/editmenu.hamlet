@@ -15,7 +15,8 @@ $if showMenu
     <li #blHealth class='has-sub'><a href='#'><span>Add Health</span></a>
       <ul>
          <li><a href=@{WellnessR rabId}><span>New Wellness Report</span></a></li>
-         <li class=><a href=@{VetVisitR rabId "General"}><span>Enter Vet Visit</span></a></li>
+         <li ><a href=@{VetVisitR rabId "General"}><span>Enter Vet Visit</span></a></li>
+         <li><a href=@{TreatmentR rabId}><span>Injury/Illness Treatment</span></a></li> 
          $if not_altered
           <li><a href=@{VetVisitR rabId "Altered"}><span>Altered</span></a></li>
          <li><a href=@{DiedR rabId}><span>Died</span></a></li>
