@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE QuasiQuotes, TemplateHaskell, TypeFamilies #-}
 {-# LANGUAGE OverloadedStrings, GADTs, FlexibleContexts #-}
 
@@ -8,25 +5,25 @@ module Utils where
 
 --this is a test 
 
-import qualified Data.ByteString.Lazy as L
-import Conduit
+--import qualified Data.ByteString.Lazy as L
+--import Conduit
 
-import Data.Conduit
-import Data.Conduit.Binary
-import Data.Default
+--import Data.Conduit
+--import Data.Conduit.Binary
+--import Data.Default
 import Yesod hiding ((!=.), (==.), (||.))
-import Yesod.Default.Util
-import Yesod.Auth
+--import Yesod.Default.Util
+--import Yesod.Auth
 import Foundation
 
 import Data.Text (Text, unpack, append)
 import Database.Esqueleto
-import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
-import Database.Persist.Sql (insert)
-import Control.Monad.IO.Class (liftIO)
-import Text.Printf
-import Data.Time
-import Data.List (sortBy)
+--import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
+--import Database.Persist.Sql (insert)
+--import Control.Monad.IO.Class (liftIO)
+--import Text.Printf
+--import Data.Time
+--import Data.List (sortBy)
 import qualified Data.Text as T
 import Text.Julius
 
@@ -37,7 +34,13 @@ gbp numE alist accum | length alist<numE = accum++alist
                          a2 = accum++l1
                          
 groupByPage numEntries alist = gbp numEntries alist []
-    
+
+queryTreatments::Handler [(Entity TreatmentB, Entity Rabbit)]
+queryTreatments = runDB $
+  select $ from $ \(treat, rab)->do
+    where_ (rab ^. RabbitId ==. treat ^. TreatmentBRabbit)
+    orderBy [desc (treat ^. TreatmentBStart)]
+    return (treat, rab)
 
 queryGetBonded rabId = runDB $ 
   select $
@@ -46,26 +49,24 @@ queryGetBonded rabId = runDB $
   return (rab, bonded)
 
   
-queryStatus status = runDB $ do
-  zipt<-select $ from $ \r ->do
+queryStatus status = runDB $ 
+ select $ from $ \r ->do
      where_ (r ^. RabbitStatus ==. val status)
      orderBy [asc (r ^. RabbitName)]
-     return (r)
-  return zipt
+     return r
 
 
 queryName name = runDB $ do
   let (f,s) = T.splitAt 1 name
-  let capName = append (T.toUpper f) s
-  let lowName = append (T.toLower f) s
+  let capName = T.append (T.toUpper f) s
+  let lowName = T.append (T.toLower f) s
       
-  zipt<-select $ from $ \r ->do
+  select $ from $ \r ->do
      where_ ((like  (r ^. RabbitName)  ((%) ++. val capName ++. (%)) ) ||.
              (like  (r ^. RabbitName)  ((%) ++. val lowName ++. (%)) ) 
              )
      orderBy [asc (r ^. RabbitName)]
      return r
-  return zipt
 
 rabId2rab rabId = do
          Just rab <- runDB $ get rabId

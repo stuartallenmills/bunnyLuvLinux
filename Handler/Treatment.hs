@@ -1,18 +1,15 @@
-{-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies, RankNTypes #-}
 {-# LANGUAGE QuasiQuotes, TemplateHaskell, TypeFamilies #-}
-{-# LANGUAGE OverloadedStrings, GADTs, FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings, GADTs, FlexibleContexts, RankNTypes #-}
 
 
 module Handler.Treatment where
 
---this is a test 
 
-import qualified Data.ByteString.Lazy as L
+--import qualified Data.ByteString.Lazy as L
 import Conduit
 
-import Data.Conduit
-import Data.Conduit.Binary
+--import Data.Conduit
+--import Data.Conduit.Binary
 import Data.Default
 import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
@@ -20,10 +17,10 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack)
 import Database.Esqueleto
-import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
-import Database.Persist.Sql (insert)
-import Control.Monad.IO.Class (liftIO)
-import Text.Printf
+--import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
+--import Database.Persist.Sql (insert)
+--import Control.Monad.IO.Class (liftIO)
+--import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
 import FormUtils
@@ -82,14 +79,14 @@ extractTreat (Entity treatID treat) = treat
 getTreatmentR::RabbitId->Handler Html
 getTreatmentR rabId  = do
     maid <- maybeAuthId
-    treatments<-queryTreatmentB rabId
-    let numtreats = length treatments
-    let treatment = if null treatments then Nothing else Just (extractTreat (Prelude.head treatments))
+--    treatments<-queryTreatmentB rabId
+--    let numtreats = length treatments
+--    let treatment = if null treatments then Nothing else Just (extractTreat (Prelude.head treatments))
     Just rabbit <-runDB  $ get rabId
-    (treatmentWid, enctype) <-generateFormPost (treatmentForm maid rabId treatment)
+    (treatmentWid, enctype) <-generateFormPost (treatmentForm maid rabId Nothing)
     let menu = [whamlet|
                <div #addCance style="float:inherit; text-align:left; margin:10px;">
-                <b> Treatment  for &nbsp;  #{rabbitName rabbit} : (#{numtreats})
+                <b> Treatment  for &nbsp;  #{rabbitName rabbit}
                 <div #treatCan style="float:right; display:inline;">
                   <div .cancelBut #wellEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabId }> cancel </a>
@@ -106,9 +103,7 @@ getTreatmentR rabId  = do
 postTreatmentR::RabbitId->Handler Html
 postTreatmentR rabId = do
   maid <-maybeAuthId
-  treatments<-queryTreatmentB rabId
-  let treatment = if null treatments then Nothing else Just (extractTreat (Prelude.head treatments))
-  ((tresult, _), _) <- runFormPost (treatmentForm maid rabId treatment)
+  ((tresult, _), _) <- runFormPost (treatmentForm maid rabId Nothing)
   case tresult of
     FormSuccess atreatment -> do
       runDB $ do
@@ -157,7 +152,6 @@ postEditTreatmentR treatId = do
   let treatrab = Prelude.head treatments
   
   let rabId = getRabId treatrab
-  let rabbit = getRabbit treatrab
   let treatment = Just (getTreatment treatrab)
   ((tresult, _), _) <- runFormPost (treatmentForm maid rabId treatment)
   case tresult of

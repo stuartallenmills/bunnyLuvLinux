@@ -1,8 +1,5 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE QuasiQuotes, TemplateHaskell, TypeFamilies #-}
-{-# LANGUAGE OverloadedStrings, GADTs, FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings, TemplateHaskell, TypeFamilies #-}
+{-# LANGUAGE GADTs, FlexibleContexts, QuasiQuotes #-}
 
 module Handler.Reports where
 
@@ -18,7 +15,7 @@ import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
 import Foundation
 import Yesod.Auth
-import Data.Text (Text, unpack, pack)
+import Data.Text (Text, unpack, pack, append)
 import Database.Esqueleto
 import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
 import Database.Persist.Sql (insert)
@@ -49,7 +46,7 @@ reportbase atitle result = do
      let imgpath = unpack impath
      let mode = (maid == Just "demo")
      let isAuth=(auth==Authorized)
-     today<- liftIO $ getCurrentDay
+     today<- liftIO  getCurrentDay
      defaultLayout $ do
         setTitle atitle
         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
@@ -90,12 +87,11 @@ reportbase atitle result = do
 
 
 
-doAdoptedReport = runDB $ do
-  zapt <- select $ from $ \(tr, tvv)-> do
+doAdoptedReport = runDB $ 
+  select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. AdoptedRabbit ==. tr ^. RabbitId)
     orderBy [desc ( tvv ^. AdoptedDate)]
-    return ((tr, tvv))
-  return zapt
+    return (tr, tvv)
   
 adoptedReport adoptReport = $(widgetFileNoReload def "adoptedReport")
 
@@ -106,12 +102,11 @@ getAdoptedViewR   = do
 
            
            
-doWellnessReport = runDB $ do
-  zapt <- select $ from $ \(tr, tvv)-> do
+doWellnessReport = runDB $ 
+  select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. WellnessRabbit ==. tr ^. RabbitId)
     orderBy [desc ( tvv ^.WellnessDate)]
-    return ((tr, tvv))
-  return zapt
+    return (tr, tvv)
   
 weReport wellReport = $(widgetFileNoReload def "wellnessReport")
 
@@ -120,12 +115,11 @@ getWellViewR   = do
    wellReport <-doWellnessReport
    reportbase "Wellness Report" (weReport wellReport)
 
-doVetVisits = runDB $ do
-  zapt <- select $ from $ \(tr, tvv)-> do
+doVetVisits = runDB $ 
+  select $ from $ \(tr, tvv)-> do
     where_ (tvv ^. VetVisitRabbit ==. tr ^. RabbitId)
     orderBy [desc ( tvv ^. VetVisitDate)]
-    return ((tr, tvv))
-  return zapt
+    return (tr, tvv)
   
 vvReport vetVisits = $(widgetFileNoReload def "vetvisitReport")
 
@@ -133,3 +127,13 @@ getVVViewR::Handler Html
 getVVViewR   = do
     vetvisits <-doVetVisits
     reportbase "Vet Visits" (vvReport vetvisits)
+
+treatmentReport treatments = $(widgetFileNoReload def "TreatmentsReport");
+
+getTreatmentReportR::Handler Html
+getTreatmentReportR = do
+  treatments <- queryTreatments
+  let ls = length treatments
+  let ti = append (pack (show ls)) " Treatments "
+  reportbase (toHtml ti) (treatmentReport treatments)
+  

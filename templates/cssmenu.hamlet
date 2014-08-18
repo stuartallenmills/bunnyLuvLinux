@@ -15,6 +15,7 @@
 
    <li #blReports class='has-sub'><a href='#'><span>Reports</span></a>
       <ul>
+         <li><a href=@{TreatmentReportR}>Treatments Report</a></li>
          <li><a href=@{SearchR}><span>Advanced Search</span></a></li>
          <li><a href=@{VVViewR}><span>Vet Visits Report</span></a></li>
          <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>

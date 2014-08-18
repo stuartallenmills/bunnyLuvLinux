@@ -2,7 +2,8 @@
 <div #showtreatments>
 
  $forall (Entity treatId treat) <- treatments
-  <div .treatR>
+  <div #treatBlock>
+   <div .treatR>
      <div #shrea >
       <div .bllabel>
          Reason:
@@ -11,11 +12,11 @@
      <div #treatD>
        <div .bllabel> Start: #
        <div #tsdate> #{showtime (treatmentBStart treat)}
-  <div .treatR>
+   <div .treatR>
      <div #treatT>
        <div .bllabel> Treatment: #
        <div #ttreat> #{treatmentBInstruct treat}
-  <div .treatR>
+   <div .treatR>
      <div #tStop>
        <div .bllabel> Stop: #
        <div #tStopF>

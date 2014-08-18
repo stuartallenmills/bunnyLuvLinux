@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE QuasiQuotes, TemplateHaskell, TypeFamilies #-}
 {-# LANGUAGE OverloadedStrings, GADTs, FlexibleContexts #-}
 
@@ -55,7 +52,7 @@ test mrab field = case mrab of
                     Just ri->Just (field ri)
 
 
-opttest::(Maybe Rabbit)->(Rabbit->Text)->(Maybe Text)
+opttest::Maybe Rabbit->(Rabbit->Text)->Maybe Text
 opttest mrab field= case mrab of
                    Nothing-> Just ""
                    Just ri-> Just (field ri)
@@ -151,7 +148,7 @@ postDiedR rabId = do
 
 
 rabbitForm ::(Maybe Rabbit, Maybe [Entity Wellness])-> Html -> MForm Handler (FormResult Rabbit, Widget)
-rabbitForm (mrab, rabId) extra = do
+rabbitForm (mrab, _) extra = do
     local_time <- liftIO  getLocalTime
     let today = localDay local_time
     let stime = showtime today
@@ -180,7 +177,7 @@ rabbitForm (mrab, rabId) extra = do
     let daysTot = (+) <$> yrdays <*> mndays
     let daysTotNeg = ((-1)*) <$> daysTot
     let date = text2date dateInRes
-    let bday = ( addDays) <$> daysTotNeg <*> date 
+    let bday =  addDays <$> daysTotNeg <*> date 
     let alteredDate = text2dateM alteredDateRes 
     let rabbitUpdateRes =Rabbit <$>  nameRes <*>  descRes <*> date <*> sourceTypeRes <*> sourceRes <*> sexRes <*> alteredRes <*> alteredDate <*> statusRes <*> statusDateRes <*> statusNoteRes <*> bday  <*> imgNoteRes
  --   let rabbitRes = rabbitRes1 <*> (FormResult (Just True)) <*> (FormResult Nothing) Nothing
@@ -188,119 +185,6 @@ rabbitForm (mrab, rabId) extra = do
          $(widgetFileNoReload def "add")
          addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
          addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
-         toWidget [julius|
-                      $(function () {
-                               if ( $( "#hident6" ).val() == "2") {
-                                 $( "#hident7 option[value='3']" ).remove();
-                                 }
-                               else {
-                                 $( "#hident7 option[value='4']" ).remove();
-                                 }
-                              });
-
-
-                     $(function () {
-                          $( "#hident6" ).change (function() {
-                               if ( $( "#hident6" ).val() == "2") {
-                                 $( "#hident7 option[value='3']" ).remove();
-                                 $( "#hident7" ).append ("<option value='4'>Neutered</option>");
-                                }
-                               else {
-                                 $( "#hident7 option[value='4']" ).remove();
-                                 $( "#hident7" ).append ("<option value='3'>Spayed</option>");
-                                 }
-
-                              });
-                            });
-
-                     $(function () {
-                          $( "#hident3" ).change (function() {
-                             var astr = $( "#hident3" ).val();
-                               { $( "#hident13" ).val(astr);}
-                             });
-                            });
- 
-                     $(function () {
-                          $( "#hident9" ).change (function () {
-                              if ($( "#hident9" ).val() == "1") {
-                                 $( "#hident13" ).val ( $( "#tmpDate" ).text());
-                                 var str = $( "#hident13" ).val();
-                                 var str2 = $( "#hident3" ).val();
-                                 if ((str.length > 5) || (str2.length<1)) {
-                                  $(  "#statusDateF" ).hide();
-                                 }
-                               }                               
-                              else {
-                                $( "#statusDateF" ).show();
-                                var astr = $( "#hident13" ).val();
-                                if (astr.length >4) {
-                                  $( "#tmpDate" ).text ( $( "#hident13").val());
-                                }
-                                $( "#hident13" ).val("");
-                                $( "#hident13" ).focus();
-
-                              }
-                             });
-                            });
-  $(function () {
-              $( "#tmpDate" ).text ( $( "#hident13" ).val());
-                   });
- 
-                    $(function () {
-                              if ($( "#hident9" ).val() == "1") { 
-                                   var str1 = $( "#hident13" ).val();
-                                   var str2 = $( "#tmpDate" ).val()
-                                   if (str2.length > str1.length) {
-                                      $( "#hident13" ).val(str2);
-                                    }
-                                   $(  "#statusDateF" ).hide();
-                               }
-                              else {
-                                $( "#statusDateF" ).show();
-                                var astr = $( "#hident13" ).val();
-                                if (astr.length >4) {
-                                  $( "#tmpDate" ).text ( $( "#hident13").val());
-                                }
-                                $( "#hident13" ).val("");
-                                $( "#hident13" ).focus();
-                             }
-                           });
-
-                    $(function () {
-                          $( "#hident14" ).change (function () {
-                              if (#{newrabbit}) {
-                               $(  "#statusDateF" ).hide();
-                               }
-                              else {
-                                $( "#statusDateF" ).show();
-                               $( "#hident13" ).val("");
-                                $( "#hident13" ).focus();
-
-                              }
-                             });
-                           });                                                           
-
-
-          |]
-{-
-        
-         toWidget [julius|
-
-         
-
-
-
-                      
-                     $(function () {
-                          $( "#hident3" ).change (function() {
-                             alert("hident3 change");
-                             var str = $( "#hident3" ).val();
-                             $( "#hident13" ).val(str);
-                            }};
-
-                         |]
- -}
-                  
     return (rabbitUpdateRes, awid)
 
 

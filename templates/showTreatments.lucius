@@ -5,12 +5,20 @@
     display:none;
 }
 
+#treatBlock {
+    width:100%;
+    border-top:1px solid #7f7f7f;
+    border-bottom:1px solid #7f7f7f;
+    margin-bottom:3px;
+    margin-top:3px;
+}
+
 #showtreatments div {
         float:left;
 }
 
 .treatR {
-   border-bottom:1px dashed #8f8f8f;
+   border-bottom:1px dotted #7f7f7f;
    width:100%;
    margin:5px;
 }

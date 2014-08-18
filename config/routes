@@ -30,3 +30,4 @@
 /bonded/#RabbitId       BondedR GET POST
 /treat/#RabbitId        TreatmentR GET POST
 /edittreat/#TreatmentBId    EditTreatmentR GET POST
+/treatrep               TreatmentReportR GET

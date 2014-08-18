@@ -39,6 +39,7 @@ queryTreatmentBbyTreat treatId = runDB $
      where_ ((treat ^. TreatmentBId ==. val treatId) &&. ( rab ^. RabbitId ==. treat ^. TreatmentBRabbit))
      return (treat, rab)
 
+
 sourceType::[(Text,Text)]
 sourceType=[("Shelter","Shelter"), ("Other", "Other")]
 
