@@ -6,12 +6,12 @@
                    <div id="sexF", style="float:right;">  
                       Sex : ^{fvInput sexView}
                   <div .faddRw>
-                     <div #sourceTypeF>
+                     <div #sourceTypeF title="Select 'Other' if not from a shelter">
                        Source Type: ^{fvInput sourceTypeView}
                      <div .blDate #dateInF>
                        Date In <span style="font-size:90%">(m/d/y) </span>: ^{fvInput dateInView}  
                   <div .faddRw>
-                     <div #sourceF>
+                     <div #sourceF title="If source is not a shelter select 'Other' above">
                        Source:   ^{fvInput sourceView}
                   <div .faddRw>
                        Estimated Age at intake:  Yrs: ^{fvInput yrsIntakeView}
@@ -34,10 +34,10 @@
                     <div #statusF>
                       Status:
                      ^{fvInput statusView}
-                    <div .blDate #statusDateF title="Change on Death, Adoption, Euth, or new Status Notes">   
+                    <div .blDate #statusDateF title="New Status Date for Death, Adoption, Euth, or new Status Notes">   
                       Status/Notes Change Date : ^{fvInput statusDateView} 
                   <div .faddRw> 
-                    <div #statusNoteF title="Rabbit location, condition, personality">
+                    <div #statusNoteF title="Example notes: Rabbit location, condition, and/or personality">
                       Status Notes: ^{fvInput statusNoteView}          
                   <input type=submit value="submit">
                <div #tmpDate>
