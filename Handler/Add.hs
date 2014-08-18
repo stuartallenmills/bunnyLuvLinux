@@ -158,6 +158,9 @@ rabbitForm (mrab, rabId) extra = do
     let tname = case mrab of 
           Nothing -> Nothing
           Just rb -> Just (rabbitName rb)
+    let newrabbit= case mrab of
+          Nothing->True
+          Just _ ->False
     (nameRes, nameView) <- mreq textField "this is not used" tname
     (dateInRes, dateInView) <-mreq textField "nope" (testDateIn stime mrab)
     (descRes, descView) <- mreq textField "neither is this"  (test mrab rabbitDesc)
@@ -186,8 +189,7 @@ rabbitForm (mrab, rabId) extra = do
          addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
          addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
          toWidget [julius|
-
-                     $(function () {
+                      $(function () {
                                if ( $( "#hident6" ).val() == "2") {
                                  $( "#hident7 option[value='3']" ).remove();
                                  }
@@ -213,10 +215,70 @@ rabbitForm (mrab, rabId) extra = do
 
                      $(function () {
                           $( "#hident3" ).change (function() {
-                             var str = $( "#hident3" ).val();
-                               { $( "#hident13" ).val(str);}
+                             var astr = $( "#hident3" ).val();
+                               { $( "#hident13" ).val(astr);}
                              });
                             });
+ 
+                     $(function () {
+                          $( "#hident9" ).change (function () {
+                              if ($( "#hident9" ).val() == "1") {
+                                 $( "#hident13" ).val ( $( "#tmpDate" ).text());
+                                 var str = $( "#hident13" ).val();
+                                 var str2 = $( "#hident3" ).val();
+                                 if ((str.length > 5) || (str2.length<1)) {
+                                  $(  "#statusDateF" ).hide();
+                                 }
+                               }                               
+                              else {
+                                $( "#statusDateF" ).show();
+                                var astr = $( "#hident13" ).val();
+                                if (astr.length >4) {
+                                  $( "#tmpDate" ).text ( $( "#hident13").val());
+                                }
+                                $( "#hident13" ).val("");
+                                $( "#hident13" ).focus();
+
+                              }
+                             });
+                            });
+  $(function () {
+              $( "#tmpDate" ).text ( $( "#hident13" ).val());
+                   });
+ 
+                    $(function () {
+                              if ($( "#hident9" ).val() == "1") { 
+                                   var str1 = $( "#hident13" ).val();
+                                   var str2 = $( "#tmpDate" ).val()
+                                   if (str2.length > str1.length) {
+                                      $( "#hident13" ).val(str2);
+                                    }
+                                   $(  "#statusDateF" ).hide();
+                               }
+                              else {
+                                $( "#statusDateF" ).show();
+                                var astr = $( "#hident13" ).val();
+                                if (astr.length >4) {
+                                  $( "#tmpDate" ).text ( $( "#hident13").val());
+                                }
+                                $( "#hident13" ).val("");
+                                $( "#hident13" ).focus();
+                             }
+                           });
+
+                    $(function () {
+                          $( "#hident14" ).change (function () {
+                              if (#{newrabbit}) {
+                               $(  "#statusDateF" ).hide();
+                               }
+                              else {
+                                $( "#statusDateF" ).show();
+                               $( "#hident13" ).val("");
+                                $( "#hident13" ).focus();
+
+                              }
+                             });
+                           });                                                           
 
 
           |]

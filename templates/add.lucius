@@ -50,10 +50,12 @@
                         width:60%;
                      }
                      #statusF {
-                        width:30%
+                        width:30%;
                      }
+
                      #statusDateF {
-                        width:40%
+                        width:40%;
+                        display:none;
                      }
                      #statusNoteF {
                         width:100%;
