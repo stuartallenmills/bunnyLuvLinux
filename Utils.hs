@@ -35,6 +35,23 @@ gbp numE alist accum | length alist<numE = accum++alist
                          
 groupByPage numEntries alist = gbp numEntries alist []
 
+queryWellness rabId = runDB $ 
+  select $ from $ \r ->do
+     where_ (r ^. WellnessRabbit ==. val rabId)
+     orderBy [desc (r ^. WellnessDate)]
+     return r
+
+queryVetVisits rabId = runDB $ 
+ select $ from $ \r ->do
+     where_ (r ^. VetVisitRabbit ==. val rabId)
+     orderBy [desc (r ^. VetVisitDate)]
+     return r
+
+queryAdopted rabId = runDB $ 
+ select $ from $ \r ->do
+     where_ (r ^. AdoptedRabbit ==. val rabId)
+     return r
+
 queryTreatments::Handler [(Entity TreatmentB, Entity Rabbit)]
 queryTreatments = runDB $
   select $ from $ \(treat, rab)->do

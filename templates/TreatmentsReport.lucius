@@ -1,0 +1,34 @@
+
+#showtreatments {
+    width:100%;
+    float:left;
+ }
+
+#trTreatBlock {
+  border-bottom:1px solid #7f7f7f;
+  width:100%;
+}
+
+#showtreatments div {
+        float:left;
+}
+
+#trNameDate {
+  width:100%;
+}
+
+.bllabel {
+  margin-right:5px;
+}
+
+.treatR {
+   border-bottom:1px solid #9f9f9f;
+   width:100%;
+   margin:5px;
+}
+
+#showtreatments #treatD, #showtreatments #editLink {
+   float:right;
+   margin-right:5px;
+}
+

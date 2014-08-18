@@ -40,4 +40,4 @@
                     <div #statusNoteF title="Example notes: Rabbit location, condition, and/or personality">
                       Status Notes: ^{fvInput statusNoteView}          
                   <input type=submit value="submit">
-               <div #tmpDate>
+               <div #tmpDate style="display:none">

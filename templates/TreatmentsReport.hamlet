@@ -1,0 +1,33 @@
+
+<div #showtreatments>
+
+ $forall (Entity treatId treat, Entity rabId rab) <- treatments
+  <div #trTreatBlock>
+   <div .treatR>
+     <div #trNameDate >
+      <div .nameC #trRabName>
+          <a href=@{ViewR rabId}>#{rabbitName rab}</a>
+      <div #treatD>
+       <div .bllabel> Start: #
+       <div #tsdate> #{showtime (treatmentBStart treat)}
+   <div .treatR>
+    <div #trReason>
+      <div .bllabel>
+         Reason: #
+      <div #treatReason>
+       #{treatmentBReason treat}
+   <div .treatR>
+     <div #treatT>
+       <div .bllabel> Treatment: #
+       <div #ttreat> #{treatmentBInstruct treat}
+   <div .treatR>
+     <div #tStop>
+       <div .bllabel> Stop: #
+       <div #tStopF>
+         $maybe sdate <- treatmentBStop treat
+            #{showtime sdate}
+         $nothing
+            Active
+     <div #editLink>
+        <div .cancelBut><a href=@{EditTreatmentR treatId}> edit</a>
+       

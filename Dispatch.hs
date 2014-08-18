@@ -19,6 +19,7 @@ import Handler.Admin
 import Handler.Search
 import Handler.Bonded
 import Handler.Treatment
+import Handler.ViewRabbit
 
 
 mkYesodDispatch "App" resourcesApp
