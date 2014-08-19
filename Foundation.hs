@@ -178,6 +178,7 @@ Rabbit
    statusNote Text
    birthday Day
    image Text Maybe
+   RabbitDate name dateIn
    deriving Show
 |]
 

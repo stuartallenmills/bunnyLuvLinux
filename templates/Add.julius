@@ -7,6 +7,32 @@
                                  }
                               });
 
+                    $(function () {
+                       $( "#hident5" ).change (function() {
+                           var ttype = $( "#hident12" ).val();
+                           if ( ttype == "1" ) {
+                            var tsrc = $( "#hident5" ).val();
+                            if (tsrc.toLowerCase().indexOf( "helter" ) >=0) {
+                             return true;
+                            }
+                            var newSource = tsrc + " Shelter";
+                            $( "#hident5" ).val( newSource );
+                           }
+                          });
+                         });
+
+                   $(function () {
+                       $( "#hident2" ).change (function() {
+                           var currval = $( "#hident2" ).val();
+                           var onfile = #{rawJS (gostring names)};
+                           var capval = currval.charAt(0).toUpperCase()+ currval.slice(1);
+                           var amember = $.inArray( capval, onfile );
+                           if (amember >= 0) {
+                               alert("Name already on file");
+                            }
+                          });
+                         });
+                   
 
                      $(function () {
                           $( "#hident6" ).change (function() {

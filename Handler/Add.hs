@@ -15,6 +15,7 @@ import Database.Esqueleto
 import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time.Calendar
+import Text.Julius
 import FormUtils
 import Utils
 
@@ -121,8 +122,8 @@ postDiedR rabId = do
 
 
 
-rabbitForm ::(Maybe Rabbit, Maybe [Entity Wellness])-> Html -> MForm Handler (FormResult Rabbit, Widget)
-rabbitForm (mrab, _) extra = do
+rabbitForm ::(Maybe Rabbit, [Text])-> Html -> MForm Handler (FormResult Rabbit, Widget)
+rabbitForm (mrab, names) extra = do
     local_time <- liftIO  getLocalTime
     let today = localDay local_time
     let stime = showtime today
@@ -164,7 +165,8 @@ rabbitForm (mrab, _) extra = do
 
 getAddR::Handler Html
 getAddR = do
-  (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing,Nothing))
+  names <- getNamesDB
+  (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing,names))
   let menu = 
            [whamlet|
               <div #addCance style="float:inherit; text-align:left; margin:10px;">
@@ -181,7 +183,7 @@ getAddR = do
 
 postPostR::Handler Html
 postPostR = do
-  ((result, _), _) <-runFormPost (rabbitForm (Nothing, Nothing))
+  ((result, _), _) <-runFormPost (rabbitForm (Nothing, []))
   link<- case result of
     FormSuccess  rabi -> 
      runDB $ do
@@ -193,7 +195,7 @@ postPostR = do
 -- update a rabbit 
 postUpdateR::RabbitId->Handler Html
 postUpdateR rabId = do
-  ((result, _), _) <-runFormPost (rabbitForm (Nothing,Nothing))
+  ((result, _), _) <-runFormPost (rabbitForm (Nothing,[]))
 
   case result of
     FormSuccess rabi -> do
@@ -211,8 +213,7 @@ postUpdateR rabId = do
 getEditR::RabbitId->Handler Html
 getEditR rabId  = do
     rabbit <-runDB  $  get rabId
-    wellRs<-queryWellness rabId
-    (formWidget, enctype) <- generateFormPost (rabbitForm (rabbit, (Just wellRs)))
+    (formWidget, enctype) <- generateFormPost (rabbitForm (rabbit, []))
     let menu = [whamlet|
               <div #addCance style="float:inherit; text-align:left; margin:10px;">
                 <b> Edit Rabbit
