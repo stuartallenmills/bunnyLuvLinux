@@ -40,6 +40,9 @@ queryTreatmentBbyTreat treatId = runDB $
      return (treat, rab)
 
 
+
+field txt id = FieldSettings txt (Just txt) (Just id) (Just id) []
+
 sourceType::[(Text,Text)]
 sourceType=[("Shelter","Shelter"), ("Other", "Other")]
 

@@ -6,6 +6,11 @@
                               box-shadow:2px 2x 3px #7f7f7f;
                            }
                       
+#adoprint {
+    float:right;
+    display: inline;
+    width: 20%;
+}
 
 #headimg {
       float:left;

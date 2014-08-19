@@ -48,7 +48,6 @@ data Search = Search {
 
                  }
 
-field txt id = FieldSettings txt (Just txt) (Just id) (Just id) []
 
 searchForm::Html -> MForm Handler (FormResult Search, Widget)
 searchForm extra = do

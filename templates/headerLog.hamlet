@@ -4,7 +4,7 @@
       <div #splash>  
        <h2> BunnyLuv Rabbit Tracker
        
-       <div #adoprint style="float:right; display:inline;" >
+       <div #adoprint >
 
         <div #doprint style="float:right;">
            <img id="pimg" src=@{StaticR printer_png}>
