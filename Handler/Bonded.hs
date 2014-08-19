@@ -176,19 +176,30 @@ getBondedR rabId = do
        
   let silly=  toWidget [julius|
                   $( document ).ready(function() { 
+                    var validOptions = #{rawJS (gostring notbtext)};
                     $( "#notBonded" ).attr("title", "Find rabbit by name");
                     $( "#notBonded" ).autocomplete({
-                      source: #{rawJS (gostring notbtext)},
-                      change: function (event, ui) {
-                        if ((ui.item==null) || (ui.item==undefined)) {
-                         alert("You must select from the list of rabbits");
-                         $( "#notBonded" ).val( "" );
-                         $( "#notBonded" ).focus();
-                         }
-                        }
-
+                      source:validOptions,
+                      change:function (event, ui) {
+          if ((ui.item == null) || (ui.item == undefined)) {
+            var isValid =false;
+            var zinc = validOptions[0];
+            var currval = $( this ).val();
+            var capval = currval.charAt(0).toUpperCase()+ currval.slice(1);
+            var amember = $.inArray( capval, validOptions );
+            if ( amember > -1 ) {
+                $( this ).val( capval );
+                return true;
+            }
+            alert("Rabbit not on file");
+           $( this ).val( "" );
+           $( this ).focus();
+          return false;
+        }
+      }
                     });
                    });
+                 
                |]
   let bondedWid= do
           wWid
