@@ -32,7 +32,7 @@ import FormUtils
 import Utils
 
 relates::[(Text, Text)]
-relates=[("Friend", "Friend"),("Sibling", "Sibling"), ("Child", "Child"), ("Parent","Parent") ]
+relates=[("Friend", "Friend"),("Sibling", "Sibling"), ("Offspring", "Offspring"), ("Parent","Parent") ]
 
 queryBondEntry r1 r2 =
   select $
@@ -53,8 +53,8 @@ queryGetNotBonded rabId = runDB $
 getRel rel
         | rel=="Friend" = "Friend"
         | rel=="Sibling" = "Sibling"
-        | rel=="Parent" = "Child"
-        | rel=="Child" = "Parent"
+        | rel=="Parent" = "Offspring"
+        | rel=="Offspring" = "Parent"
         | otherwise = "Error"
                       
 addBonded rabId1 rabId2 rel = runDB $ do
@@ -80,7 +80,7 @@ bondedForm rabId extra = do
           [whamlet| #{extra}
             <div #bonded>
                 <div #bname>
-                 <div #blN>
+                 <div #blN title="Only rabbits already on file can be added">
                     Name:
                  ^{fvInput bondView}
                 <div #relation>
@@ -178,7 +178,15 @@ getBondedR rabId = do
                   $( document ).ready(function() { 
                     $( "#notBonded" ).attr("title", "Find rabbit by name");
                     $( "#notBonded" ).autocomplete({
-                      source: #{rawJS (gostring notbtext)}
+                      source: #{rawJS (gostring notbtext)},
+                      change: function (event, ui) {
+                        if ((ui.item==null) || (ui.item==undefined)) {
+                         alert("You must select from the list of rabbits");
+                         $( "#notBonded" ).val( "" );
+                         $( "#notBonded" ).focus();
+                         }
+                        }
+
                     });
                    });
                |]
