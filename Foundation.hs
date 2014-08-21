@@ -70,6 +70,40 @@ Usr
 |]
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+
+DailyReport 
+  date Day
+  person Text
+  report Textarea
+  deriving Show
+
+HomeCheck 
+   date Day
+   hcDay Day
+   hcTime Text
+   hcNotes Text Maybe
+   hcResults Text Maybe
+   deriving Show
+
+AdoptForm 
+   lookTime Text
+   lookparticular Text
+   whoRabbitFor Text
+   contactedOthers Text
+   reasearchedRabCar Bool
+--Animals
+   numRabsYouHave Int
+   hadRabsBefore Bool
+   currentOtherAnimals Text Maybe
+   hadOthereBefor Bool
+   plantoGetOther Bool
+--Household
+   children Text
+   adultCount Int
+
+
+   deriving Show
+
 Person
     firstName Text
     lastName Text

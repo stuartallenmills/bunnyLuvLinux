@@ -82,9 +82,47 @@ reportbase atitle result = do
                         }
               |]
  
+twid drr = do
+          [whamlet| 
+           $forall (Entity drId dr) <- drr
+             <div .blockDR >
+               <div .rDR >
+                  <div #dateDR style="float:left;">
+                     #{showtime (dailyReportDate dr)}
+                  <div #personDR style="float:right;">
+                     #{dailyReportPerson dr}
+               <div .rDR>
+                    #{dailyReportReport dr}
+            |]
+          toWidget [lucius|
+                   .blockDR {
+                       border-bottom:1px solid #7f7f7f;
+                       border-top:1px solid #7f7f7f;
+                       width:100%;
+                       float:left;
+                     }
 
+                   .rDR {
+                       margin:5px;
+                       margin-right:10px;
+                       width:100%;
+                       display:block;
+                       float:left;
+                     }
+            |]
 
-
+getDailyViewR::Handler Html
+getDailyViewR = do
+  drr<- runDB $ select $
+               from $ \tdr-> do
+               where_ ( tdr ^. DailyReportPerson !=. val "")
+               return tdr
+  let ls = length drr
+  let ti = "Daily Report  " ++ (show ls)
+  reportbase (toHtml ti) (twid drr)
+                   
+  
+    
 
 
 doAdoptedReport = runDB $ 

@@ -31,3 +31,5 @@
 /treat/#RabbitId        TreatmentR GET POST
 /edittreat/#TreatmentBId    EditTreatmentR GET POST
 /treatrep               TreatmentReportR GET
+/daily                  DailyR GET POST
+/viewDaily              DailyViewR GET

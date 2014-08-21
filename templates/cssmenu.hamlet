@@ -15,6 +15,7 @@
 
    <li #blReports class='has-sub'><a href='#'><span>Reports</span></a>
       <ul>
+         <li><a href=@{DailyViewR}><span>Daily Reports</span></a></li>
          <li><a href=@{TreatmentReportR}>Treatments Report</a></li>
          <li><a href=@{SearchR}><span>Advanced Search</span></a></li>
          <li><a href=@{VVViewR}><span>Vet Visits Report</span></a></li>
@@ -24,6 +25,9 @@
          <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
          <li><a href=@{SourceR "Shelter"}><span>Source: Shelter</span></a></li>
          <li class='last'><a href=@{SourceR "Other"}><span>Source: Other</span></a></li>
+   <li class='has-sub'> <a href='#'><span>New </span></a>
+        <ul>
+         <li class='last'> <a href=@{DailyR}><span>New Daily Report</span></a></li>
    <li class='has-sub last' id="blAdmin"><a href='#'><span>Admin</span></a>
       <ul>
        $if mode

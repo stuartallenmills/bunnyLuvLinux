@@ -36,7 +36,7 @@ import FormUtils
     
 wellnessForm::(Maybe Text)->RabbitId->Html-> MForm Handler (FormResult Wellness, Widget)
 wellnessForm user rabID extra = do
-    local_time <- liftIO $ getLocalTime
+    local_time <- liftIO  getLocalTime
     let stime = showtime (localDay local_time)
     (wellDateRes, wellDateView)<-mreq textField "nope" (Just stime)
     (wellLbsRes, wellLbsView)<-mreq intField "nope" Nothing
