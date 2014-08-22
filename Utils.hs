@@ -107,19 +107,22 @@ getNamesDB = do
      rabs<-queryStatus "BunnyLuv"
      return (getNames rabs)
 
-getNameForm::Html->MForm Handler (FormResult Text, Widget)
-getNameForm extra = do
+getNameForm = getNameFormB "formName"
+
+getNameFormB::Text->Html->MForm Handler (FormResult Text, Widget)
+getNameFormB id extra = do
   let fs = FieldSettings "sNamel" (Just "Find rabbit by name") (Just "getName") (Just "nameField") []
   (nameRes, nameView) <- mreq textField "default"  Nothing
   let wid =do
                   [whamlet| #{extra}
-                     <div class="ui-widget getNameDiv" style="font-size:1em; display:inline" title="Find rabbit by name">
+                     <div class="ui-widget getNameDiv" ##{id} style="font-size:1em; display:inline" title="Find rabbit by name">
                          <label style="font-size:0.8em;" for="getName" >name: </label>  ^{fvInput nameView}
                      <input #nameIn type=submit value="find" style="display:none;">
                     |]
                   toWidget [lucius|
                                ##{fvId nameView} {
                                       font-size:0.9em;
+                                      width:15em;
                                   }
                              .ui-autocomplete {
                                    z-index:100;
@@ -168,7 +171,7 @@ newFormat task = toWidget [lucius|
                               display:none;
                               padding:10px;
                               transform: translate(100px, -50px);
-                              width:200px;
+                              width:220px;
                               z-index:100;
                               background:#f8f8f8;
                               position:absolute;
@@ -186,14 +189,14 @@ newFormat task = toWidget [lucius|
 
 
 divName = append "new" 
-
+canName = append "cancel"
 getTaskWidget bnames wid enctype task = [whamlet| 
-                <div ##{divName task}>
-                 <div #newTaskTitle>
-                   New #{task} for 
-                 ^{getNameWidgetG bnames wid enctype "newName" (newFormat task) task}
+                <div ##{divName task} .popup>
+                 <div #newTaskTitle style="float:left; width=80%;" >
+                   New #{task} for
+                 <div .cancelBut .popupCancel ##{canName task} style="float:right;">cancel
+                 ^{getNameWidgetG bnames wid enctype task (newFormat task) task}
                                       |]
-getTreatWidget  bnames wid enctype= getNameWidgetG bnames wid enctype "newName" (newFormat "Treatment") "Treatment"
 
 
 getNameWidget::[Text]->Widget->Enctype-> Widget
@@ -209,8 +212,8 @@ getNameWidgetG bnames wid enctype form format taction= do
 
          toWidget [julius|
                   $( document ).ready(function() { 
-                    $( ".getNameDiv :input" ).attr("title", "Find rabbit by name");
-                    $( ".getNameDiv :input" ).autocomplete({
+                    $( "##{rawJS form} :input" ).attr("title", "Find rabbit by name");
+                    $( "##{rawJS form} :input" ).autocomplete({
                       source: #{rawJS (gostring bnames)},
                       select: function (event, ui) {
                           $( this ).val (ui.item.label);
@@ -218,4 +221,10 @@ getNameWidgetG bnames wid enctype form format taction= do
                         }
                     });
                    });
+
+                  $(function() {
+                      $( ".popupCancel" ).click( function() {
+                        $( this ).parent().closest( "div" ).hide();
+                        });
+                       });
                |]

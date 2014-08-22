@@ -44,9 +44,11 @@ doRabbitRows today result = $(widgetFileNoReload def "rabbitRows")
 
 base::Html->Html->[Entity Rabbit]->Handler Html
 base wtitle atitle result  = do 
-     (formWidget, enctype) <- generateFormPost getNameForm
+     (formWidget, enctype) <- generateFormPost (getNameForm)
      (ageWidget, age_enctype) <-generateFormPost getAgeForm
-     (newWidget, new_enctype) <-generateFormPost getNameForm
+     (newWidget, well_enctype) <-generateFormPost (getNameFormB "wellForm")
+     (treatWidget, treat_enctype) <-generateFormPost (getNameFormB "treatForm")
+     (vvWidget, vv_enctype) <- generateFormPost (getNameFormB "vetvistForm")
      bnames <-  getNamesDB
      impath <- liftIO getImagePath
      let imgpath = unpack impath
@@ -70,13 +72,17 @@ base wtitle atitle result  = do
                               $( "#blStatus" ).show();
                               $( "#blSource" ).show();      
                               $( "#rAddM" ).show();   
-                              $( "#blAdmin" ).show(); }
+                              $( "#blAdmin" ).show(); 
+                              $( "#blNew" ).show();
+                             }
                              else {
                               $( "#blReports" ).hide(); 
                               $( "#blStatus" ).hide();
                               $( "#blSource" ).hide();      
                               $( "#rAddM" ).hide(); 
-                              $( "#blAdmin" ).hide(); }
+                              $( "#blNew" ).hide();
+                              $( "#blAdmin" ).hide(); 
+                             }
                            });
 
   
@@ -136,9 +142,9 @@ base wtitle atitle result  = do
          ^{headerLogWid imgpath maid}
          ^{mainMenu mode}
          ^{getAgeWidget ageWidget age_enctype}
-         ^{getTaskWidget bnames newWidget new_enctype "Wellness"}
-         ^{getTaskWidget bnames newWidget new_enctype "Treatment"}
-         ^{getTaskWidget bnames newWidget new_enctype "Vet_Visit"}
+         ^{getTaskWidget bnames newWidget well_enctype "Wellness"}
+         ^{getTaskWidget bnames treatWidget treat_enctype "Treatment"}
+         ^{getTaskWidget bnames vvWidget vv_enctype "Vet_Visit"}
         <div #formResults>
          <div #atitleD> 
               <b> #{atitle} 
