@@ -132,11 +132,25 @@ getShowNameR name = do
   return page
    
 
-postNameR::Handler Html 
-postNameR = do
+postNameR::Text->Handler Html 
+postNameR task= do
   ((result,_), _) <- runFormPost getNameForm
   case result of
-    FormSuccess name -> redirect (ShowNameR name)
+    FormSuccess name -> case task of
+                             "Wellness"->do
+                                      names<-queryName name
+                                      let id = getrabId (Prelude.head names)
+                                      redirect (WellnessR id)
+                             "Treatment"->do
+                                      names<-queryName name
+                                      let id = getrabId (Prelude.head names)
+                                      redirect (TreatmentR id)
+                             "Vet_Visit"->do
+                                      names<-queryName name
+                                      let id = getrabId (Prelude.head names)
+                                      redirect (VetVisitR id "Other")
+                             _  -> redirect (ShowNameR name)
+                                      
     _ -> redirect HomeR
 
 
@@ -150,7 +164,7 @@ ageDiff::Day->Entity Rabbit->(Integer, Entity Rabbit)
 ageDiff bday rabE@(Entity _ rab) = ( abs (diffDays bday (rabbitBirthday rab)), rabE)
 
 clean::Integer->[(Integer, Entity Rabbit)]->[(Integer, Entity Rabbit)]
-clean ageDiff = filter (\(a,_)-> a <= ageDiff) 
+clean tageDiff = filter (\(a,_)-> a <= tageDiff) 
 
 sortImp::(Integer, Entity Rabbit)->(Integer, Entity Rabbit)->Ordering
 sortImp (a, r1) (b, r2)
@@ -164,7 +178,7 @@ sortEnt::Integer->Day->[Entity Rabbit]->[Entity Rabbit]
 sortEnt ageRange bday rabs = nrabs where
         ageDiffs = map (ageDiff bday) rabs
         cleaned = clean ageRange ageDiffs
-        sorted =  (sortBy sortImp cleaned)
+        sorted =  sortBy sortImp cleaned
         nrabs = map extractRabb sorted
   
 getAgesR::Integer->Handler Html

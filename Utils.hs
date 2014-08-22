@@ -94,6 +94,8 @@ gostring alist = out where
            temp= foldl (\accum x-> T.append( T.append (T.append "\"" x) "\",") accum) T.empty alist
            out = T.append "["  (T.append (T.take ((T.length temp) - 1) temp) "]")
 
+getrabId (Entity rId rab) = rId
+
 getName::Entity Rabbit->Text
 getName (Entity rabId rab) = rabbitName rab
 
@@ -108,20 +110,17 @@ getNamesDB = do
 getNameForm::Html->MForm Handler (FormResult Text, Widget)
 getNameForm extra = do
   let fs = FieldSettings "sNamel" (Just "Find rabbit by name") (Just "getName") (Just "nameField") []
-  (nameRes, nameView) <- mreq textField fs  Nothing
+  (nameRes, nameView) <- mreq textField "default"  Nothing
   let wid =do
                   [whamlet| #{extra}
-                     <div class=ui-widget #getNameDiv style="font-size:1em; display:inline" title="Find rabbit by name">
+                     <div class="ui-widget getNameDiv" style="font-size:1em; display:inline" title="Find rabbit by name">
                          <label style="font-size:0.8em;" for="getName" >name: </label>  ^{fvInput nameView}
                      <input #nameIn type=submit value="find" style="display:none;">
                     |]
                   toWidget [lucius|
-                               #getName {
+                               ##{fvId nameView} {
                                       font-size:0.9em;
                                   }
-                               #getNameDiv {
-                                  float:right;
-                                }
                              .ui-autocomplete {
                                    z-index:100;
                                  }
@@ -132,12 +131,8 @@ getNameForm extra = do
                   
   return (nameRes, wid)
 
-getNameWidget bnames wid enctype = do
-         [whamlet|
-           <form #formName method=post action=@{NameR} enctype=#{enctype}>
-            ^{wid}
-           |]
-         toWidget [lucius|
+rightTopFormat::Widget
+rightTopFormat =  toWidget [lucius|
                      @media screen {
                           #formName {
                               padding:0;
@@ -153,17 +148,73 @@ getNameWidget bnames wid enctype = do
                        #formName {
                           display:none;
                          }
-                     }
-
+                    }
             |]
+
+
+newFormat::Text->Widget
+newFormat task = toWidget [lucius|
+                     @media screen {
+
+                          ##{divName task} form {
+                               border:none;
+                               padding:0;
+                             }
+                          ##{divName task} {
+                              padding:0;
+                              border:1px solid #7f7f7f;
+                              margin:1px;;
+                              box-shadow:1px 1px 2px #7f7f7f;
+                              display:none;
+                              padding:10px;
+                              transform: translate(100px, -50px);
+                              width:200px;
+                              z-index:100;
+                              background:#f8f8f8;
+                              position:absolute;
+                             }
+                           ##{divName task} input {
+                              display:inline;
+                           }
+                         }
+                     @media print {
+                       ##{divName task}{
+                          display:none;
+                         }
+                    }
+            |]
+
+
+divName = append "new" 
+
+getTaskWidget bnames wid enctype task = [whamlet| 
+                <div ##{divName task}>
+                 <div #newTaskTitle>
+                   New #{task} for 
+                 ^{getNameWidgetG bnames wid enctype "newName" (newFormat task) task}
+                                      |]
+getTreatWidget  bnames wid enctype= getNameWidgetG bnames wid enctype "newName" (newFormat "Treatment") "Treatment"
+
+
+getNameWidget::[Text]->Widget->Enctype-> Widget
+getNameWidget bnames wid enctype = getNameWidgetG bnames wid enctype "formName" rightTopFormat  "bunn"
+
+getNameWidgetG::[Text]->Widget->Enctype->Text->Widget->Text->Widget
+getNameWidgetG bnames wid enctype form format taction= do
+         format 
+         [whamlet|
+           <form ##{form} method=post action=@{NameR taction} enctype=#{enctype}>
+            ^{wid}
+           |]
+
          toWidget [julius|
                   $( document ).ready(function() { 
-                    $( "#getName" ).attr("title", "Find rabbit by name");
-                    $( "#getName" ).autocomplete({
+                    $( ".getNameDiv :input" ).attr("title", "Find rabbit by name");
+                    $( ".getNameDiv :input" ).autocomplete({
                       source: #{rawJS (gostring bnames)},
                       select: function (event, ui) {
-                          $( "#getName" ).val (ui.item.label);
-                          $( "#formName" ).submit()
+                          $( this ).val (ui.item.label);
+                          $( "##{rawJS form}" ).submit()
                         }
                     });
                    });

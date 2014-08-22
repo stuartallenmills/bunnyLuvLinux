@@ -46,6 +46,7 @@ base::Html->Html->[Entity Rabbit]->Handler Html
 base wtitle atitle result  = do 
      (formWidget, enctype) <- generateFormPost getNameForm
      (ageWidget, age_enctype) <-generateFormPost getAgeForm
+     (newWidget, new_enctype) <-generateFormPost getNameForm
      bnames <-  getNamesDB
      impath <- liftIO getImagePath
      let imgpath = unpack impath
@@ -78,6 +79,7 @@ base wtitle atitle result  = do
                               $( "#blAdmin" ).hide(); }
                            });
 
+  
   $(function() {
     $( document ).tooltip({
       position: {
@@ -95,8 +97,24 @@ base wtitle atitle result  = do
     });
   });
  
+ $(function() {
+   $( "#newWell" ).click( function() {
+         $( "#newWellness" ).toggle();
+         });
+        });
 
-                             |]
+ $(function() {
+   $( "#newTreat" ).click( function() {
+         $( "#newTreatment" ).toggle();
+         });
+        });
+
+  $(function() {
+   $( "#newVetVisit" ).click( function() {
+         $( "#newVet_Visit" ).toggle();
+         });
+        });
+                            |]
         toWidget [lucius| #atitleD {
                                 width:100%;
                                 float:left;
@@ -111,12 +129,16 @@ base wtitle atitle result  = do
                       
               |]
 
+ 
         [whamlet|
         <div #blHeaderD>
          ^{getNameWidget bnames formWidget enctype}
          ^{headerLogWid imgpath maid}
          ^{mainMenu mode}
          ^{getAgeWidget ageWidget age_enctype}
+         ^{getTaskWidget bnames newWidget new_enctype "Wellness"}
+         ^{getTaskWidget bnames newWidget new_enctype "Treatment"}
+         ^{getTaskWidget bnames newWidget new_enctype "Vet_Visit"}
         <div #formResults>
          <div #atitleD> 
               <b> #{atitle} 

@@ -24,7 +24,7 @@
 /ages/#Integer           AgesR GET
 /getAge                 GetAgeR POST
 /name/#Text             ShowNameR GET
-/getName                NameR POST
+/getName/#Text          NameR POST
 /all                    AllR GET
 /search                 SearchR GET POST
 /bonded/#RabbitId       BondedR GET POST

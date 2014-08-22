@@ -25,8 +25,11 @@
          <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
          <li><a href=@{SourceR "Shelter"}><span>Source: Shelter</span></a></li>
          <li class='last'><a href=@{SourceR "Other"}><span>Source: Other</span></a></li>
-   <li class='has-sub'> <a href='#'><span>New </span></a>
+   <li class='has-sub' #blNew> <a href='#'><span>New </span></a>
         <ul>
+         <li #newWell><span><a href='#'>New Wellness</span></a></li>
+         <li #newTreat><a href='#'><span>New Treatment</span></a></li>
+         <li #newVetVisit><a href='#'><span>New Vet Vist</span></a></li>
          <li class='last'> <a href=@{DailyR}><span>New Daily Report</span></a></li>
    <li class='has-sub last' id="blAdmin"><a href='#'><span>Admin</span></a>
       <ul>
