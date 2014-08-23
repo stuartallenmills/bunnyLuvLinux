@@ -101,14 +101,35 @@ baseForm ti menu form = do
                  if (str.length < 1)
                    return;
                  var thedate = checkDate( str );
+                 if (thedate.length < 4) {
+                   e.preventDefault();
+                   alert("Invalid Date");
+                   $( this ).val( "" );
+                   $( this ).focus();              
+                  } else {
+                  $( this ).val ( thedate );
+                  $( this ).change();
+                 }
+                });
+               });
+
+            $(function () {
+              $( ".blDate :input" ).keydown ( function(e) {
+               if (e.keyCode==13 || e.keyCode==9) {
+                 var str = $( this ).val();
+                 if (str.length < 1)
+                   return;
+                 var thedate = checkDate( str );
+                 if (thedate.length < 4) {
+                   e.preventDefault();
+                   alert("Invalid Date");
+                   $( this ).val( "");
+                   $( this ).focus();
+                  } else {
                  $( this ).val ( thedate );
                  $( this ).change();
-                 if (thedate.length < 4) {
-                   alert("Invalid Date");
-                   setTimeout (function() {
-                       $( this ).focus();
-                          }, 100);
                  }
+                }
                 });
                });
 

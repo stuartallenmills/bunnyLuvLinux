@@ -83,23 +83,40 @@ bondedForm rabId extra = do
                  <div #blN title="Only rabbits already on file can be added">
                     Name:
                  ^{fvInput bondView}
+                 <div #berror>
+                      \<- Rabbit not on file!
                 <div #relation>
                   <div #bR>
                     Relation:
                   ^{fvInput relationView}
-               <input type=submit value="submit">
+               <input type=submit value="submit" style="float:right;">
 
                     |]
           toWidget [lucius|
                  #bonded input {
                    display:inline;
+                   float:left;
                   }
+
+                  #bname, #relation {
+                    width:100%;
+                   }
+                  #berror {
+                     margin:5px;
+                     font-size:95%;
+                     color:#ef0000;
+                     float:left;
+                     display:none;
+                     transform:translateY(-5px);
+                   }
+
                   #blN, #bR {
                     width:12%;
                     float:left;
                    }
                   #bonded div {
                     margin-bottom:20px;
+                    float:left;
                    }
                  ##{fvId relationView} {
                                 width:10em;
@@ -205,12 +222,14 @@ getBondedR rabId = do
                    });
               
                 $(function() { $( "#notBonded" ).blur( function( e) {
-                            var aname = $( "#notBonded" ).val();
+                             var aname = $( "#notBonded" ).val();
                             var nname = checkName( aname );
                             if (nname.length < 1) {
-                              e.preventDefault();
+                               e.preventDefault();
                               $( "#notBonded" ).val( "" );
                               $( "#notBonded" ).focus();
+                             $( "#berror" ).show();
+                               
                              } else {
                               $( "#notBonded" ).val( nname );
                               }
@@ -218,6 +237,7 @@ getBondedR rabId = do
                  });
                  
                 $(function() { $( "#notBonded" ).keydown( function( e) {
+                           $( "#berror" ).hide();
                            if (e.keyCode==13 || e.keyCode==9) {
                             var aname = $( "#notBonded" ).val();
                             var nname = checkName( aname );
@@ -225,7 +245,8 @@ getBondedR rabId = do
                               e.preventDefault();
                               $( "#notBonded" ).val( "" );
                               $( "#notBonded" ).focus();
-                             } else {
+                              $( "#berror" ).show();
+                              } else {
                               $( "#notBonded" ).val( nname );
                               }
                            }
