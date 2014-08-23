@@ -138,7 +138,7 @@ getBondedR rabId = do
                |]
   let wWid =    [whamlet|
     <div #addff>
-     <form method=post action=@{BondedR rabId} enctype=#{enctype}>
+     <form  #bondedForm method=post action=@{BondedR rabId} enctype=#{enctype}>
        ^{formWidget}
     <div #cff>
        <div #tcff>
@@ -175,30 +175,63 @@ getBondedR rabId = do
    
        
   let silly=  toWidget [julius|
-                  $( document ).ready(function() { 
-                    var validOptions = #{rawJS (gostring notbtext)};
-                    $( "#notBonded" ).attr("title", "Find rabbit by name");
-                    $( "#notBonded" ).autocomplete({
-                      source:validOptions,
-                      change:function (event, ui) {
-          if ((ui.item == null) || (ui.item == undefined)) {
-            var isValid =false;
-            var zinc = validOptions[0];
-            var currval = $( this ).val();
-            var capval = currval.charAt(0).toUpperCase()+ currval.slice(1);
-            var amember = $.inArray( capval, validOptions );
+
+
+    function checkName ( inVal ) {
+         var currval = inVal;
+         var validOptions = #{rawJS (gostring notbtext)};
+         var capval = currval.charAt(0).toUpperCase()+ currval.slice(1);
+         var amember = $.inArray( capval, validOptions );
             if ( amember > -1 ) {
                 $( this ).val( capval );
-                return true;
+                return capval;
+            } else {
+             return ("");
             }
-            alert("Rabbit not on file");
-           $( this ).val( "" );
-           $( this ).focus();
-          return false;
         }
-      }
-                    });
+
+
+
+                   $( document ).ready(function() { 
+                    $( "#notBonded" ).attr("title", "Find rabbit by name");
+                    $( "#notBonded" ).autocomplete({
+                      minLength:0,
+                      source:#{rawJS (gostring notbtext)},
+                      select: function (event, ui) {
+                          $( this ).val (ui.item.label);
+                          $( "#bondedForm" ).submit();
+                        }
+                     });
                    });
+              
+                $(function() { $( "#notBonded" ).blur( function( e) {
+                            var aname = $( "#notBonded" ).val();
+                            var nname = checkName( aname );
+                            if (nname.length < 1) {
+                              e.preventDefault();
+                              $( "#notBonded" ).val( "" );
+                              $( "#notBonded" ).focus();
+                             } else {
+                              $( "#notBonded" ).val( nname );
+                              }
+                   });
+                 });
+                 
+                $(function() { $( "#notBonded" ).keydown( function( e) {
+                           if (e.keyCode==13 || e.keyCode==9) {
+                            var aname = $( "#notBonded" ).val();
+                            var nname = checkName( aname );
+                            if (nname.length < 1) {
+                              e.preventDefault();
+                              $( "#notBonded" ).val( "" );
+                              $( "#notBonded" ).focus();
+                             } else {
+                              $( "#notBonded" ).val( nname );
+                              }
+                           }
+                   });
+                 });
+                 
                  
                |]
   let bondedWid= do

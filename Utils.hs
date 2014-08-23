@@ -214,10 +214,11 @@ getNameWidgetG bnames wid enctype form format taction= do
                   $( document ).ready(function() { 
                     $( "##{rawJS form} :input" ).attr("title", "Find rabbit by name");
                     $( "##{rawJS form} :input" ).autocomplete({
+                      search:"",
                       source: #{rawJS (gostring bnames)},
                       select: function (event, ui) {
                           $( this ).val (ui.item.label);
-                          $( "##{rawJS form}" ).submit()
+                          $( "##{rawJS form}" ).submit();
                         }
                     });
                    });
