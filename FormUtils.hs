@@ -103,8 +103,8 @@ baseForm ti menu form = do
                  var thedate = checkDate( str );
                  if (thedate.length < 4) {
                    e.preventDefault();
-                   alert("Invalid Date");
                    $( this ).val( "" );
+                   alert("Invalid Date");
                    $( this ).focus();              
                   } else {
                   $( this ).val ( thedate );
@@ -122,8 +122,8 @@ baseForm ti menu form = do
                  var thedate = checkDate( str );
                  if (thedate.length < 4) {
                    e.preventDefault();
-                   alert("Invalid Date");
                    $( this ).val( "");
+                   alert("Invalid Date");
                    $( this ).focus();
                   } else {
                  $( this ).val ( thedate );
@@ -142,4 +142,11 @@ baseForm ti menu form = do
        ^{headerLogWid imgpath maid}
        ^{menu}
        ^{form}
+       <div #dateError> Error in Date!
        |]
+    toWidget [lucius| 
+          #dateError {
+      
+
+}
+|]
