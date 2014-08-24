@@ -106,18 +106,21 @@ base wtitle atitle result  = do
  $(function() {
    $( "#newWell" ).click( function() {
          $( "#newWellness" ).toggle();
+         $( "#newWellness :input").focus();
          });
         });
 
  $(function() {
    $( "#newTreat" ).click( function() {
          $( "#newTreatment" ).toggle();
+         $( "#newTreatment :input").focus();
          });
         });
 
   $(function() {
    $( "#newVetVisit" ).click( function() {
          $( "#newVet_Visit" ).toggle();
+         $( "#newVet_Visit :input").focus();
          });
         });
                             |]
