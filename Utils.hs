@@ -117,7 +117,8 @@ getNameFormB id extra = do
                   [whamlet| #{extra}
                      <div class="ui-widget getNameDiv" ##{id} style="font-size:1em; display:inline" title="Find rabbit by name">
                          <label style="font-size:0.8em;" for="getName" >name: </label>  ^{fvInput nameView}
-                     <input #nameIn type=submit value="find" style="display:none;">
+                      <input #nameIn type=submit value="find" style="display:none;">                 
+                      <div #berror> Not on file!
                     |]
                   toWidget [lucius|
                                ##{fvId nameView} {
@@ -130,6 +131,15 @@ getNameFormB id extra = do
                              .ui-menu-item {
                                       font-size:0.8em;
                                 }
+                   #berror {
+                     margin:5px;
+                     font-size:95%;
+                     color:#ef0000;
+                     float:left;
+                     display:none;
+                     transform:translateY(-5px);
+                   }
+
                       |]
                   
   return (nameRes, wid)
@@ -228,4 +238,40 @@ getNameWidgetG bnames wid enctype form format taction= do
                         $( this ).parent().closest( "div" ).hide();
                         });
                        });
+
+   function checkName ( inVal ) {
+         var currval = inVal;
+         var validOptions = #{rawJS (gostring bnames)};
+         var capval = currval.charAt(0).toUpperCase()+ currval.slice(1);
+         var amember = $.inArray( capval, validOptions );
+            if ( amember > -1 ) {
+                $( this ).val( capval );
+                return capval;
+            } else {
+             return ("");
+            }
+        }
+
+                           
+
+               $(function() { $( "##{rawJS form} :input" ).keydown( function( e) {
+                           $( "##{rawJS form} #berror" ).hide();
+                           if (e.keyCode==13 || e.keyCode==9) {
+                            var aname = $( this ).val();
+                            var nname = checkName( aname );
+                            if (nname.length < 1) {
+                              e.preventDefault();
+                              $( this ).val( "" );
+                              $( this ).focus();
+                              $( "##{rawJS form} #berror" ).show();
+                              } else {
+                              $( this ).val( nname );
+                              }
+
+                            }
+                   });
+                 });
+                 
+
+
                |]
