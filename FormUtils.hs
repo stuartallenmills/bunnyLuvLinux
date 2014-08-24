@@ -104,7 +104,7 @@ baseForm ti menu form = do
                  if (thedate.length < 4) {
                    e.preventDefault();
                    $( this ).val( "" );
-                   alert("Invalid Date");
+                    $( "#dateError" ).show();
                    $( this ).focus();              
                   } else {
                   $( this ).val ( thedate );
@@ -115,6 +115,7 @@ baseForm ti menu form = do
 
             $(function () {
               $( ".blDate :input" ).keydown ( function(e) {
+                 $( "#dateError" ).hide();
                if (e.keyCode==13 || e.keyCode==9) {
                  var str = $( this ).val();
                  if (str.length < 1)
@@ -123,7 +124,7 @@ baseForm ti menu form = do
                  if (thedate.length < 4) {
                    e.preventDefault();
                    $( this ).val( "");
-                   alert("Invalid Date");
+                    $( "#dateError" ).show();
                    $( this ).focus();
                   } else {
                  $( this ).val ( thedate );
@@ -141,12 +142,20 @@ baseForm ti menu form = do
                  This is a test
        ^{headerLogWid imgpath maid}
        ^{menu}
+        <div #dateError> Error in Date Entry!
        ^{form}
-       <div #dateError> Error in Date!
-       |]
+        |]
     toWidget [lucius| 
           #dateError {
-      
-
+           position:absolute;
+           color:#ff0000;
+           background-color:#f8f8f8;
+           margin-left:30%;
+           border:1px solid #7f7f7f;
+           box-shadow:1px 1px 2px #7f7f7f;
+           display:none;
+           padding-left:10px;
+           padding-right:10px;
+           margin-top:5px;
 }
 |]
