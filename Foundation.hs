@@ -85,24 +85,6 @@ HomeCheck
    hcResults Text Maybe
    deriving Show
 
-AdoptForm 
-   lookTime Text
-   lookparticular Text
-   whoRabbitFor Text
-   contactedOthers Text
-   reasearchedRabCar Bool
---Animals
-   numRabsYouHave Int
-   hadRabsBefore Bool
-   currentOtherAnimals Text Maybe
-   hadOthereBefor Bool
-   plantoGetOther Bool
---Household
-   children Text
-   adultCount Int
-
-
-   deriving Show
 
 Person
     firstName Text
@@ -212,7 +194,6 @@ Rabbit
    statusNote Text
    birthday Day
    image Text Maybe
-   RabbitDate name dateIn
    deriving Show
 |]
 
