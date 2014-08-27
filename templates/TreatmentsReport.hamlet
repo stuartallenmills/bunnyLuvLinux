@@ -1,7 +1,7 @@
 
 <div #showtreatments>
 
- $forall (Entity treatId treat, Entity rabId rab) <- treatments
+ $forall ( Entity rabId rab, Entity treatId treat) <- treatments
   <div #trTreatBlock>
    <div .treatR>
      <div #trNameDate >

@@ -13,8 +13,8 @@
 /vetPost/#RabbitId      VetPostR POST
 /adopted/#RabbitId      AdoptedR GET POST
 /died/#RabbitId         DiedR GET POST
-/viewVetVisits          VVViewR GET
-/wellreport             WellViewR GET
+/viewVetVisits          VVViewR GET POST
+/wellreport             WellViewR GET POST
 /adoptedreport          AdoptedViewR GET
 /image/#RabbitId        ImagesR GET POST
 /alteredReport/#Text    AlteredR GET
@@ -30,6 +30,6 @@
 /bonded/#RabbitId       BondedR GET POST
 /treat/#RabbitId        TreatmentR GET POST
 /edittreat/#TreatmentBId    EditTreatmentR GET POST
-/treatrep               TreatmentReportR GET
+/treatrep               TreatmentReportR GET POST
 /daily                  DailyR GET POST
 /viewDaily              DailyViewR GET
