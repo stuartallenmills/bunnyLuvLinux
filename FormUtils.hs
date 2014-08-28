@@ -149,11 +149,12 @@ baseForm ti menu form = do
           #dateError {
            position:absolute;
            color:#ff0000;
-           background-color:#f8f8f8;
-           margin-left:30%;
+           background-color:#ffffff;
+           margin-left:40%;
            border:1px solid #7f7f7f;
-           box-shadow:1px 1px 2px #7f7f7f;
+           box-shadow:2px 2px 3px #7f7f7f;
            display:none;
+           padding:2px;
            padding-left:10px;
            padding-right:10px;
            margin-top:5px;

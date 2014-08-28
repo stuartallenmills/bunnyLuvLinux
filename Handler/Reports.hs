@@ -485,6 +485,7 @@ getBondedViewR = do
   let isAuth=(auth==Authorized)
   defaultLayout $ do
     setTitle "Friends and Family"
+    $(widgetFileNoReload def "nameC")
     [whamlet|
      <div #blHeaderD>
         ^{getNameWidget bnames formWidget enctype}
@@ -493,11 +494,13 @@ getBondedViewR = do
          ^{getAgeWidget ageWidget age_enctype}
         <div #atitleD>
           <b> Friends and Family
+    <div #ff style="float:left;">
      $forall NId rabName rid <- M.keys bmap
         <div #ffblock style="border-bottom:1px solid;">
-           <b> <a href=@{ViewR (rid)}> #{ rabName}</a> </b>
-           $forall rel <- getRel bmap rabName rid
-              <div #relblock style="border-top:1px dashed #7f7f7f;">
+          <div #ffname .nameC>
+           <a href=@{ViewR (rid)}> #{ rabName}</a> 
+          $forall rel <- getRel bmap rabName rid
+              <div #relblock>
                 #{rel}: #
                  $forall NId rn ri<- getRabs bmap rabName rel rid
                       <a href=@{ViewR ri} style="margin-left:5px;"> #{rn} </a>#
@@ -519,5 +522,12 @@ getBondedViewR = do
                      #ffblock a:hover {
                           color:#6f6f6f;
                       }
+                    
+                     #relblock {
+                       border-top:1px dotted #7f7f7f;
+                       display:inline-block;
+                       margin-left:10px;
+                       padding-left:10px;
+                       }
        |]
      
