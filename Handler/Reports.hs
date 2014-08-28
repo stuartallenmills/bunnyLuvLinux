@@ -5,11 +5,11 @@ module Handler.Reports where
 
 --this is a test 
 
-import qualified Data.ByteString.Lazy as L
+--import qualified Data.ByteString.Lazy as L
 import Conduit
 
-import Data.Conduit
-import Data.Conduit.Binary
+--import Data.Conduit
+--import Data.Conduit.Binary
 import Data.Default
 import Yesod hiding ((!=.), (==.), (=.), update, (>=.), (<=.))
 import Yesod.Default.Util
@@ -17,16 +17,66 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack, pack, append)
 import Database.Esqueleto
-import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
-import Database.Persist.Sql (insert)
-import Control.Monad.IO.Class (liftIO)
-import Text.Printf
+--import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
+--import Database.Persist.Sql (insert)
+--import Control.Monad.IO.Class (liftIO)
+--import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time.Calendar
 import AgeForm
 import Utils
 import FormUtils
+import qualified Data.Map as M
+
+--getBonded::Handler ([Rabbit, Bonded, Rabbit])
+getBonded::Handler [(Entity Rabbit, Entity Bonded, Entity Rabbit)]
+
+getBonded = runDB $
+   select $
+   from $ \( rab1 `LeftOuterJoin` bonded `InnerJoin` rab2) -> do
+   on (rab2 ^. RabbitId ==. bonded ^. BondedSecond) 
+   on (rab1 ^.RabbitId ==. bonded ^. BondedFirst)
+   groupBy (bonded ^. BondedRelation)
+   orderBy [desc (rab1 ^. RabbitName)]
+   return (rab1, bonded, rab2)
+
+getBonded2::Handler [(Entity Rabbit, Entity Bonded, Entity Rabbit)]
+getBonded2 = runDB $
+   select $
+   from $ \( rab1, bonded,  rab2) -> do
+   where_ ((rab2 ^. RabbitId ==. bonded ^. BondedSecond) &&. (rab1 ^. RabbitId ==. bonded ^.BondedFirst))
+   orderBy [asc (rab1 ^. RabbitName), asc (bonded ^. BondedRelation)]
+   return (rab1, bonded, rab2)
+
+data NId = NId {
+           rname::Text
+           ,rid::RabbitId
+            } deriving (Show, Eq, Ord)
+                       
+type BondedMap = M.Map NId (M.Map Text [NId])
+
+type BondedSet = (Entity Rabbit, Entity Bonded, Entity Rabbit)
+
+getRelM rel | rel=="Friend" = rel
+           | otherwise= "Family"
+
+getInsert rel name@(NId rn rid) | rel== "Friend" = name
+                   | otherwise= NId ( append rn (append " (" (append rel ") "))) rid
+                                
+add2map::BondedMap->BondedSet->BondedMap
+add2map map (Entity rabId1 rab1, Entity bondId (Bonded r1 r2 rel), Entity rabId2 rab2) = theMap where
+     name = NId (rabbitName rab1) rabId1
+     n2 = NId (rabbitName rab2) rabId2
+     relMap = M.lookup name map
+     newRel = case relMap of
+        Nothing->M.insert (getRelM rel) [getInsert rel n2] M.empty
+        Just amap->M.insertWith' (++) (getRelM rel) [getInsert rel n2] amap   
+     theMap =M.insert name  newRel map
+
+makeMap::[BondedSet]->BondedMap
+makeMap = foldl (\acc el-> add2map acc el) M.empty
+
 
 isProcedureAlter::VetVisit->Bool
 isProcedureAlter vvR = tval where
@@ -208,6 +258,8 @@ reportbase begin end bl link atitle result = do
          ^{mainMenu mode}
          ^{getAgeWidget ageWidget age_enctype}
         ^{displayFormWidget rangeWidget range_enctype link}
+        <div #dateError>
+              Invalid Date!
         <div #formResults>
          <div #atitleD> 
               <b> #{atitle} 
@@ -223,6 +275,22 @@ reportbase begin end bl link atitle result = do
                                 padding-top:5px;
                                 border-bottom:thin solid #404040;
                         }
+
+                       #dateError {
+                            position:absolute;
+                            background:#f8f8f8;
+                            color:#ff0000;
+                            border:1px solid #7f0000;
+                            box-shadow:1px 1px 3px #7f7f7f;
+                            margin-left:100px;
+                            padding:4px;
+                            padding-left:6px;
+                            padding-right:6px;
+                            display:none;
+                            transform:translateY(-105px);
+                            z-index:200;
+                          }
+                            
               |]
  
 twid drr = do
@@ -254,18 +322,27 @@ twid drr = do
                      }
             |]
 
-dailyView =  runDB $ select $
+dailyView begin end  =  runDB $ select $
                from $ \tdr-> do
-               where_ ( tdr ^. DailyReportPerson !=. val "")
+               where_ (( tdr ^. DailyReportDate >=. val begin) &&. (tdr ^. DailyReportDate <=. val end))
                return tdr
-               
+
+
+postDailyViewR::Handler Html
+postDailyViewR = do
+   (today, begin)<-getDefaultdays
+   ((res, _), _) <- runFormPost (displayForm today begin (Just True))
+   case res of
+     FormSuccess (Display start end bl)->do
+       drr <- dailyView start end
+       reportbase start end Nothing DailyViewR "Daily Report" (twid drr)
+     _ -> redirect DailyViewR
+
 getDailyViewR::Handler Html
 getDailyViewR = do
   (today, begin)<-getDefaultdays
-  drr<- dailyView
-  let ls = length drr
-  let ti = "Daily Report  " ++ (show ls)
-  reportbase begin today Nothing  DailyViewR (toHtml ti) (twid drr)
+  drr<- dailyView begin today
+  reportbase begin today Nothing  DailyViewR "Daily Report" (twid drr)
                    
   
 getDefaultdays = do
@@ -275,18 +352,28 @@ getDefaultdays = do
 
 
 
-doAdoptedReport = runDB $ 
+doAdoptedReport begin end = runDB $ 
   select $ from $ \(tr, tvv)-> do
-    where_ (tvv ^. AdoptedRabbit ==. tr ^. RabbitId)
+    where_ ((tvv ^. AdoptedRabbit ==. tr ^. RabbitId) &&. (tvv ^. AdoptedDate >=. val begin) &&. (tvv ^. AdoptedDate <=. val end))
     orderBy [desc ( tvv ^. AdoptedDate)]
     return (tr, tvv)
   
 adoptedReport adoptReport = $(widgetFileNoReload def "adoptedReport")
 
+postAdoptedViewR::Handler Html
+postAdoptedViewR = do
+   (today, begin)<-getDefaultdays
+   ((res, _), _) <- runFormPost (displayForm today begin (Just True))
+   case res of
+     FormSuccess (Display start end bl)->do
+       aReport <- doAdoptedReport start end
+       reportbase start end Nothing AdoptedViewR "Adopted Report" (adoptedReport aReport)
+     _ -> redirect AdoptedViewR
+
 getAdoptedViewR::Handler Html
 getAdoptedViewR   = do
     (today, begin)<-getDefaultdays
-    aReport <-doAdoptedReport
+    aReport <-doAdoptedReport begin today
     reportbase begin today Nothing AdoptedViewR "Adopted Report" (adoptedReport aReport)
 
            
@@ -377,3 +464,59 @@ postTreatmentReportR = do
        treatments <-doAReport TreatmentBRabbit TreatmentBStart start end bl
        reportbase start end bl TreatmentReportR "Treatments" (treatmentReport treatments)
      _ -> redirect TreatmentReportR
+getRel map nm rid = M.keys (map M.! (NId nm rid))
+
+getRabs map nm rel rid = (map M.! (NId nm rid)) M.! rel
+
+
+getBondedViewR::Handler Html
+getBondedViewR = do
+  bonded<- getBonded2
+  let bmap = makeMap bonded
+  (formWidget, enctype) <- generateFormPost getNameForm
+  (ageWidget, age_enctype) <-generateFormPost getAgeForm
+  bnames <-  getNamesDB
+  msg <-getMessage
+  maid <- maybeAuthId
+  auth <- isAdmin
+  impath <- liftIO getImagePath
+  let imgpath = unpack impath
+  let mode = (maid == Just "demo")
+  let isAuth=(auth==Authorized)
+  defaultLayout $ do
+    setTitle "Friends and Family"
+    [whamlet|
+     <div #blHeaderD>
+        ^{getNameWidget bnames formWidget enctype}
+         ^{headerLogWid imgpath maid}
+         ^{mainMenu mode}
+         ^{getAgeWidget ageWidget age_enctype}
+        <div #atitleD>
+          <b> Friends and Family
+     $forall NId rabName rid <- M.keys bmap
+        <div #ffblock style="border-bottom:1px solid;">
+           <b> <a href=@{ViewR (rid)}> #{ rabName}</a> </b>
+           $forall rel <- getRel bmap rabName rid
+              <div #relblock style="border-top:1px dashed #7f7f7f;">
+                #{rel}: #
+                 $forall NId rn ri<- getRabs bmap rabName rel rid
+                      <a href=@{ViewR ri} style="margin-left:5px;"> #{rn} </a>#
+              
+     |]
+    toWidget [lucius| #atitleD {
+                                width:100%;
+                                float:left;
+                                text-align:center;
+                                background:#e8e8e8;
+                                padding-bottom:5px;
+                                padding-top:5px;
+                                border-bottom:thin solid #404040;
+                        }
+
+                     #ffblock a {
+                          color:#000000;
+                      }
+                     #ffblock a:hover {
+                          color:#6f6f6f;
+                      }
+       |]
