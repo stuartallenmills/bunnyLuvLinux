@@ -37,6 +37,11 @@
   width:80%;
 }
 
+#formName #berror {
+  transform:translateY(-2px);
+  font-size:95%;
+}
+
 #login,
 #usr {
    float:right;
