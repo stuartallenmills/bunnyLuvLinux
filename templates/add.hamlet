@@ -3,6 +3,8 @@
                   <div .faddRw>
                    <div id="nameF">
                      Name  ^{fvInput nameView}
+                   <div #NameError>
+                      \<- Name already exists!
                    <div id="sexF", style="float:right;">  
                       Sex : ^{fvInput sexView}
                   <div .faddRw>

@@ -520,3 +520,4 @@ getBondedViewR = do
                           color:#6f6f6f;
                       }
        |]
+     

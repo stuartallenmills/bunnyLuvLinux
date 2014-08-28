@@ -22,14 +22,26 @@
                          });
 
                    $(function () {
+                     $( "#hident2" ).keydown ( function () {
+                        $( "#NameError" ).hide();
+                        });
+                       });
+
+                   $(function () {
                        $( "#hident2" ).change (function() {
                            var currval = $( "#hident2" ).val();
                            var onfile = #{rawJS (gostring names)};
                            var capval = currval.charAt(0).toUpperCase()+ currval.slice(1);
-                           var amember = $.inArray( capval, onfile );
+                            var amember = $.inArray( capval, onfile );
                            if (amember >= 0) {
-                               alert("Name already on file");
-                            }
+                              $( "#NameError" ).text( "<- " + capval + " already exists!" );
+                              $( "#NameError" ).show();
+                              $( "#hident2" ).val("");
+                              $( "#hident2" ).focus();
+                            } else {
+                                 $( "#hident2" ).val(capval);
+                              }
+ 
                           });
                          });
                    

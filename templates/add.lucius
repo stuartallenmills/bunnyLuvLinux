@@ -5,6 +5,12 @@
                        display:inline;
                      }
 
+                   #NameError {
+                       color:#ff0000;
+                       font-size:95%;
+                       display:none;
+                   }
+
                    #fAdd div {
                        float:left;
                        margin-top:3px;
@@ -23,9 +29,6 @@
                      #aTitle {
                          margin:0;
                       }
-                     #nameF {
-                        width:50%;
-                     }
                      #sexF {
                         width:20%;
                      }
