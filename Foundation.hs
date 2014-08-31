@@ -85,6 +85,39 @@ HomeCheck
    hcResults Text Maybe
    deriving Show
 
+AdoptRequest
+   date Day
+   person Person
+   ownRab Bool
+   ownRabDesc Textarea Maybe
+   companion Bool Maybe
+   ownDiet Textarea Maybe
+   interest Textarea
+   howlong Textarea
+   research Textarea
+   otherShelters Textarea
+   allergies Textarea
+   caregiver Textarea
+   ownrent Textarea
+   bunnyproofed Textarea
+   enclosure Textarea
+   exercise Textarea
+   vacation Textarea
+   vet Text Maybe
+   pets Textarea
+   pettime Textarea Maybe
+   petkept Textarea Maybe
+   vetcare Textarea
+   nopetapt Textarea
+   newallergic Textarea
+   seperate Textarea
+   lifechange Textarea
+   homevisit Bool
+   howBL Textarea
+   deriving Show
+   
+   
+   
 
 Person
     firstName Text

@@ -31,6 +31,7 @@
          <li #newWell><span><a href='#'>New Wellness</span></a></li>
          <li #newTreat><a href='#'><span>New Treatment</span></a></li>
          <li #newVetVisit><a href='#'><span>New Vet Vist</span></a></li>
+         <li #adoptForm><a = href=@{AdoptionFormR}>Adoption Form </a></li>
          <li class='last'> <a href=@{DailyR}><span>New Daily Report</span></a></li>
    <li class='has-sub last' id="blAdmin"><a href='#'><span>Admin</span></a>
       <ul>

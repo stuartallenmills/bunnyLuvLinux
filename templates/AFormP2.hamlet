@@ -1,0 +1,29 @@
+<#aFormP2>
+  <div .afrow>
+
+   Have you contacted other rabbit rescue groups or shelters?  If so, which ones?
+   ^{fvInput researchView}
+
+  <div .afrow>
+    Does any member of your family have any allergies to animals or hay?
+   ^{fvInput allergyView}
+
+  <div .afrow>
+    Which member of your household will be the primary caregiver for the rabbits?
+    ^{fvInput careView}
+
+  <div .afrow>
+    Do you own your own house or rent an apartment?  How long? 
+    ^{fvInput ownView}
+
+ <div .afrow>
+   Is your home bunny-proofed?  (Electric cords are covered, there are no chemicals on the floors, toxic plants have been removed from the rabbit’s living and play areas, etc.) 
+   ^{fvInput proofView}
+
+
+
+  <input type=submit value="submit">
+
+  <div .afrow>
+   <div  .backButton> <-back  
+ 

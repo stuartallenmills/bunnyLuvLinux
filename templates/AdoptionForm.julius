@@ -1,0 +1,38 @@
+ var pages=["#adformIntro", "#thePerson", "#theDataadFormP1", "#aFormP2"]
+ var currentpage = 0
+
+$(function () { 
+      $( ".continueButton" ).click( function() {
+       $( pages[currentpage] ).hide();
+        currentpage=currentpage+1;
+       $( pages[currentpage] ).show();
+      });
+    });
+
+$(function () { 
+      $( ".backButton" ).click( function() {
+       if (validateRequiredFields() ) {
+       $( pages[currentpage] ).hide();
+        currentpage=currentpage-1;
+       $( pages[currentpage] ).show();
+        }
+       else {
+        alert("Please fill in required fields");
+       }
+      });
+    });
+
+function validateRequiredFields()
+{
+     var val=true;
+    $( "input,textarea" ).filter( "[required]:visible" ).each( function( i, requiredField){
+
+        if ( $(requiredField).val()=="" )
+        {
+            $(requiredField).css( "border-color", "red" );
+             val= false;       
+           }
+  
+    });
+ return val;
+}

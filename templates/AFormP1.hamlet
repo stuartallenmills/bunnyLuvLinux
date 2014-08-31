@@ -1,0 +1,22 @@
+
+<#theDataadFormP1>
+
+  <div .afrow>
+   <div #adDate>
+
+    Date: ^{fvInput dateView}
+  <div .afrow>   Do you have a rabbit now? ^{fvInput ownRabView}
+  <div .afrow> How many? What are their names and ages? Are they spayed/neutered? Do they have any medical conditions? ^{fvInput ownRabDescView}
+  <div .afrow> Is this bunny intended to be a companion for another family rabbit?  ^{fvInput companionView}
+  <div .afrow>
+    Please describe your rabbit’s diet. ^{fvInput dietView}
+  <div .afrow>
+    Why are you interested in adopting a rabbit or rabbits? ^{fvInput reasonView}
+  <div .afrow>
+    Have you done any research on what it takes to care for a rabbit?   If yes, where? ^{fvInput researchView}
+
+   
+  
+  <div .afrow>
+   <div  .backButton> <-back  
+   <div .continueButton>continue->

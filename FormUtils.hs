@@ -57,6 +57,27 @@ vets = [("Dr. Misetich", "Dr. Misetich"), ("Dr. Petritz", "Dr. Petritz"), ("Dr. 
 procedures::[(Text,Text)]
 procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthanized", "Euthanized"), ("Other", "Other")]
 
+personForm:: MForm Handler (FormResult Person, Widget)
+personForm   = do
+    (personFirstNameRes, personFirstNameView)<-mreq textField "nope" Nothing
+    (personLastNameRes, personLastNameView)<-mreq textField "nope" Nothing
+    (personPhoneRes, personPhoneView)<-mreq textField "nope" Nothing
+    (personMobileRes, personMobileView)<-mopt textField "noop" Nothing
+    (personStreetRes, personStreetView)<-mreq textField "nope" Nothing
+    (personAptRes, personAptView)<-mopt textField "noop" Nothing
+    (personCityRes, personCityView)<-mreq textField "nope" Nothing
+    (personStateRes,personStateView)<-mreq textField "nope" Nothing
+    (personZipRes, personZipView)<-mreq textField "nope" Nothing
+    (personEmailRes, personEmailView)<-mopt textField "nope" Nothing
+    let personRes = Person <$> personFirstNameRes <*>
+                        personLastNameRes <*>  personPhoneRes <*>
+                         personMobileRes <*> personStreetRes <*> personAptRes <*>
+                         personCityRes <*> personStateRes <*> personZipRes <*>
+                         personEmailRes 
+    let pwid = $(widgetFileNoReload def "Person")
+    return (personRes, pwid)
+
+
 baseForm ti menu form = do
   maid <-maybeAuthId
   impath <- liftIO getImagePath

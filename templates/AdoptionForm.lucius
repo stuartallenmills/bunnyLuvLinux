@@ -1,0 +1,63 @@
+#adoptionFormForm input {
+    display:inline;
+}
+
+#adoptionFormForm textarea {
+    margin:5px;
+    width:95%;
+}
+
+
+#adoptionFormForm div {
+   float:left;
+}
+
+#thePerson, #theDataadFormP1, #aFormP2 {
+  display:none;
+}
+.afrow {
+  width:100%;
+  float:left;
+  margin:5px;
+}
+
+                 .subTitle {
+                    width:100%
+                    text-align:left;
+                    margin-top:5px;
+                    margin-bottom:8px;
+                   } 
+#adoptionFormForm .continueButton {
+         float:right;
+ }
+                  .continueButton, .backButton {
+                     background: none repeat scroll 0 0 #efefef;
+                     border: 1pt solid #999;
+                     border-radius: 5pt;
+                     color: #1f1f1f;
+                     float: right;
+                     font-size: 80%;
+                     height: 19px;
+                     padding: 1px;
+                     width: 80px;
+                     text-align:center;
+                     cursor:pointer;
+                     cursor:hand;
+                     }
+                                 /* Change color on mouseover */
+                     .continueButton:hover, .backButton:hover {
+                                  background:#fff;
+                                  color:#09c;
+                     }
+
+                     .continueButton a {
+                            text-decoration:none;
+                            display:block;
+                            color: #fff;
+                            width:100%;
+                            height:100%;
+                     }
+
+                     .continueButton a:hover {
+                             color:#09c;
+                      }

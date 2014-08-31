@@ -1,0 +1,25 @@
+                     #fperson input {
+                       display:inline;
+                      }
+                     #fperson div {
+                       float:left;
+                       margin:5px;
+                     }
+
+                     #fperson #add, #fperson #phones, #fperson #statezip {
+                                margin-left:0;
+                     }
+                     #faDate, #faCity, #statezip, #phones, #anotes, #email {
+                        width:90%;
+                     }
+                     #faState, #faHPhone {
+                        width:50%;
+                     }
+                     #fperson { width:100%;}
+                     ##{fvId personFirstNameView} {width:20em}
+                     ##{fvId personLastNameView} {width:20em}
+                     ##{fvId personStreetView} {width:25em}
+                     ##{fvId personCityView} {width:25em}
+                     ##{fvId personEmailView} {width:25em;}
+                     ##{fvId personPhoneView} {width:8em;}
+                     ##{fvId personMobileView} {width:8em;}

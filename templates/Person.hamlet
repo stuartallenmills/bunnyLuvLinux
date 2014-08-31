@@ -1,0 +1,25 @@
+                   <div #fperson>
+                     <div #faPersonFirst>
+                      First Name : ^{fvInput personFirstNameView} 
+                     <div #faPersonLast>
+                      Last Name :   ^{fvInput personLastNameView}
+                     <div #add>
+                      <div #faStreet>
+                       Street: ^{fvInput personStreetView}
+                      <div #apt>
+                         Apt: ^{fvInput personAptView}
+                     <div #faCity>
+                      City : ^{fvInput personCityView}
+                     <div #statezip>
+                      <div #faState>
+                        State : ^{fvInput personStateView}
+                      <div #faZip>
+                        Zip : ^{fvInput personZipView}
+                     <div #phones>
+                      <div #faHPhone>
+                       Home Phone:  ^{fvInput personPhoneView}
+                      <div #faMPhone>
+                       Mobile : ^{fvInput personMobileView}
+                     <div #email>
+                       Email: ^{fvInput personEmailView}
+ 

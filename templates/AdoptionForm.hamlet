@@ -1,0 +1,33 @@
+#{extra}
+<div #adformIntro>
+  <.afrow style="text-align:center;">
+   <b> Bunnyluv Rabbit Resource Center Adoption Application 
+  <br>
+  <div> The following information is requested so that we can assist you in the selection of a house rabbit companion.  This application and consultation with a BunnyLuv adoption counselor is designed to help us determine if the adoption is in the rabbits best interest and to assist you in finding the rabbits most compatible with your lifestyle.  Rabbits are highly social, they are happiest and thrive when living with other rabbits as an integrated part of their families lives and surroundings.  
+   <br> Therefore rabbits are housed inside only and require 5 to 8 hours of playtime daily. 
+   <br> In order to be considered as an adopter you must:
+  <ul>
+     <li>Be able and willing to provide an indoor, loving, safe and peaceful environment for your rabbits.
+     <li>Be financially stable and willing to provide all necessary medical care.
+     <li>Be committed to the health and welfare of the rabbit for his/her lifetime (an average of 8-10 years) regardless of lifestyle changes such as divorce, moving, etc.
+     <li>Be aware that we DO NOT adopt rabbits to children, all members of the household should visit the prospective rabbit and apply for adoption.
+     <li>Be aware that we DO NOT place rabbits in a home with an un-neutered or un-spayed rabbit.
+     <li>Be willing to agree to a home visit and consultation by one of our adoption counselors prior to the adoption.
+     <li>Agree to a $95 adoption fee (per rabbit) which is used to pay for our rabbits' spay, neuter and medical care.
+     <li>Be willing to agree to a follow-up home visit within 1-2 months of the adoption date.
+  <br> Our primary goal at BunnyLuv Rabbit Resource Center is education - the purpose of the initial visit is to help facilitate a good match between a bunny and your family's needs and comfort levels. 
+  <br> Thank you for wanting to give a rabbit a safe and loving forever home.  
+ <div .afrow>
+  <div #intro .continueButton>continue->
+
+<#thePerson>
+ ^{perWidget}
+  <div .afrow>
+   <div  .backButton> <-back  
+   <div .continueButton>continue->
+
+
+<#P1>
+ ^{p1Widget}
+
+  

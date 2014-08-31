@@ -34,3 +34,4 @@
 /daily                  DailyR GET POST
 /viewDaily              DailyViewR GET POST
 /viewBonded             BondedViewR GET
+/adoptform              AdoptionFormR GET POST
