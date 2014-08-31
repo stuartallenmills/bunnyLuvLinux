@@ -764,3 +764,76 @@ dependencies: transformers-0.3.0.0 text-1.1.1.3 resourcet-1.1.2.2
 install-outcome: InstallOk
 docs-outcome: NotTried
 tests-outcome: NotTried
+
+package: network-uri-2.6.0.0
+os: windows
+arch: x86_64
+compiler: ghc-7.8.3
+client: cabal-install-1.20.0.3
+dependencies: parsec-3.1.5 base-4.7.0.1
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: yesod-1.2.6.1
+os: windows
+arch: x86_64
+compiler: ghc-7.8.3
+client: cabal-install-1.20.0.3
+dependencies: yesod-persistent-1.2.3 yesod-form-1.3.15.2
+              yesod-core-1.2.17 yesod-auth-1.3.4.3 yaml-0.8.8.4 warp-3.0.0.4
+              wai-extra-3.0.1 wai-3.0.0.2 unordered-containers-0.2.5.0
+              transformers-0.3.0.0 text-1.1.1.3 template-haskell-2.9.0.0
+              streaming-commons-0.1.3.1 shakespeare-js-1.3.0
+              shakespeare-css-1.1.0 shakespeare-2.0.1 safe-0.3.7
+              network-conduit-1.1.0 monad-logger-0.3.7 monad-control-0.3.3.0
+              hamlet-1.2.0 fast-logger-2.1.5 directory-1.2.1.0 data-default-0.5.3
+              conduit-extra-1.1.1 bytestring-0.10.4.0 blaze-markup-0.6.1.0
+              blaze-html-0.7.0.2 base-4.7.0.1 aeson-0.7.0.6
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: yesod-auth-1.3.4.3
+os: windows
+arch: x86_64
+compiler: ghc-7.8.3
+client: cabal-install-1.20.0.3
+flags: network-uri
+dependencies: yesod-persistent-1.2.3 yesod-form-1.3.15.2
+              yesod-core-1.2.17 wai-3.0.0.2 unordered-containers-0.2.5.0
+              transformers-0.3.0.0 time-1.4.2 text-1.1.1.3
+              template-haskell-2.9.0.0 shakespeare-js-1.3.0 shakespeare-css-1.1.0
+              shakespeare-2.0.1 safe-0.3.7 resourcet-1.1.2.2 random-1.0.1.1
+              persistent-template-1.3.1.4 persistent-1.3.1.1 network-uri-2.6.0.0
+              mime-mail-0.4.5.2 lifted-base-0.2.3.0 http-types-0.8.5
+              http-conduit-2.1.2.3 http-client-0.3.4 hamlet-1.2.0
+              file-embed-0.0.7 email-validate-2.0.1 data-default-0.5.3
+              cryptohash-0.11.6 containers-0.5.5.1 conduit-extra-1.1.1
+              conduit-1.1.6 bytestring-0.10.4.0 byteable-0.1.1
+              blaze-markup-0.6.1.0 blaze-html-0.7.0.2 blaze-builder-0.3.3.2
+              binary-0.7.1.0 base64-bytestring-1.0.0.1 base16-bytestring-0.1.1.6
+              base-4.7.0.1 authenticate-1.3.2.8 attoparsec-conduit-1.1.0
+              aeson-0.7.0.6
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: yesod-form-1.3.15.2
+os: windows
+arch: x86_64
+compiler: ghc-7.8.3
+client: cabal-install-1.20.0.3
+flags: network-uri
+dependencies: yesod-persistent-1.2.3 yesod-core-1.2.17
+              xss-sanitize-0.3.5.2 wai-3.0.0.2 transformers-0.3.0.0 time-1.4.2
+              text-1.1.1.3 template-haskell-2.9.0.0 shakespeare-js-1.3.0
+              shakespeare-css-1.1.0 shakespeare-2.0.1 resourcet-1.1.2.2
+              persistent-1.3.1.1 network-uri-2.6.0.0 hamlet-1.2.0
+              email-validate-2.0.1 data-default-0.5.3 containers-0.5.5.1
+              bytestring-0.10.4.0 byteable-0.1.1 blaze-markup-0.6.1.0
+              blaze-html-0.7.0.2 blaze-builder-0.3.3.2 base-4.7.0.1
+              attoparsec-0.12.1.0 aeson-0.7.0.6
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
