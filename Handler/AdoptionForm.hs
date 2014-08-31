@@ -32,7 +32,7 @@ data AdoptTest = AdoptTest {
                       addate::Text
                       ,adownRab::Bool
                       ,addesc::Maybe Textarea
-                      ,adcompan::Maybe Bool
+                      ,adcompan:: Bool
                       ,adDiet::Maybe Textarea
                       ,adReason::Textarea
                       ,adResearch::Textarea
@@ -57,11 +57,11 @@ adoptionForm= do
   (dateRes, dateView)<- mreq textField "nope" Nothing
   (ownRabRes, ownRabView)<-mreq boolField "nope" Nothing
   (ownRabDescRes, ownRabDescView)<-mopt textareaField "nope" Nothing
-  (companionRes, companionView)<-mopt checkBoxField "nop" Nothing
+  (companionRes, companionView)<-mreq boolField "nop" Nothing
   (dietRes, dietView)<-mopt textareaField "nope" Nothing
   (reasonRes, reasonView)<-mreq textareaField "nope" Nothing
   (researchRes, researchView)<-mreq textareaField "nope" Nothing
-  (rescueRes, rescueView)<- mreq textareaField "nope" Nothing
+  (rescueRes, rescueView)<-mreq textareaField "nope" Nothing
   (allergyRes, allergyView)<-mreq boolField "nope" Nothing
   (careRes, careView)<-mreq textField "nope" Nothing
   (ownRes, ownView)<-mreq textareaField "nope" Nothing
@@ -108,9 +108,8 @@ postAdoptionFormR = do
                        defaultLayout  [whamlet|
                                      <div> Success
                                                 #{personFirstName person}
-                                     $maybe des <- addesc atest
-                                        <div>
-                                             #{des}
+                                         <div>
+                                             #{adReason atest}
 
  
                                               |]

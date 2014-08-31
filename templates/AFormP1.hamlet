@@ -2,7 +2,7 @@
 <#theDataadFormP1>
 
   <div .afrow>
-   <div #adDate>
+   <div #adDate .blDate>
 
     Date: ^{fvInput dateView}
   <div .afrow>   Do you have a rabbit now? ^{fvInput ownRabView}

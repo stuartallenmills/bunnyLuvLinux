@@ -2,7 +2,7 @@
   <div .afrow>
 
    Have you contacted other rabbit rescue groups or shelters?  If so, which ones?
-   ^{fvInput researchView}
+   ^{fvInput rescueView}
 
   <div .afrow>
     Does any member of your family have any allergies to animals or hay?
@@ -22,8 +22,7 @@
 
 
 
-  <input type=submit value="submit">
 
   <div .afrow>
    <div  .backButton> <-back  
- 
+   <input type=submit value="submit">
