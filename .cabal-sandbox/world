@@ -1,0 +1,5 @@
+persistent-sqlite -any
+conduit-combinators -any
+esqueleto -any
+yesod -any
+yesod-static -any

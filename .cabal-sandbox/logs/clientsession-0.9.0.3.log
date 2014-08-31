@@ -1,0 +1,23 @@
+Registering clientsession-0.9.0.3...
+4\home\smills\Hask\bunnyluv\.cabal-sandbox\x86_64-windows-ghc-7.8.3\clientsession-0.9.0.3
+\ClientSession.hs, dist\dist-sandbox-abbcc9d7\build\Web\ClientSession.o )
+
+src\Web\ClientSession.hs:77:1: Warning:
+    The import of `Data.Tagged' is redundant
+      except perhaps to import instances from `Data.Tagged'
+    To import instances alone, use: import Data.Tagged()
+
+src\Web\ClientSession.hs:81:1: Warning:
+    The import of `Crypto.Random' is redundant
+      except perhaps to import instances from `Crypto.Random'
+    To import instances alone, use: import Crypto.Random()
+
+src\Web\ClientSession.hs:82:1: Warning:
+    The import of `Crypto.Types' is redundant
+      except perhaps to import instances from `Crypto.Types'
+    To import instances alone, use: import Crypto.Types()
+
+src\Web\ClientSession.hs:214:37: Warning:
+    In the use of `A.initKey' (imported from Crypto.Cipher.AES):
+    Deprecated: "use initAES"
+In-place registering clientsession-0.9.0.3...

@@ -1,0 +1,17 @@
+Registering mono-traversable-0.6.1...
+\home\smills\Hask\bunnyluv\.cabal-sandbox\x86_64-windows-ghc-7.8.3\mono-traversable-0.6.1
+a\ByteVector.hs, dist\dist-sandbox-abbcc9d7\build\Data\ByteVector.o )
+[2 of 7] Compiling Data.MonoTraversable ( src\Data\MonoTraversable.hs, dist\dist-sandbox-abbcc9d7\build\Data\MonoTraversable.o )
+
+src\Data\MonoTraversable.hs:39:1: Warning:
+    The import of `$, replicate' from module `Prelude' is redundant
+makeCorePair: arity missing $cofoldMap{v aaPN} [lid]
+[3 of 7] Compiling Data.GrowingAppend ( src\Data\GrowingAppend.hs, dist\dist-sandbox-abbcc9d7\build\Data\GrowingAppend.o )
+[4 of 7] Compiling Data.Sequences   ( src\Data\Sequences.hs, dist\dist-sandbox-abbcc9d7\build\Data\Sequences.o )
+
+src\Data\Sequences.hs:14:1: Warning:
+    The import of `not' from module `Prelude' is redundant
+[5 of 7] Compiling Data.MinLen      ( src\Data\MinLen.hs, dist\dist-sandbox-abbcc9d7\build\Data\MinLen.o )
+[6 of 7] Compiling Data.NonNull     ( src\Data\NonNull.hs, dist\dist-sandbox-abbcc9d7\build\Data\NonNull.o )
+[7 of 7] Compiling Data.Containers  ( src\Data\Containers.hs, dist\dist-sandbox-abbcc9d7\build\Data\Containers.o )
+In-place registering mono-traversable-0.6.1...
