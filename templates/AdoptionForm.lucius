@@ -1,5 +1,6 @@
 #adoptionFormForm input {
     display:inline;
+    margin-left:5px;
 }
 
 #adoptionFormForm textarea {
