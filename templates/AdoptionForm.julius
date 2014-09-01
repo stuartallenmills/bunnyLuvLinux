@@ -1,6 +1,53 @@
  var pages=["#adformIntro", "#thePerson", "#theDataadFormP1", "#aFormP2"]
  var currentpage = 0
 
+function checkEmail (inval) {
+   var aval = inval;
+   var t = new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/);
+   var newval = aval.match(t);
+   return newval;
+}
+
+function domail( obj ) {
+  var theobj = obj;
+  var aval = $( theobj).val();
+  if (aval.length==0) {
+   $( theobj ).css("border-color", "#1f2f2f");
+   return true;
+  }
+  var newe=checkEmail(aval);
+  if (newe==null) {
+    alert("Error in email address");
+    $( theobj ).val("");
+    $( theobj ).css("border-color", "red");
+    return false;
+   } else {
+    $( theobj ).css("border-color", "#1f2f2f");
+     return true;
+   }
+ }
+
+function validateEmail () {
+  var resval = true;
+  $( ".email :input:visible" ).each( function (i, email) {
+      if (!( domail ( $( email) ))) {
+          resval=false;
+       }
+  });
+  return resval;
+ };
+    
+$(function () {
+   $( ".email :input" ).blur( function (e) {
+       var res = domail( $(this));
+       if (!res) {   
+           e.preventDefault();
+           $( this ).focus();
+ }       
+
+   });
+ });
+
 function validatePhone (inval) {
        var aval = inval;
 
@@ -59,7 +106,7 @@ $(function () {
 
 $(function () { 
       $( ".continueButton" ).click( function(e) {
-     if (validateRequiredFields() && validateTextArea() && validateRadio() && validatePhones()) {
+     if (validateRequiredFields() && validateTextArea() && validateRadio() && validatePhones() && validateEmail()) {
        $( pages[currentpage] ).hide();
         currentpage=currentpage+1;
        $( pages[currentpage] ).show();
@@ -73,7 +120,7 @@ $(function () {
 
 $(function () { 
       $( ".backButton" ).click( function() {
-        if (validateRequiredFields() && validateTextArea() && validateRadio()  && validatePhones() ) {
+        if (validateRequiredFields() && validateTextArea() && validateRadio()  && validatePhones() && validateEmail()) {
        $( pages[currentpage] ).hide();
         currentpage=currentpage-1;
        $( pages[currentpage] ).show();

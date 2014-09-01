@@ -20,6 +20,7 @@
                        Home Phone:  ^{fvInput personPhoneView}
                       <div #faMPhone .phone>
                        Mobile : ^{fvInput personMobileView}
-                     <div #email .email>
-                       Email: ^{fvInput personEmailView}
+                     <div #email>
+                       Email: 
+                        <span .email>^{fvInput personEmailView}
  
