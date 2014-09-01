@@ -1,21 +1,57 @@
  var pages=["#adformIntro", "#thePerson", "#theDataadFormP1", "#aFormP2"]
  var currentpage = 0
 
+function validatePhone (inval) {
+       var aval = inval;
+
+       if (aval.length==0) {
+         return "";
+       }
+       var pat2 =/[0-9]/g;
+       var temp = aval.match(pat2);
+       if (temp == null)
+         return "";
+       if (temp.length == 10) {
+        var num = "("+temp[0]+temp[1]+temp[2]+")"+" "+temp[3]+temp[4]+temp[5]+"-"+temp[6]+temp[7]+temp[8]+temp[9];
+        return num 
+       } else {
+          return "";
+       }
+}
+      
+function validatePhones () {
+    var retval =true;
+   $( ".phone :input:visible" ).each( function (i, phone) {
+      var aval = $( phone ).val();  
+      var newval = validatePhone(aval);
+      $( phone ).val(newval);
+     if ((aval.length >0) && (newval.length==0)) {
+          alert("Invalid Phone Number");
+          $( phone ).css("border-color", "red");
+           retval =false;
+         } else {
+          $(phone).css("border-color", "#1f2f2f");
+       }
+  }); 
+  return retval;
+ };
+
 $(function () {
       $( ".phone :input" ).blur( function (e) {
        var pat = /[0-9-()+]{3,20}/; 
-       var pat2 =/[0-9]/g
        var aval = $(this).val();
-       var temp = aval.match(pat2);
-       if (temp.length == 10) {
-        var num = "("+temp[0]+temp[1]+temp[2]+")"+" "+temp[3]+temp[4]+temp[5]+"-"+temp[6]+temp[7]+temp[8]+temp[9];
-        $( this ).val(num);
+       if (aval.length==0)
+          return;
+       var newNum = validatePhone(aval);
+       if (newNum.length>10) {
+        $( this ).val(newNum);
         $( this ).css("border-color", "#1f2f2f");
        }
        else {
         e.preventDefault();
         alert("Invalid Phone Number");
          $( this).css("border-color", "red");
+         $(this).val("");
         $( this ).focus();
        }
   });
@@ -23,7 +59,7 @@ $(function () {
 
 $(function () { 
       $( ".continueButton" ).click( function(e) {
-     if (validateRequiredFields() && validateTextArea() && validateRadio()) {
+     if (validateRequiredFields() && validateTextArea() && validateRadio() && validatePhones()) {
        $( pages[currentpage] ).hide();
         currentpage=currentpage+1;
        $( pages[currentpage] ).show();
@@ -37,7 +73,7 @@ $(function () {
 
 $(function () { 
       $( ".backButton" ).click( function() {
-        if (validateRequiredFields() && validateTextArea() && validateRadio() ) {
+        if (validateRequiredFields() && validateTextArea() && validateRadio()  && validatePhones() ) {
        $( pages[currentpage] ).hide();
         currentpage=currentpage-1;
        $( pages[currentpage] ).show();
