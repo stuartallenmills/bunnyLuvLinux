@@ -5,9 +5,11 @@
    <div #adDate .blDate>
 
     Date: ^{fvInput dateView}
-  <div .afrow .reqRadio>   Do you have a rabbit now? ^{fvInput ownRabView}
+  <div .afrow >   Do you have a rabbit now? 
+    <span .reqRadio>^{fvInput ownRabView}
   <div .afrow> How many? What are their names and ages? Are they spayed/neutered? Do they have any medical conditions? ^{fvInput ownRabDescView}
-  <div .afrow .reqRadio> Is this bunny intended to be a companion for another family rabbit?  ^{fvInput companionView}
+  <div .afrow > Is this bunny intended to be a companion for another family rabbit?  
+    <span .reqRadio>^{fvInput companionView}
   <div .afrow>
     Please describe your rabbit’s diet. ^{fvInput dietView}
   <div .afrow .required>

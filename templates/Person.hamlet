@@ -16,10 +16,10 @@
                       <div #faZip>
                         Zip : ^{fvInput personZipView}
                      <div #phones>
-                      <div #faHPhone>
+                      <div #faHPhone .phone>
                        Home Phone:  ^{fvInput personPhoneView}
-                      <div #faMPhone>
+                      <div #faMPhone .phone>
                        Mobile : ^{fvInput personMobileView}
-                     <div #email>
+                     <div #email .email>
                        Email: ^{fvInput personEmailView}
  

@@ -1,6 +1,26 @@
  var pages=["#adformIntro", "#thePerson", "#theDataadFormP1", "#aFormP2"]
  var currentpage = 0
 
+$(function () {
+      $( ".phone :input" ).blur( function (e) {
+       var pat = /[0-9-()+]{3,20}/; 
+       var pat2 =/[0-9]/g
+       var aval = $(this).val();
+       var temp = aval.match(pat2);
+       if (temp.length == 10) {
+        var num = "("+temp[0]+temp[1]+temp[2]+")"+" "+temp[3]+temp[4]+temp[5]+"-"+temp[6]+temp[7]+temp[8]+temp[9];
+        $( this ).val(num);
+        $( this ).css("border-color", "#1f2f2f");
+       }
+       else {
+        e.preventDefault();
+        alert("Invalid Phone Number");
+         $( this).css("border-color", "red");
+        $( this ).focus();
+       }
+  });
+ });
+
 $(function () { 
       $( ".continueButton" ).click( function(e) {
      if (validateRequiredFields() && validateTextArea() && validateRadio()) {
@@ -74,8 +94,12 @@ function validateRadio()
           var aval = $( ".reqRadio :input:radio[name="+name+"]:checked" ).val();
           if (typeof aval === "undefined") {
            val=false;
-           $( radio ).parent().css( "background-color", "#FFE8E8" );
+           $( radio ).parent().css( "border", "1px solid red");
+          } else {
+           $( radio ).parent().css( "border", "none");
           }
+         
+          
       });
 
  return val;

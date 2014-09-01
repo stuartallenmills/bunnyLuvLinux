@@ -4,9 +4,9 @@
    Have you contacted other rabbit rescue groups or shelters?  If so, which ones?
    ^{fvInput rescueView}
 
-  <div .afrow .reqRadio>
+  <div .afrow>
     Does any member of your family have any allergies to animals or hay?
-   ^{fvInput allergyView}
+    <span .reqRadio>^{fvInput allergyView}
 
   <div .afrow>
     Which member of your household will be the primary caregiver for the rabbits?
