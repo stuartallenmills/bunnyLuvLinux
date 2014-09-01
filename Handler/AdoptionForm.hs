@@ -41,7 +41,11 @@ data AdoptTest = AdoptTest {
                       ,adCareGiver::Text
                       ,adOwn::Textarea
                       ,adProof::Textarea
-                       
+                      ,adEnclosure::Textarea
+                      ,adExercise::Textarea
+                      ,adVacation::Textarea
+                      ,adVet::Textarea
+                      ,adPets::Textarea
                        } deriving Show
 
 aMaster::Html->MForm Handler (FormResult (Person, AdoptTest), Widget)
@@ -66,22 +70,34 @@ adoptionForm= do
   (careRes, careView)<-mreq textField "nope" Nothing
   (ownRes, ownView)<-mreq textareaField "nope" Nothing
   (proofRes, proofView)<-mreq textareaField "nope" Nothing
+  (enclosureRes, enclosureView)<-mreq textareaField "nope" Nothing
+  (exerciseRes, exerciseView)<-mreq textareaField "nope" Nothing
+  (vacationRes, vacationView)<-mreq textareaField "nope" Nothing
+  (vetRes, vetView)<-mreq textareaField "nope" Nothing
+  (petsRes, petsView)<-mreq textareaField "nope" Nothing
+  
   
   
   let wid1 = $(widgetFileNoReload def "AFormP1")
   let wid2 = $(widgetFileNoReload def "AFormP2");
+  let wid3 = $(widgetFileNoReload def "AFormP3");
   let wid = do
          wid1
          wid2
+         wid3
          toWidget [lucius|
                    ##{fvId careView} {
                        width:25em;
                        margin:3px;
                       }
+                    ##{fvId petsView} {
+                        height:12em;
+                      }
          |]
   let res = AdoptTest <$> dateRes <*> ownRabRes <*> ownRabDescRes <*>companionRes <*>
                         dietRes <*> reasonRes <*> researchRes <*> rescueRes <*>
-                        allergyRes <*> careRes <*> ownRes <*> proofRes
+                        allergyRes <*> careRes <*> ownRes <*> proofRes <*> enclosureRes <*>
+                        exerciseRes <*> vacationRes <*> vetRes <*> petsRes
   return (res, wid)
 
 getAdoptionFormR::Handler Html

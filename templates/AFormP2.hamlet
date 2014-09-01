@@ -20,9 +20,12 @@
    Is your home bunny-proofed?  (Electric cords are covered, there are no chemicals on the floors, toxic plants have been removed from the rabbit’s living and play areas, etc.) 
    ^{fvInput proofView}
 
+ <div .afrow .required>
+    What type of enclosure are you planning to use for the rabbits and where will they live? 
+     ^{fvInput enclosureView}
 
 
 
   <div .afrow>
    <div  .backButton> <-back  
-   <input #adoptSubmit .continueButton type=submit value="submit">
+   <div  .continueButton>continue->

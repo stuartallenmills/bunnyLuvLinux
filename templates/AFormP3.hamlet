@@ -1,0 +1,25 @@
+<#aFormP3>
+  <div .afrow .required>
+     Describe the ways you plan to allow your rabbits to exercise, number of hours, space, etc 
+   ^{fvInput exerciseView}
+
+  <div .afrow .required>
+    If you go away on vacation, who will take care of the rabbits? 
+      ^{fvInput vacationView}
+
+  <div .afrow .required>
+   Do you have a veterinarian?  If so what is his/her name?
+   ^{fvInput vetView}
+
+  <div .afrow .required>
+    Do you currently have any other pets? Please describe type, age, sex, and whether spayed or neutered (include all animals in household including roommate’s pets).
+    ^{fvInput petsView}
+
+
+
+
+
+
+  <div .afrow>
+   <div  .backButton> <-back  
+   <input #adoptSubmit .continueButton type=submit value="submit">

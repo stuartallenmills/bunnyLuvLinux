@@ -1,4 +1,4 @@
- var pages=["#adformIntro", "#thePerson", "#theDataadFormP1", "#aFormP2"]
+ var pages=["#adformIntro", "#thePerson", "#theDataadFormP1", "#aFormP2", "#aFormP3"]
  var currentpage = 0
 
 function checkEmail (inval) {

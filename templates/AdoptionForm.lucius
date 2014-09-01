@@ -13,7 +13,7 @@
    float:left;
 }
 
-#thePerson, #theDataadFormP1, #aFormP2 {
+#thePerson, #theDataadFormP1, #aFormP2, #aFormP3 {
   display:none;
 }
 .afrow {
