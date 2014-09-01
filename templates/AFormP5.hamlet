@@ -1,0 +1,23 @@
+<div #aFormP5>
+
+ <div .afrow .required>
+  What would you do if you and your significant other separate?
+  ^{fvInput separateView}
+
+ <div .afrow .required>
+   What would you do if you have a significant change in your life, e.g., need to move out of town, get married, have a baby, etc.
+    ^{fvInput changeView}
+ 
+ <div .afrow .reqRadio>
+  Do we have permission to visit your home?
+   ^{fvInput permissionView}
+
+ <div .afrow .required>
+  How did you find out about BunnyLuv Rabbit Resource Center?
+  ^{fvInput findView}
+
+
+
+  <div .afrow>
+   <div  .backButton> <-back  
+   <input #adoptSubmit .continueButton type=submit value="submit">

@@ -5,7 +5,7 @@
 
 #adoptionFormForm textarea {
     margin:5px;
-    width:95%;
+    width:100%;
 }
 
 
@@ -13,7 +13,7 @@
    float:left;
 }
 
-#thePerson, #theDataadFormP1, #aFormP2, #aFormP3 {
+#thePerson, #theDataadFormP1, #aFormP2, #aFormP3, #aFormP4, #aFormP5 {
   display:none;
 }
 .afrow {

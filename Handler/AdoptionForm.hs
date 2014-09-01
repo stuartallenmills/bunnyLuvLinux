@@ -46,6 +46,15 @@ data AdoptTest = AdoptTest {
                       ,adVacation::Textarea
                       ,adVet::Textarea
                       ,adPets::Textarea
+                      ,adWhere::Textarea
+                      ,adVetcare::Textarea
+                      ,adApt::Textarea
+                      ,adRoom::Textarea
+                      ,adOther::Textarea
+                      ,adSeparate::Textarea
+                      ,adChange::Textarea
+                      ,adPermission::Bool
+                      ,adFind::Textarea
                        } deriving Show
 
 aMaster::Html->MForm Handler (FormResult (Person, AdoptTest), Widget)
@@ -75,16 +84,30 @@ adoptionForm= do
   (vacationRes, vacationView)<-mreq textareaField "nope" Nothing
   (vetRes, vetView)<-mreq textareaField "nope" Nothing
   (petsRes, petsView)<-mreq textareaField "nope" Nothing
+  (whereRes, whereView)<-mreq textareaField "nope" Nothing
+  (vetcareRes, vetcareView)<-mreq textareaField "nope" Nothing
+  (aptRes, aptView)<-mreq textareaField "nope" Nothing
+  (roomRes, roomView)<-mreq textareaField "nope" Nothing
+  (otherRes, otherView)<-mreq textareaField "nope" Nothing
+  (separateRes, separateView)<- mreq textareaField "nope" Nothing
+  (changeRes, changeView)<-mreq textareaField "nope" Nothing
+  (permissionRes, permissionView)<-mreq boolField "nope" Nothing
+  (findRes, findView)<-mreq textareaField "nope" Nothing
+  
   
   
   
   let wid1 = $(widgetFileNoReload def "AFormP1")
   let wid2 = $(widgetFileNoReload def "AFormP2");
   let wid3 = $(widgetFileNoReload def "AFormP3");
+  let wid4 = $(widgetFileNoReload def "AFormP4");
+  let wid5 = $(widgetFileNoReload def "AFormP5");
   let wid = do
          wid1
          wid2
          wid3
+         wid4
+         wid5
          toWidget [lucius|
                    ##{fvId careView} {
                        width:25em;
@@ -97,7 +120,9 @@ adoptionForm= do
   let res = AdoptTest <$> dateRes <*> ownRabRes <*> ownRabDescRes <*>companionRes <*>
                         dietRes <*> reasonRes <*> researchRes <*> rescueRes <*>
                         allergyRes <*> careRes <*> ownRes <*> proofRes <*> enclosureRes <*>
-                        exerciseRes <*> vacationRes <*> vetRes <*> petsRes
+                        exerciseRes <*> vacationRes <*> vetRes <*> petsRes <*>
+                        whereRes <*> vetcareRes <*> aptRes <*> roomRes <*> otherRes <*>
+                        separateRes <*> changeRes <*> permissionRes <*> findRes
   return (res, wid)
 
 getAdoptionFormR::Handler Html

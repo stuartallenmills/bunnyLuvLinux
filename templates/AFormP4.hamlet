@@ -1,0 +1,26 @@
+<div #aFormP4>
+
+ <div .afrow .required>
+  Where are other pets kept during the day and where at night? 
+  ^{fvInput whereView}
+
+ <div .afrow .required>
+  What would you do if/when your rabbit(s) require extensive veterinary care (e.g., surgery) costing in excess of $1000 at one time or over several years?
+     ^{fvInput vetcareView}
+
+ <div .afrow .required>
+  What would you do if your apartment no longer allows pets?
+  ^{fvInput aptView}
+
+ <div .afrow .required>
+  What would you do if your (new) roomate is allergic to rabbits?
+  ^{fvInput roomView}
+
+ <div .afrow .required>
+  What would you do if your (new) significant other is allergic to rabbits?
+  ^{fvInput otherView}
+
+
+  <div .afrow>
+   <div  .backButton> <-back  
+   <div .continueButton>continue->
