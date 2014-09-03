@@ -26,10 +26,11 @@ import Control.Monad.IO.Class (liftIO)
 import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
+import Data.Time.Calendar
 import FormUtils
 
 data AdoptTest = AdoptTest {
-                      addate::Text
+                      addate::Day
                       ,adownRab::Bool
                       ,addesc::Maybe Textarea
                       ,adcompan:: Bool
@@ -57,7 +58,7 @@ data AdoptTest = AdoptTest {
                       ,adFind::Textarea
                        } deriving Show
 
-aMaster::Html->MForm Handler (FormResult (Person, AdoptTest), Widget)
+aMaster::Html->MForm Handler (FormResult (Person, AdoptInfo), Widget)
 aMaster extra = do
   (res1, p1Widget) <-  adoptionForm 
   (res2, perWidget) <-  personForm 
@@ -65,14 +66,18 @@ aMaster extra = do
   let ares = (,) <$> res2 <*> res1
   return (ares, wid)
 
-adoptionForm::MForm Handler (FormResult AdoptTest, Widget)
+adoptionForm::MForm Handler (FormResult AdoptInfo, Widget)
 adoptionForm= do
-  (dateRes, dateView)<- mreq textField "nope" Nothing
+  local_time <- liftIO getLocalTime
+  let today = localDay local_time
+  let strTime = showtime today
+  (dateRes, dateView)<- mreq textField "nope" (Just strTime)
   (ownRabRes, ownRabView)<-mreq boolField "nope" Nothing
   (ownRabDescRes, ownRabDescView)<-mopt textareaField "nope" Nothing
   (companionRes, companionView)<-mreq boolField "nop" Nothing
   (dietRes, dietView)<-mopt textareaField "nope" Nothing
   (reasonRes, reasonView)<-mreq textareaField "nope" Nothing
+  (howlongRes, howlongView)<-mreq textareaField "nope" Nothing
   (researchRes, researchView)<-mreq textareaField "nope" Nothing
   (rescueRes, rescueView)<-mreq textareaField "nope" Nothing
   (allergyRes, allergyView)<-mreq boolField "nope" Nothing
@@ -84,7 +89,6 @@ adoptionForm= do
   (vacationRes, vacationView)<-mreq textareaField "nope" Nothing
   (vetRes, vetView)<-mreq textareaField "nope" Nothing
   (petsRes, petsView)<-mreq textareaField "nope" Nothing
-  (whereRes, whereView)<-mreq textareaField "nope" Nothing
   (vetcareRes, vetcareView)<-mreq textareaField "nope" Nothing
   (aptRes, aptView)<-mreq textareaField "nope" Nothing
   (roomRes, roomView)<-mreq textareaField "nope" Nothing
@@ -93,9 +97,6 @@ adoptionForm= do
   (changeRes, changeView)<-mreq textareaField "nope" Nothing
   (permissionRes, permissionView)<-mreq boolField "nope" Nothing
   (findRes, findView)<-mreq textareaField "nope" Nothing
-  
-  
-  
   
   let wid1 = $(widgetFileNoReload def "AFormP1")
   let wid2 = $(widgetFileNoReload def "AFormP2");
@@ -117,11 +118,12 @@ adoptionForm= do
                         height:12em;
                       }
          |]
-  let res = AdoptTest <$> dateRes <*> ownRabRes <*> ownRabDescRes <*>companionRes <*>
-                        dietRes <*> reasonRes <*> researchRes <*> rescueRes <*>
+  let date = text2date dateRes
+  let res = AdoptInfo <$> date <*> ownRabRes <*> ownRabDescRes <*>companionRes <*>
+                        dietRes <*> reasonRes <*> howlongRes <*> researchRes <*> rescueRes <*>
                         allergyRes <*> careRes <*> ownRes <*> proofRes <*> enclosureRes <*>
                         exerciseRes <*> vacationRes <*> vetRes <*> petsRes <*>
-                        whereRes <*> vetcareRes <*> aptRes <*> roomRes <*> otherRes <*>
+                         vetcareRes <*> aptRes <*> roomRes <*> otherRes <*>
                         separateRes <*> changeRes <*> permissionRes <*> findRes
   return (res, wid)
 
@@ -146,14 +148,19 @@ postAdoptionFormR = do
   ((perResf, _), _)<-runFormPost aMaster
   case perResf of
     FormSuccess (person, atest) -> do
+                       runDB $ do
+                        personID<-insert person
+                        let areq = AdoptRequest personID atest
+                        reqID<- insert areq
+                        return ()
                        defaultLayout  [whamlet|
-                                     <div> Success
-                                                #{personFirstName person}
-                                         <div>
-                                             #{adReason atest}
-
+                                     <div> 
+                                             Thanks for applying for adoption!
+                                             <br>
+                                             We will give you call shortly to discuss your application.
  
                                               |]
+                         
     _ -> do
            msg<-getMessage
            defaultLayout [whamlet| Error in Posting Form  

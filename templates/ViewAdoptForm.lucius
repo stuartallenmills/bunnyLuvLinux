@@ -1,0 +1,30 @@
+.afrow {
+  width:100%;
+  margin:5px;
+  border-bottom:1px dotted #7f7f7f;
+}  
+.ans {
+  width:100%
+  margin-left:5px;
+  padding-left:5px;
+  background:#FFFfdf;
+} 
+
+                  #fperson input {
+                       display:inline;
+                      }
+                     #fperson div {
+                       float:left;
+                       margin:5px;
+                     }
+
+                     #fperson #add, #fperson #phones, #fperson #statezip {
+                                margin-left:0;
+                     }
+                     #faDate, #faCity, #statezip, #phones, #anotes, #email {
+                        width:90%;
+                     }
+                     #faState, #faHPhone {
+                        width:50%;
+                     }
+                     #fperson { width:100%;}

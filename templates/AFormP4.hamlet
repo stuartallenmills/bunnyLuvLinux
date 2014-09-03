@@ -1,8 +1,5 @@
 <div #aFormP4>
 
- <div .afrow .required>
-  Where are other pets kept during the day and where at night? 
-  ^{fvInput whereView}
 
  <div .afrow .required>
   What would you do if/when your rabbit(s) require extensive veterinary care (e.g., surgery) costing in excess of $1000 at one time or over several years?

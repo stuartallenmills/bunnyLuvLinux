@@ -12,7 +12,7 @@
    ^{fvInput vetView}
 
   <div .afrow .required>
-    Do you currently have any other pets? Please describe type, age, sex,  whether spayed or neutered, and how long you have had the pet (include all animals in the household including roommate’s pets).
+    Do you currently have any other pets? For each pet please describe type, age, sex,  whether spayed or neutered,  how long you have had the pet, and where the pet is kept during the day and night (include all animals in the household including roommate’s pets).
     ^{fvInput petsView}
 
 

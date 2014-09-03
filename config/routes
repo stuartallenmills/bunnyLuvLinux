@@ -35,3 +35,5 @@
 /viewDaily              DailyViewR GET POST
 /viewBonded             BondedViewR GET
 /adoptform              AdoptionFormR GET POST
+/viewadoptforms         ViewAdoptForms GET
+/viewadoptform/#AdoptRequestId          ViewAdoptForm GET

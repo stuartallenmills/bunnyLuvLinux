@@ -9,9 +9,9 @@ module Foundation where
 import Conduit
 import Network.HTTP.Conduit (Manager, conduitManagerSettings, newManager)
 import Control.Concurrent.STM
-import Data.ByteString.Lazy (ByteString)
+--import Data.ByteString.Lazy (ByteString)
 import Data.Default
-import Data.Text (Text, pack)
+import Data.Text (Text, pack, unpack)
 import qualified Data.Text as Text
 import Text.Hamlet
 import Yesod hiding (parseTime)
@@ -19,16 +19,16 @@ import Yesod.Default.Util
 import Yesod.Auth
 import Yesod.Auth.Message
 import Yesod.Static
-import Data.Text (Text, unpack)
+--import Data.Text (Text, unpack)
 import Database.Esqueleto
 import Database.Persist.Sqlite --(runSqlite, runMigrationSilent, withSqlitePool)
-import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase,
-       share, sqlSettings)
-import Database.Persist.Sql (insert)
-import Control.Monad.IO.Class (liftIO)
-import Control.Monad (liftM)
-import Text.Printf
-import Control.Monad.Trans.Resource (runResourceT)
+--import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase,
+--       share, sqlSettings)
+--import Database.Persist.Sql (insert)
+--import Control.Monad.IO.Class (liftIO)
+--import Control.Monad (liftM)
+--import Text.Printf
+--import Control.Monad.Trans.Resource (runResourceT)
 import Control.Monad.Logger (runStderrLoggingT)
 import Data.Time
 import Data.Time.Format
@@ -86,30 +86,34 @@ HomeCheck
    deriving Show
 
 AdoptRequest
+   person PersonId
+   info   AdoptInfo
+   deriving Show
+
+
+AdoptInfo
    date Day
-   person Person
    ownRab Bool
    ownRabDesc Textarea Maybe
-   companion Bool Maybe
+   companion Bool 
    ownDiet Textarea Maybe
    interest Textarea
    howlong Textarea
    research Textarea
    otherShelters Textarea
-   allergies Textarea
-   caregiver Textarea
+   allergies Bool
+   caregiver Text
    ownrent Textarea
    bunnyproofed Textarea
    enclosure Textarea
    exercise Textarea
    vacation Textarea
-   vet Text Maybe
+   vet Textarea 
    pets Textarea
-   pettime Textarea Maybe
-   petkept Textarea Maybe
    vetcare Textarea
    nopetapt Textarea
    newallergic Textarea
+   otherallergic Textarea
    seperate Textarea
    lifechange Textarea
    homevisit Bool

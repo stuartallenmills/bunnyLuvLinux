@@ -15,6 +15,9 @@
   <div .afrow .required>
     Why are you interested in adopting a rabbit or rabbits? ^{fvInput reasonView}
   <div .afrow .required>
+    How long have you been looking for a rabbit?
+     ^{fvInput howlongView}
+  <div .afrow .required>
     Have you done any research on what it takes to care for a rabbit?   If yes, where? ^{fvInput researchView}
 
    

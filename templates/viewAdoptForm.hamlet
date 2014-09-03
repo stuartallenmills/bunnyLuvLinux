@@ -1,0 +1,118 @@
+                   <div #fperson>
+                    <div .afrow>
+                     <div #faPersonFirst>
+                        #{personFirstName person}
+                     <div #faPersonLast>
+                        #{personLastName person}
+                    <div .afrow>
+                     <div #add> 
+                        <div #faStreet>
+                          #{personStreet person}
+                          $maybe apt <- personApt person
+                              <div #apt>
+                                 Apt: #{apt}
+                    <div .afrow>
+                     <div #faCity>
+                      #{personCity person}
+                    <div .afrow>
+                     <div #statezip>
+                      <div #faState>
+                        #{personState person}
+                      <div #faZip>
+                        #{personZip person}
+                    <div .afrow>
+                     <div #phones>
+                      <div #faHPhone .phone>
+                       Home Phone:  #{personPhone person}
+                      $maybe mp <- personMobile person
+                       <div #faMPhone .phone>
+                       Mobile : #{mp}
+                    $maybe email <- personEmail person
+                     <div .afrow>
+                      <div #email>
+                       Email: 
+                        <span >#{email}
+ 
+ <div #adoptBlock style="float:left; width:100%;">
+  <div .afrow>
+   Do you have a rabbit now? 
+    <div .ans> #{doBool (adoptInfoOwnRab adoptinfo)}
+  $maybe rabdesc <- adoptInfoOwnRabDesc adoptinfo
+   <div .afrow>
+    How many? What are their names and ages? Are they spayed/neutered? Do they have any medical conditions? 
+    <div .ans>  #{rabdesc}
+  <div .afrow>
+     Is this bunny intended to be a companion for another family rabbit?  
+     <div .ans> #{doBool (adoptInfoCompanion adoptinfo)}
+   $maybe diet<- adoptInfoOwnDiet adoptinfo
+    <div .afrow>
+      Please describe your rabbit's diet. 
+      <div .ans> #{diet}
+  <div .afrow>
+    Why are you interested in adopting a rabbit or rabbits?
+     <div .ans> #{adoptInfoInterest adoptinfo}
+  <div .afrow>
+    How long have you been looking for a rabbit?
+     <div .ans> #{adoptInfoHowlong adoptinfo}
+  <div .afrow>
+    Have you done any research on what it takes to care for a rabbit?   If yes, where? 
+     <div .ans> #{adoptInfoResearch adoptinfo}
+  <div .afrow>
+    Have you contacted other rabbit rescue groups or shelters?  If so, which ones?
+     <div .ans> #{adoptInfoOtherShelters adoptinfo}
+  <div .afrow>
+     Does any member of your family have any allergies to animals or hay?
+     <div .ans> #{doBool (adoptInfoAllergies adoptinfo)}
+  <div .afrow>
+    Which member of your household will be the primary caregiver for the rabbits?
+    <div .ans> #{adoptInfoCaregiver adoptinfo}
+  <div .afrow> 
+    Do you own your own house or rent an apartment?  How long? 
+     <div .ans> #{adoptInfoOwnrent adoptinfo}
+  <div .afrow>
+    Is your home bunny-proofed?  (Electric cords are covered, there are no chemicals on the floors, toxic plants have been removed from the rabbit's living and play areas, etc.) 
+    <div .ans> #{adoptInfoBunnyproofed adoptinfo}
+  <div .afrow>
+    What type of enclosure are you planning to use for the rabbits and where will they live? 
+    <div .ans> #{adoptInfoEnclosure adoptinfo}
+  <div .afrow>
+    Describe the ways you plan to allow your rabbits to exercise, number of hours, space, etc
+    <div .ans>  #{adoptInfoExercise adoptinfo}
+  <div .afrow>
+      If you go away on vacation, who will take care of the rabbits? 
+      <div .ans> #{adoptInfoVacation adoptinfo} 
+  <div .afrow>
+    What is your veterinarian's name? 
+    <div .ans> #{adoptInfoVet adoptinfo}
+  <div .afrow>
+     Do you currently have any other pets? Please describe type, age, sex,  whether spayed or neutered, how long you have owned each, and where they are kept day/night (include all animals in household including roommate's pets).
+     <div .ans> #{adoptInfoPets adoptinfo}
+  <div .afrow>
+     What would you do if/when your rabbit(s) require extensive veterinary care (e.g., surgery) costing in excess of $1000 at one time or over several years?
+    <div .ans> #{adoptInfoVetcare adoptinfo}
+  <div .afrow>
+    What would you do with the rabbits if your apartment no longer allows pets
+    <div .ans> #{adoptInfoNopetapt adoptinfo}
+  <div .afrow>
+    What would you do with the rabbits if your (new) roommate is allergic to rabbits
+    <div .ans> #{adoptInfoNewallergic adoptinfo}
+
+  <div .afrow>
+    What would you do with the rabbits if your (new) significant other is allergic to rabbits
+    <div .ans> #{adoptInfoOtherallergic adoptinfo}
+
+  <div .afrow>
+    What would you do with the rabbits if you and your significant other separate
+    <div .ans> #{adoptInfoSeperate adoptinfo}
+
+  <div .afrow>
+    What would you do with the rabbits if you have a significant change in your life, e.g., need to move out of town, get married, have a baby, etc.
+    <div .ans> #{adoptInfoLifechange adoptinfo}
+
+  <div .afrow>
+   Do we have permission to visit your home? 
+     <div .ans> #{doBool (adoptInfoHomevisit adoptinfo)}
+
+ <div .afrow>
+    How did you find out about BunnyLuv Rabbit Resource Center?
+    <div .ans> #{adoptInfoHowBL adoptinfo}
