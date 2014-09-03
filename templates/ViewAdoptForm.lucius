@@ -1,6 +1,6 @@
 .afrow {
   width:100%;
-  margin:5px;
+  margin-bottom:2px;
   border-bottom:1px dotted #7f7f7f;
 }  
 .ans {
@@ -15,7 +15,7 @@
                       }
                      #fperson div {
                        float:left;
-                       margin:5px;
+                       margin-left:5px;
                      }
 
                      #fperson #add, #fperson #phones, #fperson #statezip {

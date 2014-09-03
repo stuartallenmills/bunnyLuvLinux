@@ -32,14 +32,40 @@ getAdoptForm id = runDB $
 
 getViewAdoptForms::Handler Html
 getViewAdoptForms = do
+  (formWidget, enctype)<- generateFormPost getNameForm
   adopts<-getAdoptions
-  defaultLayout 
+  bnames <-  getNamesDB
+  maid <- maybeAuthId
+  impath <- liftIO getImagePath
+  let imgpath = unpack impath
+
+  admin <- isAdmin
+  defaultLayout $ do
+    setTitle "Adoption Requests"
+    $(widgetFileNoReload def "cancelbutton")
+--         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+--         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
+--         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
+    toWidget [julius|
+ .afrow {
+    width:100%;
+    margin-bottom:2px;
+   border-bottom:1px dotted #7f7f7f;
+ }
+ |]
+              
     [whamlet|
+     <div #blHeaderD>
+     ^{getNameWidget bnames formWidget enctype}
+     ^{headerLogWid imgpath maid}    
+     <div #afTitle style="width:100%; float:left; text-align:center; background:#cfcfcf;"> 
+           <b> Adoption Requests </b>
+
     <div #adoptReqBlock>
      $forall (Entity aid (AdoptRequest apid adoptinfo), Entity pId per)<-adopts
-        <div .row>
-        #{personLastName per}, #{personFirstName per} :
-                       <a href=@{ViewAdoptForm aid}>#{showtime (adoptInfoDate adoptinfo)}</a>
+        <div .afrow>
+         <a href=@{ViewAdoptForm aid}>#{personLastName per}, #{personFirstName per} :&nbsp;
+                      #{showtime (adoptInfoDate adoptinfo)}</a>
     |]
 
 viewaform::Person->AdoptInfo->Widget
@@ -50,14 +76,31 @@ doBool val = if val then "Yes" else "No"
 
 getViewAdoptForm::AdoptRequestId->Handler Html
 getViewAdoptForm  id = do
+  (formWidget, enctype)<- generateFormPost getNameForm
   aform<- getAdoptForm id
-  defaultLayout 
+  bnames <-  getNamesDB
+  maid <- maybeAuthId
+  impath <- liftIO getImagePath
+  let imgpath = unpack impath
+
+  admin <- isAdmin
+  defaultLayout $ do
+    setTitle "Adoption Request"
+    $(widgetFileNoReload def "cancelbutton")
+--         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+--         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
+--         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"     
     [whamlet|
-    <div #adoptReqBlock>
+     <div #blHeaderD>
+     ^{getNameWidget bnames formWidget enctype}
+     ^{headerLogWid imgpath maid}    
+    <div #afTitle style="width:100%; float:left; text-align:center; background:#cfcfcf;"> 
+           <b> Adoption Request </b>
+    <div #adoptReqBlock style="float:left;">
      $forall (Entity  aide  (AdoptRequest apid adoptinfo) , Entity pId per)<- aform
-        <div .afrow>
-         #{showtime (adoptInfoDate adoptinfo)}
-         ^{viewaform per adoptinfo}
+          <div #afDate style="float:right; width:100%; text-align:right;">
+            #{showtime (adoptInfoDate adoptinfo)}
+          ^{viewaform per adoptinfo}
     |]
           
 
