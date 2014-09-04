@@ -1,48 +1,54 @@
 <div id=cssmenu>
   <ul>
    <li class='active'><a href=@{HomeR}><span>Home</span></a></li>
-   <li id="rAddM"><a href=@{AddR}><span title="Add New Rabbit">Add</span></a>
-   <li #blStatus class='has-sub' title="Find Rabbits by status "><a href='#'><span >Status</span></a>
-      <ul>
-         <li><a href=@{QueryR "BunnyLuv"}><span>BunnyLuv</span></a></li>
-         <li><a href=@{QueryR "Adopted"}><span>Adopted</span></a></li>
-         <li><a href=@{QueryR "Euthanized"}><span>Euthanized</span></a></li>
-         <li><a href=@{QueryR "Died"}><span>Died</span></a></li>
-         <li class='last'><a href=@{AllR}><span>All on file</span></a></li>
 
-   <li #blAge title="Find Rabbits by Age"><a href='#'><span >Age</span></a>
+   <li #blAdopt class="has-sub" title="Adoption"><a href='#'><span >Adoption</span></a>
+    <ul>
+      <li #blAge title="Find Rabbit"><a href='#'>Find Companion Rabbit</a>
+      <li #adoptForm class="last"><a = href=@{AdoptionFormR}>Adoption Request Form </a></li>
 
 
-   <li #blReports class='has-sub'><a href='#'><span>Reports</span></a>
+   <li #blReports class="has-sub"><a href="#"><span>Reports</span></a>
       <ul>
          <li><a href=@{DailyViewR}><span>Daily Reports</span></a></li>
-         <li><a href=@{ViewAdoptForms}>Adoption Requests</a></li>
          <li><a href=@{TreatmentReportR}>Treatments Report</a></li>
-         <li><a href=@{SearchR}><span>Advanced Search</span></a></li>
          <li><a href=@{VVViewR}><span>Vet Visits Report</span></a></li>
          <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>
          <li><a href=@{BondedViewR}>Bonded/Family Report</a></li>
+         <li><a href=@{ViewAdoptForms}>Adoption Requests</a></li>
          <li><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
-         <li><a href=@{AlteredR "No"}><span>Not Altered</span></a></li>
-         <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
-         <li><a href=@{SourceR "Shelter"}><span>Source: Shelter</span></a></li>
-         <li class='last'><a href=@{SourceR "Other"}><span>Source: Other</span></a></li>
-   <li class='has-sub' #blNew> <a href='#'><span>New </span></a>
+         <li .has-sub><a href="#"><span>Altered Status </span></a>
+           <ul>
+            <li><a href=@{AlteredR "No"}><span>Not Altered</span></a></li>           
+            <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
+         <li><a href=@{SearchR}><span>Advanced Search</span></a></li>
+         <li #blStatus .has-sub .last title="Find Rabbits by status "><a href="#"><span >Status/Source  </span></a>
+           <ul>
+            <li><a href=@{QueryR "BunnyLuv"}><span>BunnyLuv</span></a></li>
+            <li><a href=@{QueryR "Adopted"}><span>Adopted</span></a></li>
+            <li><a href=@{QueryR "Euthanized"}><span>Euthanized</span></a></li>
+            <li><a href=@{QueryR "Died"}><span>Died</span></a></li>
+            <li .has-sub><a href="#">Source </a> 
+              <ul>
+               <li><a href=@{SourceR "Shelter"}><span>Source: Shelter</span></a></li>
+               <li .last><a href=@{SourceR "Other"}><span>Source: Other</span></a></li>
+            <li .last><a href=@{AllR}><span>All on file</span></a></li>
+   <li class="has-sub" #blNew> <a href="#"><span>New </span></a>
         <ul>
-         <li #newWell><span><a href='#'>New Wellness</span></a></li>
-         <li #newTreat><a href='#'><span>New Treatment</span></a></li>
-         <li #newVetVisit><a href='#'><span>New Vet Vist</span></a></li>
-         <li #adoptForm><a = href=@{AdoptionFormR}>Adoption Form </a></li>
-         <li class='last'> <a href=@{DailyR}><span>New Daily Report</span></a></li>
-   <li class='has-sub last' id="blAdmin"><a href='#'><span>Admin</span></a>
+         <li id="rAddM"><a href=@{AddR}><span title="New Rabbit">New Rabbit</span></a>
+         <li #newWell><span><a href="#">New Wellness</span></a></li>
+         <li #newTreat><a href="#"><span>New Treatment</span></a></li>
+         <li #newVetVisit><a href="#"><span>New Vet Vist</span></a></li>
+         <li class="last"> <a href=@{DailyR}><span>New Daily Report</span></a></li>
+   <li class="has-sub last" id="blAdmin"><a href="#"><span>Admin</span></a>
       <ul>
        $if mode
-         <li><a href='#'><span title="Disabled for Demo">Change Password </span></a></li>
-         <li><a href='#'><span  title="Disabled for Demo">Delete User</span></a></li>
-         <li class='last'><a href='#'><span  title="Disabled for Demo">Add User</span></a></li>
+         <li><a href="#"><span title="Disabled for Demo">Change Password </span></a></li>
+         <li><a href="#"><span  title="Disabled for Demo">Delete User</span></a></li>
+         <li class="last"><a href="#"><span  title="Disabled for Demo">Add User</span></a></li>
        $else
          <li><a href=@{ChangePassR}><span>Change Password</span></a></li>
          <li><a href=@{DeleteUR}><span>Delete User</span></a></li>
-         <li class='last'><a href=@{AddUR}><span>Add User</span></a></li>
+         <li class="last"><a href=@{AddUR}><span>Add User</span></a></li>
          
       

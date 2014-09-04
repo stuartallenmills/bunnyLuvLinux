@@ -40,6 +40,10 @@ ageDiffMax = 2 * 365  -- 2 years in days
 
 data AgeSearch = AgeSearch { agesearchAge::Integer
                              ,  agesearchDiff::Integer
+                             ,male::Maybe Bool
+                             ,female::Maybe Bool
+                             ,hasff::Maybe Bool
+                             ,noff::Maybe Bool
                                 }
 
 getAgeForm::Html->MForm Handler (FormResult AgeSearch, Widget)
@@ -47,19 +51,30 @@ getAgeForm extras= do
   let fs = FieldSettings "sNamel" (Just "Find rabbit") (Just "getAge") (Just "stName") []
   (ageRes,ageView) <- mreq intField fs  Nothing
   (ageDiffRes, ageDiffView) <-mreq intField "bbb" (Just 12)
-  let agesch = AgeSearch <$> ageRes <*> ageDiffRes
+  (maleRes, maleView)<- mopt checkBoxField "bbb" (Just (Just True))
+  (femaleRes, femaleView)<-mopt checkBoxField "bbb" (Just (Just True))
+  (hasffRes, hasffView)<-mopt checkBoxField "bbb" (Just (Just True))
+  (noffRes, noffView)<-mopt checkBoxField "bbb" (Just (Just True))
+  let agesch = AgeSearch <$> ageRes <*> ageDiffRes <*> maleRes <*> femaleRes
+                             <*> hasffRes <*> noffRes
   let awid = do
         $(widgetFileNoReload def "cancelButton")
         [whamlet| #{extras}
              <div #getAgeDiv>
               <div #ageTitle style="margin-bottom:8px;">
-                Find rabbits by age:
+                Find companion rabbits:
                <div .cancelBut #ageCan style="text-align:left; float:right;">
                                     <a href=@{HomeR}> cancel</a>
               <div #ageInD>
                <label for="getAge">Age: </label> ^{fvInput ageView} yrs
               <div #ageDiffD>
                <label for="ageDiff">Plus/Minus: </label> ^{fvInput ageDiffView} mnths
+              <div #sex>
+                   Male : ^{fvInput maleView}
+                  <span style="margin-left:10px;"> Female: ^{fvInput femaleView}
+              <div #companion>
+                   Has Friends/Family:
+              <div #yn style="margin-left:10px;"> Yes: ^{fvInput hasffView} <span style="margin-left:10px;"> No: ^{fvInput noffView}
              <input #agesub type=submit value="find" sytle="float:none; margin-top:10px;">
          |]
         toWidget [lucius|

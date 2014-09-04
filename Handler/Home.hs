@@ -33,14 +33,41 @@ import Utils
 import BaseForm
 import AgeForm
 
-getAges yrs diffMnths= do
-    b1 <-queryStatus "BunnyLuv"
+notBond rab arg = arg $
+           from $ \bonded -> do
+           where_  ((bonded ^. BondedFirst) ==. (rab ^. RabbitId))
+
+queryCompanion male female hasff noff = do
+    let mstr=if male then "M" else "Z"
+    let fstr=if female then "F" else "Z"
+    case (hasff, noff) of
+      (True, True)->    runDB $ do
+                         select $ from $ \rab-> do
+                           where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
+                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr))
+
+                               )
+                           return rab
+      (True, False)->    runDB $ do
+                         select $ from $ \rab-> do
+                           where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
+                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&. (notBond rab exists))
+                           return rab
+      (False, True)->    runDB $ do
+                         select $ from $ \rab-> do
+                           where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
+                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&. (notBond rab notExists))
+                           return rab
+      (False, False)-> return []
+
+getAges yrs diffMnths male female hasff noff= do
+    b1 <-queryCompanion male female hasff noff
     today <- liftIO getCurrentDay
     let bday = addDays (yrs*(-365)) today
     let mnthDays = 31*diffMnths
     let result = sortEnt mnthDays bday b1
     let ageTit= "Rabbits within " ++ (show diffMnths) ++ " months of age "++(show yrs)
-    base "Tabbit Age Results" (toHtml ageTit) result
+    base "Companion Rabbit Results" (toHtml ageTit) result
 
 
 
@@ -48,7 +75,7 @@ postGetAgeR::Handler Html
 postGetAgeR  = do
   ((result, _), _) <- runFormPost getAgeForm
   case result of
-       FormSuccess (AgeSearch age ageDiffMnths) ->getAges age ageDiffMnths
+       FormSuccess (AgeSearch age ageDiffMnths (Just male) (Just female) (Just ff) (Just noff)) ->getAges age ageDiffMnths male female ff noff
        _ -> redirect HomeR
   
 queryAltered value = runDB $ do
