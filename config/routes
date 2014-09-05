@@ -37,3 +37,4 @@
 /adoptform              AdoptionFormR GET POST
 /viewadoptforms         ViewAdoptForms GET
 /viewadoptform/#AdoptRequestId          ViewAdoptForm GET
+/newnote/#AdoptRequestId     NewNoteR GET POST

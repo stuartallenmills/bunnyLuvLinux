@@ -90,6 +90,11 @@ AdoptRequest
    info   AdoptInfo
    deriving Show
 
+AdoptNotes
+  adoptRequest AdoptRequestId
+  date Day
+  action Textarea
+  deriving Show
 
 AdoptInfo
    date Day
@@ -180,7 +185,7 @@ Weight
 
 Vet
    practice Text
-   doctor   Text 
+   doctor   Text
    telephone Text
    deriving Show
    
