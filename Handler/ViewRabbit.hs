@@ -56,7 +56,8 @@ getViewR rabId  = do
     let (yrs,rm) = dage `divMod` 365
     let mnths = rm `div` 30
     let was_adopted = (length adopteds > 0)
-    let had_visits = (length vetvisits >0)
+    let vlen= length vetvisits;
+    let had_visits = vlen >0
     let had_well = (length wellRs > 0)
     let had_treatments = (length treatments>0)
     let not_dead = not ((rabbitStatus rab == "Died") || (rabbitStatus rab == "Euthanized"))
@@ -95,7 +96,7 @@ getViewR rabId  = do
            <div #blHeaderD>
             ^{getNameWidget bnames formWidget enctype}
             ^{headerLogWid imgpath maid}    
-            ^{viewRabMenu showMenu not_dead not_adopted not_altered rabId}      
+            ^{viewRabMenu showMenu not_dead not_adopted not_altered rabId}  
            ^{viewRab  imgpath rab yrs mnths bonded}
               $if showMenu
                $if was_adopted
@@ -106,7 +107,7 @@ getViewR rabId  = do
                    <div id="tDArrow" class=arrow-down> 
                   <b>Injury/Illness Treatments </b> 
                  ^{showtreatments treatments}
-                $if had_visits 
+               $if had_visits 
                  <div #vetvisits style="float:left;" title="Show/Hide Vet Visits" >
                     <div id="vvRArrow" class=arrow-right>
                     <div id="vvDArrow" class=arrow-down> 

@@ -12,6 +12,6 @@
                            Temp: ^{fvInput wellTempView}
                       <div #wellNotes>
                         Problems:  ^{fvInput wellNotesView}
-                      <div #wellTreat>
+                      <div #wellTreat .required>
                         Treatment: ^{fvInput wellTreatmentView}
-                  <input  type=submit value="submit">
+                  <input .subButton  type=submit value="submit">
