@@ -85,6 +85,13 @@ HomeCheck
    hcResults Text Maybe
    deriving Show
 
+Adopt
+   rab RabbitId
+   date Day
+   req AdoptRequestId
+   stat Text
+   deriving Show
+
 AdoptRequest
    person PersonId
    info   AdoptInfo
