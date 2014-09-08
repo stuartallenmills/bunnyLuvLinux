@@ -34,9 +34,13 @@ import BaseForm
 import AgeForm
 
 notBond rab arg = arg $
-           from $ \bonded -> do
+           from $ \bonded -> 
            where_  ((bonded ^. BondedFirst) ==. (rab ^. RabbitId))
 
+notSelected rab = notExists $
+           from $ \adopt -> do
+           where_ (rab ^. RabbitId ==. adopt ^. AdoptRab)
+           
 queryCompanion male female hasff noff = do
     let mstr=if male then "M" else "Z"
     let fstr=if female then "F" else "Z"
@@ -44,19 +48,22 @@ queryCompanion male female hasff noff = do
       (True, True)->    runDB $ do
                          select $ from $ \rab-> do
                            where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
-                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr))
+                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
+                               (notSelected rab)
 
                                )
                            return rab
       (True, False)->    runDB $ do
                          select $ from $ \rab-> do
                            where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
-                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&. (notBond rab exists))
+                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
+                               (notBond rab exists) &&. (notSelected rab))
                            return rab
       (False, True)->    runDB $ do
                          select $ from $ \rab-> do
                            where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
-                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&. (notBond rab notExists))
+                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
+                               (notBond rab notExists) &&. (notSelected rab))
                            return rab
       (False, False)-> return []
 
