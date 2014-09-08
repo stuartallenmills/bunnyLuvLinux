@@ -351,8 +351,12 @@ adoptFormsPage aform = do
     <div #adoptReqBlock>
      $forall (Entity aid (AdoptRequest date apid adoptinfo afile), Entity pId per)<-adopts
         <div .afrow>
-         <a href=@{ViewAdoptForm aid}>#{personLastName per}, #{personFirstName per} :&nbsp;
-                      #{showtime (date)}  
+         $maybe _ <- adoptinfo 
+          <a href=@{ViewAdoptForm aid}>#{personLastName per}, #{personFirstName per} :&nbsp;
+                       #{showtime (date)} 
+         $maybe file <- afile 
+          <a href=#{mkLink file imgpath}>#{personLastName per}, #{personFirstName per} :&nbsp;
+                       #{showtime (date)}
          ^{rabbitsWidget aid}
          <div #reqId style="display:none;"> #{show aid}
          <div .aButton #addNote><a href=@{NewNoteR aid}>New Action</a>
