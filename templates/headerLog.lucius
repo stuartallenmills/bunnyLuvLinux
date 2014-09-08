@@ -15,14 +15,14 @@
 #headimg {
       float:left;
       display:block;
-      width:26%;
+      width:20%;
       padding:0;
       border:none;
 }
 #splash {
     float:left;
     display:block;
-    width:74%;
+    width:80%;
     height:50px;
     border:none;
 
@@ -34,7 +34,8 @@
   display:inline-block;
   text-shadow:2px 2px 1px #aaaaaa;
   font-family:-moz-fixed;
-  width:80%;
+  width:70%;
+  text-align:center;
 }
 
 #formName #berror {
