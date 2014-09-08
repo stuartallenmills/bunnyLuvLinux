@@ -33,7 +33,8 @@ import FormUtils
 
 
 
-uploadForm :: Html -> MForm Handler  (FormResult (FileInfo), Widget)
+
+uploadForm :: Html -> MForm Handler  (FormResult FileInfo, Widget)
 uploadForm  = renderDivs $ fileAFormReq "Image file"
   
 
@@ -76,19 +77,3 @@ postImagesR rabId = do
             setMessage "Something went wrong"
             redirect HomeR
 
-writeToServer :: FileInfo -> Handler FilePath
-writeToServer file = do
-    today<- liftIO  getCurrentDay
-    uploadDir <- liftIO getUploadDir
-    let date = showfiletime today
-    let filename = unpack $ fileName file
-        rf = reverse filename
-        (ext, thead) = break (== '.') rf
-        thead2 = tail thead
-        fn = (reverse thead2) ++ "_"++( date) ++ "." ++ (reverse ext)
-        path = imageFilePath uploadDir fn
-    liftIO $ fileMove file path
-    return fn
-
-imageFilePath :: Text->String -> FilePath
-imageFilePath adir f = (unpack adir) </> f

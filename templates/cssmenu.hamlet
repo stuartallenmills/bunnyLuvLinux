@@ -35,11 +35,12 @@
             <li .last><a href=@{AllR}><span>All on file</span></a></li>
    <li class="has-sub" #blNew> <a href="#"><span>New </span></a>
         <ul>
+         <li > <a href=@{DailyR}><span>New Daily Report</span></a></li>
          <li id="rAddM"><a href=@{AddR}><span title="New Rabbit">New Rabbit</span></a>
          <li #newWell><span><a href="#">New Wellness</span></a></li>
          <li #newTreat><a href="#"><span>New Treatment</span></a></li>
          <li #newVetVisit><a href="#"><span>New Vet Vist</span></a></li>
-         <li class="last"> <a href=@{DailyR}><span>New Daily Report</span></a></li>
+         <li #newAdReq .last ><a href=@{AdoptReqR}>New Adoption Request</a></li>
    <li class="has-sub last" id="blAdmin"><a href="#"><span>Admin</span></a>
       <ul>
        $if mode

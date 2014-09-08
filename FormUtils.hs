@@ -8,11 +8,11 @@ module FormUtils where
 
 --this is a test 
 
-import qualified Data.ByteString.Lazy as L
+--import qualified Data.ByteString.Lazy as L
 import Conduit
 
-import Data.Conduit
-import Data.Conduit.Binary
+--import Data.Conduit
+--import Data.Conduit.Binary
 import Data.Default
 import Yesod hiding ((!=.), (==.), (=.), update)
 import Yesod.Default.Util
@@ -20,13 +20,14 @@ import Foundation
 import Yesod.Auth
 import Data.Text (Text, unpack, pack)
 import Database.Esqueleto
-import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
+--import Database.Persist.TH (mkPersist, mkMigrate, persistLowerCase, share, sqlSettings)
 import Database.Persist.Sql (insert)
 import Control.Monad.IO.Class (liftIO)
-import Text.Printf
+--import Text.Printf
 import Control.Applicative
 import Data.Time.LocalTime
 import Data.Time.Calendar
+import System.FilePath
 
 queryTreatmentB rabId = runDB $
   select $ from $ \t ->do
@@ -56,6 +57,24 @@ vets::[(Text, Text)]
 vets = [("Dr. Misetich", "Dr. Misetich"), ("Dr. Petritz", "Dr. Petritz"), ("Dr. Steele (C.A.R.E)", "Dr. Steele (C.A.R.E)")]
 procedures::[(Text,Text)]
 procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthanized", "Euthanized"), ("Other", "Other")]
+
+
+writeToServer :: FileInfo -> Handler FilePath
+writeToServer file = do
+    today<- liftIO  getCurrentDay
+    uploadDir <- liftIO getUploadDir
+    let date = showfiletime today
+    let filename = unpack $ fileName file
+        rf = reverse filename
+        (ext, thead) = break (== '.') rf
+        thead2 = tail thead
+        fn = (reverse thead2) ++ "_"++( date) ++ "." ++ (reverse ext)
+        path = imageFilePath uploadDir fn
+    liftIO $ fileMove file path
+    return fn
+
+imageFilePath :: Text->String -> FilePath
+imageFilePath adir f = (unpack adir) </> f
 
 personForm:: MForm Handler (FormResult Person, Widget)
 personForm   = do

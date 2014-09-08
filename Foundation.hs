@@ -11,7 +11,7 @@ import Network.HTTP.Conduit (Manager, conduitManagerSettings, newManager)
 import Control.Concurrent.STM
 --import Data.ByteString.Lazy (ByteString)
 import Data.Default
-import Data.Text (Text, pack, unpack)
+import Data.Text (Text, pack, unpack, append)
 import qualified Data.Text as Text
 import Text.Hamlet
 import Yesod hiding (parseTime)
@@ -47,6 +47,8 @@ getImagePath = readTextFile "links/imagepath"
 getUploadDir = readTextFile "links/uploaddir"
 getBackup = readTextFile "links/backup"
 getPort = readTextFile "links/port"
+
+mkLink text path=  path ++ (unpack text)
 
 bunnyLuvDB::Text
 bunnyLuvDB = "bunnyluv.db3"
@@ -92,9 +94,12 @@ Adopt
    stat Text
    deriving Show
 
+
 AdoptRequest
+   date Day
    person PersonId
-   info   AdoptInfo
+   info   AdoptInfo Maybe
+   file   Text Maybe
    deriving Show
 
 AdoptNotes
@@ -104,7 +109,6 @@ AdoptNotes
   deriving Show
 
 AdoptInfo
-   date Day
    ownRab Bool
    ownRabDesc Textarea Maybe
    companion Bool 

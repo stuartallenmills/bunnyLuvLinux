@@ -23,6 +23,6 @@ import Handler.ViewRabbit
 import Handler.DailyReport
 import Handler.AdoptionForm
 import Handler.ViewAdoption
-
+import Handler.AdoptionReq
 
 mkYesodDispatch "App" resourcesApp

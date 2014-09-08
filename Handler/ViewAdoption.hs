@@ -27,7 +27,7 @@ getAdoptions = runDB $
 getPerson arId = runDB $ do
    req<- get arId
    case req of
-     Just (AdoptRequest pid _)-> do
+     Just (AdoptRequest _ pid _ _)-> do
                                     per <- get pid
                                     return per
      _->return Nothing
@@ -349,10 +349,10 @@ adoptFormsPage aform = do
     $maybe awid<-aform
         ^{awid}
     <div #adoptReqBlock>
-     $forall (Entity aid (AdoptRequest apid adoptinfo), Entity pId per)<-adopts
+     $forall (Entity aid (AdoptRequest date apid adoptinfo afile), Entity pId per)<-adopts
         <div .afrow>
          <a href=@{ViewAdoptForm aid}>#{personLastName per}, #{personFirstName per} :&nbsp;
-                      #{showtime (adoptInfoDate adoptinfo)}  
+                      #{showtime (date)}  
          ^{rabbitsWidget aid}
          <div #reqId style="display:none;"> #{show aid}
          <div .aButton #addNote><a href=@{NewNoteR aid}>New Action</a>
@@ -444,10 +444,13 @@ getViewAdoptForm  id = do
     <div #afTitle style="width:100%; float:left; text-align:center; background:#cfcfcf;"> 
            <b> Adoption Request </b>
     <div #adoptReqBlock style="float:left;">
-     $forall (Entity  aide  (AdoptRequest apid adoptinfo) , Entity pId per)<- aform
+     $forall (Entity  aide  (AdoptRequest date apid adoptinfo file) , Entity pId per)<- aform
           <div #afDate style="float:right; width:100%; text-align:right;">
-            #{showtime (adoptInfoDate adoptinfo)}
-          ^{viewaform per adoptinfo}
+            #{showtime (date)}
+          $maybe ainfo <- adoptinfo
+           ^{viewaform per ainfo}
+          $maybe afile <- file
+            <a href=#{mkLink afile imgpath}>#{afile}</a>
     |]
           
 

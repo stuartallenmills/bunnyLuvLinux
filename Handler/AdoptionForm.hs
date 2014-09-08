@@ -29,9 +29,13 @@ import Data.Time.LocalTime
 import Data.Time.Calendar
 import FormUtils
 
+data AdoptTest2 = AdoptTest2 {
+                    ad2Date::Day
+                    ,ad2info::AdoptInfo
+                     } deriving Show
+                                
 data AdoptTest = AdoptTest {
-                      addate::Day
-                      ,adownRab::Bool
+                      adownRab::Bool
                       ,addesc::Maybe Textarea
                       ,adcompan:: Bool
                       ,adDiet::Maybe Textarea
@@ -58,7 +62,7 @@ data AdoptTest = AdoptTest {
                       ,adFind::Textarea
                        } deriving Show
 
-aMaster::Html->MForm Handler (FormResult (Person, AdoptInfo), Widget)
+aMaster::Html->MForm Handler (FormResult (Person, AdoptTest2), Widget)
 aMaster extra = do
   (res1, p1Widget) <-  adoptionForm 
   (res2, perWidget) <-  personForm 
@@ -66,7 +70,7 @@ aMaster extra = do
   let ares = (,) <$> res2 <*> res1
   return (ares, wid)
 
-adoptionForm::MForm Handler (FormResult AdoptInfo, Widget)
+adoptionForm::MForm Handler (FormResult AdoptTest2, Widget)
 adoptionForm= do
   local_time <- liftIO getLocalTime
   let today = localDay local_time
@@ -119,12 +123,13 @@ adoptionForm= do
                       }
          |]
   let date = text2date dateRes
-  let res = AdoptInfo <$> date <*> ownRabRes <*> ownRabDescRes <*>companionRes <*>
+  let ainfo = AdoptInfo  <$> ownRabRes <*> ownRabDescRes <*>companionRes <*>
                         dietRes <*> reasonRes <*> howlongRes <*> researchRes <*> rescueRes <*>
                         allergyRes <*> careRes <*> ownRes <*> proofRes <*> enclosureRes <*>
                         exerciseRes <*> vacationRes <*> vetRes <*> petsRes <*>
                          vetcareRes <*> aptRes <*> roomRes <*> otherRes <*>
                         separateRes <*> changeRes <*> permissionRes <*> findRes
+  let res =AdoptTest2 <$> date <*> ainfo
   return (res, wid)
 
 getAdoptionFormR::Handler Html
@@ -150,7 +155,7 @@ postAdoptionFormR = do
     FormSuccess (person, atest) -> do
                        runDB $ do
                         personID<-insert person
-                        let areq = AdoptRequest personID atest
+                        let areq = AdoptRequest (ad2Date atest)  personID (Just (ad2info atest)) Nothing
                         reqID<- insert areq
                         return ()
                        defaultLayout  [whamlet|
