@@ -30,7 +30,9 @@ getPerson arId = runDB $ do
      Just (AdoptRequest pid _)-> do
                                     per <- get pid
                                     return per
-     _->return Nothing                                      
+     _->return Nothing
+     
+                      
                                       
 getRabs reqId = runDB $
   select $ from $ \(rabs, ad) ->do
@@ -44,7 +46,7 @@ getNotes reqId =  runDB $
 
 getAdoptForm id = runDB $ 
     select $ from $ \(adopt, per)-> do
-     where_ ((adopt ^. AdoptRequestPerson ==. per ^. PersonId) &&. (adopt ^. AdoptRequestId ==. val id))
+     where_ ((adopt ^. AdoptRequestPerson ==. per ^. PersonId) &&. (adopt ^. AdoptRequestId ==. val id) )
      return (adopt, per)
 
 data Notes = Notes {
@@ -76,24 +78,56 @@ adoptRabbitsForm bnames arId extra = do
        $(widgetFileNoReload def "cancelButton")
        per<- handlerToWidget ( getPerson arId) 
        [whamlet| #{extra}
-            <div #anRForm>
+          <div #anRForm>
              $maybe person <- per
               <div #reqPer>
                Select Rabbit for  #{personFirstName person} #{personLastName person}
-             <div .cancelBut #canBut, style="float:right; margin-left:20px;"> <a href=@{ViewAdoptForms}>cancel</a>
-             <div .blDate #anDate style="float:right;">
-              Date: ^{fvInput dateView}
-             <div .required #action>
+               <div .cancelBut #canBut, style="float:right; margin-left:20px;"> <a href=@{ViewAdoptForms}>cancel</a>
+             <div  #therab>
               <div .bllabel>
-               Rabbit:
+                Rabbit:
               <div #rabNameD>
-              ^{fvInput rabbitView}
+               ^{fvInput rabbitView}
               <div #berror>
                 Rabbit Not On File!
               <div #arabStatus>
                Status: ^{fvInput statusView}
+              <div .blDate #anDate style="float:right;">
+                Date: ^{fvInput dateView}
              <input .subButton  type=submit value="submit">
             |]
+       toWidget [lucius|
+                   #arabStatus {
+                    padding-left:5%;
+                   }
+                   #therab {
+                    width:100%;
+                    margin-top:5px;
+                   }
+                   #reqPer {
+                     width:100%;
+                    }
+                   ##{fvId statusView} {
+                         width:10em;
+                     }
+                   #anDate {
+                      padding-right:10%;
+                    }
+
+                    #anRForm div {
+                       float:left;
+                     }
+                    #anRForm input {
+                       display:inline-block;
+                     }
+                    ##{fvId rabbitView} {
+                        width:15em;
+                      }
+
+                    ##{fvId dateView} {
+                        width:6em;
+                      }
+   |]
        toWidget [julius|
                   $( document ).ready(function() { 
                     $( "#rabName" ).attr("title", "Find rabbit by name");
@@ -158,7 +192,7 @@ adoptNotesForm reqId extra= do
              $maybe person <- per
               <div #reqPer>
                New action for #{personFirstName person} #{personLastName person}
-             <div .cancelBut #canBut, style="float:right; margin-left:20px;"> <a href=@{ViewAdoptForms}>cancel</a>
+                <div .cancelBut #canBut, style="float:right; margin-left:20px;"> <a href=@{ViewAdoptForms}>cancel</a>
              <div .blDate #anDate style="float:right;">
               Date: ^{fvInput dateView}
              <div .required #action>
@@ -166,6 +200,7 @@ adoptNotesForm reqId extra= do
                Action:
               ^{fvInput actionView}
              <input .subButton  type=submit value="submit">
+            
             |]
        toWidget [lucius|
                ##{fvId actionView} {
@@ -173,14 +208,23 @@ adoptNotesForm reqId extra= do
                  }
                ##{fvId dateView} {
                     width:6em;
+                    padding-right:1%;
                    }
 
                #anForm {
                    width:100%;
                  }
+               #reqPer {
+                 width:100%;
+               }
                #anDate input {
                    display:inline;
                   }
+              
+               #arabStatus {
+                 padding-left:20px;
+                }
+
                #anDate {
                  float:right;
                 }
@@ -208,6 +252,7 @@ rabbitsWidget reqId = do
         <div #arabname>
          <a href=@{ViewR rabId}>#{rabbitName rab}</a>
       $else
+        <div #none style="padding-top:5px;">
          None Selected
       |]
     
@@ -226,7 +271,7 @@ notesWidget aid = do
 
 selRabWid::AdoptRequestId->Widget
 selRabWid  reqId= do
-    bnames <- handlerToWidget $ getNamesDB
+    bnames <- handlerToWidget getAdoptAvailable
     (rabWid, r_enctype)<- handlerToWidget (generateFormPost (adoptRabbitsForm bnames reqId))
     [whamlet|
      <form method=post action=@{SelRabR reqId} enctype=#{r_enctype}>

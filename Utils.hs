@@ -72,6 +72,14 @@ queryStatus status = runDB $
      orderBy [asc (r ^. RabbitName)]
      return r
 
+queryNotSelected::Handler [Entity Rabbit]
+queryNotSelected = runDB $
+   select $ from $ \rabs ->do
+     where_ (notExists $
+             from $ \adopt -> 
+               where_ (rabs ^. RabbitId ==. adopt ^. AdoptRab))
+     return rabs
+  
 
 queryName name = runDB $ do
   let (f,s) = T.splitAt 1 name
@@ -102,6 +110,16 @@ getName (Entity rabId rab) = rabbitName rab
 getNames::[Entity Rabbit]->[Text]
 getNames  = map getName 
 
+getAdoptAvailable::Handler [Text]
+getAdoptAvailable = do
+  rabs<-runDB $
+   select $ from $ \rabs ->do
+     where_ ((rabs ^. RabbitStatus ==. val "BunnyLuv") &&. (notExists $
+             from $ \adopt -> 
+               where_ (rabs ^. RabbitId ==. adopt ^. AdoptRab)))
+     return rabs
+  return (getNames rabs)
+  
 getNamesDB:: Handler [Text]
 getNamesDB = do
      rabs<-queryStatus "BunnyLuv"
