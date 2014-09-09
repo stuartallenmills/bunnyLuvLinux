@@ -171,6 +171,7 @@ reportbase begin end bl link atitle result = do
      defaultLayout $ do
         setTitle atitle
         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+        $(widgetFileNoReload def "bldate")
         toWidget [julius| $( document ).ready(function(){
                              if (#{isAuth}) { 
                               $( "#cssmenu li:eq(1)" ).show(); 
@@ -181,75 +182,7 @@ reportbase begin end bl link atitle result = do
                            });
 
 
-   function checkDate( astr ) {
-      var str =astr; 
-      var pat=/^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/]((19|20)[0-9][0-9]|[0-9][0-9])$/;
-    var res = str.match(pat);
-    if (res==null) {
-      return "";
-    }
-    
-    var dtMonth=res[1];
-    var dtDay=res[2];
-    var adtYear=res[3];
-    if (adtYear.length == 2) 
-         {dtYear="20"+adtYear;} 
-    else {dtYear=adtYear;}
-
-    if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) {
-       return "";
-    }
-
-  if (dtMonth == 2)
-     {
-     var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
-     if (dtDay> 29 || (dtDay ==29 && !isleap)) {
-          return "";
-        }
-     }
-  return (dtMonth +"/"+ dtDay+"/"+dtYear);
-    
-  }
-            $(function () {
-              $( ".blDate :input" ).blur ( function(e) {
-                 var str = $( this ).val();
-                 if (str.length < 1)
-                   return;
-                 var thedate = checkDate( str );
-                 if (thedate.length < 4) {
-                   e.preventDefault();
-                   $( this ).val( "" );
-                    $( "#dateError" ).show();
-                   $( this ).focus();              
-                  } else {
-                  $( this ).val ( thedate );
-                  $( this ).change();
-                 }
-                });
-               });
-
-            $(function () {
-              $( ".blDate :input" ).keydown ( function(e) {
-                 $( "#dateError" ).hide();
-               if (e.keyCode==13 || e.keyCode==9) {
-                 var str = $( this ).val();
-                 if (str.length < 1)
-                   return;
-                 var thedate = checkDate( str );
-                 if (thedate.length < 4) {
-                   e.preventDefault();
-                   $( this ).val( "");
-                    $( "#dateError" ).show();
-                   $( this ).focus();
-                  } else {
-                 $( this ).val ( thedate );
-                 $( this ).change();
-                 }
-                }
-                });
-               });
-
-
+  
                              |]
         [whamlet|
         <div #blHeaderD>

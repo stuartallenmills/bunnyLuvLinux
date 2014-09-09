@@ -62,21 +62,21 @@ data RabAdopt = RabAdopt {
   rabAdoptRequest::AdoptRequestId
   ,rabName::Text
   ,rabAdoptDate::Day
-  ,status::Text
   } deriving Show
-                           
-adoptRabbitsForm::[Text]-> AdoptRequestId->Html->MForm Handler (FormResult RabAdopt, Widget)
-adoptRabbitsForm bnames arId extra = do
+
+
+editRabbitsForm::[Text]-> AdoptRequestId->Html->MForm Handler (FormResult RabAdopt, Widget)
+editRabbitsForm bnames arId extra = do
   local_time <- liftIO  getLocalTime
   let stime = showtime (localDay local_time)
   (dateRes, dateView)<-mreq textField "nope" (Just stime)
   (rabbitRes,rabbitView)<-mreq textField (FieldSettings "nope" (Just "nope") (Just "rabName") (Just "rabName") []) Nothing
-  (statusRes,statusView)<-mreq (selectFieldList  rabStatus) "nope" Nothing
   let date = fmap (doparseTime.unpack) dateRes
-  let res = RabAdopt arId <$> rabbitRes <*> date <*>statusRes
+  let res = RabAdopt arId <$> rabbitRes <*> date 
   let wid = do
        $(widgetFileNoReload def "cancelButton")
        per<- handlerToWidget ( getPerson arId) 
+       rabs<- handlerToWidget (getRabs arId)
        [whamlet| #{extra}
           <div #anRForm>
              $maybe person <- per
@@ -88,12 +88,12 @@ adoptRabbitsForm bnames arId extra = do
                 Rabbit:
               <div #rabNameD>
                ^{fvInput rabbitView}
-              <div #berror>
-                Rabbit Not On File!
-              <div #arabStatus>
-               Status: ^{fvInput statusView}
+               <div #berror>
+                \<- Not On File!
+
               <div .blDate #anDate style="float:right;">
                 Date: ^{fvInput dateView}
+              <div #dateError style="display:none; color:#ff0000; float:right">Error->
              <input .subButton  type=submit value="submit">
             |]
        toWidget [lucius|
@@ -107,9 +107,6 @@ adoptRabbitsForm bnames arId extra = do
                    #reqPer {
                      width:100%;
                     }
-                   ##{fvId statusView} {
-                         width:10em;
-                     }
                    #anDate {
                       padding-right:10%;
                     }
@@ -121,7 +118,8 @@ adoptRabbitsForm bnames arId extra = do
                        display:inline-block;
                      }
                     ##{fvId rabbitView} {
-                        width:15em;
+                        width:20em;
+                        float:left;
                       }
 
                     ##{fvId dateView} {
@@ -140,7 +138,7 @@ adoptRabbitsForm bnames arId extra = do
                     });
                    });
 
- 
+  
    function checkName ( inVal ) {
          var currval = inVal;
          var validOptions = #{rawJS (gostring bnames)};
@@ -157,7 +155,7 @@ adoptRabbitsForm bnames arId extra = do
                            
 
                $(function() { $( "#rabName" ).keydown( function( e) {
-                           $( "#berror" ).hide();
+                           $( "#rabNameD #berror" ).hide();
                            if (e.keyCode==13 || e.keyCode==9) {
                             var aname = $( this ).val();
                             var nname = checkName( aname );
@@ -165,12 +163,28 @@ adoptRabbitsForm bnames arId extra = do
                               e.preventDefault();
                               $( this ).val( "" );
                               $( this ).focus();
-                              $( "#berror" ).show();
+                              $( "#rabNameD #berror" ).show();
                               } else {
                               $( this ).val( nname );
                               }
 
                             }
+                   });
+                 });
+
+               $(function() { $( "#rabName" ).blur( function(e ) {
+                            var aname = $( this ).val();
+                            var nname = checkName( aname );
+                            if (nname.length < 1) {
+                              e.preventDefault();
+                              $( this ).val( "" );
+                              $( this ).focus();
+                              $( "#rabNameD #berror" ).show();
+                              } else {
+                              $( this ).val( nname );
+                              }
+
+                            
                    });
                  });
               |]
@@ -192,9 +206,11 @@ adoptNotesForm reqId extra= do
              $maybe person <- per
               <div #reqPer>
                New action for #{personFirstName person} #{personLastName person}
-                <div .cancelBut #canBut, style="float:right; margin-left:20px;"> <a href=@{ViewAdoptForms}>cancel</a>
-             <div .blDate #anDate style="float:right;">
-              Date: ^{fvInput dateView}
+               <div .cancelBut #canBut, style="float:right; margin-left:20px;">
+                  <a href=@{ViewAdoptForms}>cancel</a>
+               <div .blDate #anDate style="float:right; margin-right:5%;">
+                 Date: ^{fvInput dateView}
+               <div #dateError style="display:none; color:#ff0000; float:right;">Error->
              <div .required #action>
               <div .bllabel>
                Action:
@@ -272,25 +288,32 @@ notesWidget aid = do
 selRabWid::AdoptRequestId->Widget
 selRabWid  reqId= do
     bnames <- handlerToWidget getAdoptAvailable
-    (rabWid, r_enctype)<- handlerToWidget (generateFormPost (adoptRabbitsForm bnames reqId))
+    (rabWid, r_enctype)<- handlerToWidget (generateFormPost (editRabbitsForm bnames reqId))
     [whamlet|
-     <form method=post action=@{SelRabR reqId} enctype=#{r_enctype}>
+     <form #selRab method=post action=@{SelRabR reqId} enctype=#{r_enctype}>
           ^{rabWid}
      |]
+    toWidget [lucius|
+               #selRab {
+                 width:90%;
+                 box-shadow:2px 2px 4px #7f7f7f;
+                 background:#fbfbfb;
+               }
+         |]
       
 getSelRabR::AdoptRequestId->Handler Html
 getSelRabR reqId = adoptFormsPage (Just (selRabWid  reqId))
 
 postSelRabR::AdoptRequestId->Handler Html
 postSelRabR reqId = do
-  ((result, _), _) <- runFormPost (adoptRabbitsForm []  reqId)
+  ((result, _), _) <- runFormPost (editRabbitsForm []  reqId)
   case result of
-    FormSuccess (RabAdopt rId rName date stat)-> do
+    FormSuccess (RabAdopt rId rName date )-> do
       rab <- queryName rName
       if (length rab >0)
          then do
           let (Entity rabId arab) = head rab
-          let adopt = Adopt rabId date rId stat
+          let adopt = Adopt rabId date rId 
           runDB $ insert adopt
           return ()
          else
@@ -302,9 +325,16 @@ postSelRabR reqId = do
 getNewNoteWid reqId= do
   (tnotesWidget, nenc)<- handlerToWidget $ generateFormPost (adoptNotesForm reqId)
   [whamlet|
-     <form method=post action=@{NewNoteR reqId} enctype=#{nenc}>
+     <form #getNote method=post action=@{NewNoteR reqId} enctype=#{nenc}>
           ^{tnotesWidget}
      |]
+  toWidget [lucius|
+            #getNote {
+              width:90%;
+              box-shadow:2px 2px 4px #7f7f7f;
+              background:#fbfbfb;
+            }
+   |]
 
 getNewNoteR::AdoptRequestId->Handler Html
 getNewNoteR reqId = adoptFormsPage (Just (getNewNoteWid reqId))
@@ -327,6 +357,11 @@ adoptFormsPage aform = do
   adopts<-getAdoptions
   bnames <-  getNamesDB
   maid <- maybeAuthId
+  auth <- isAdmin
+  impath <- liftIO getImagePath
+  let imgpath = unpack impath
+  let mode = (maid == Just "demo")
+  let isAuth=(auth==Authorized)
   impath <- liftIO getImagePath
   let imgpath = unpack impath
 
@@ -335,7 +370,7 @@ adoptFormsPage aform = do
   defaultLayout $ do
     setTitle "Adoption Requests"
     $(widgetFileNoReload def "cancelbutton")
-    $(widgetFileNoReload def "cancelbutton")
+    $(widgetFileNoReload def "bldate")
     addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
     addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
     addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
@@ -344,6 +379,7 @@ adoptFormsPage aform = do
      <div #blHeaderD>
      ^{getNameWidget bnames formWidget enctype}
      ^{headerLogWid imgpath maid}    
+     ^{mainMenu mode}
      <div #afTitle style="width:100%; float:left; text-align:center; background:#cfcfcf;"> 
            <b> Adoption Requests </b>
     $maybe awid<-aform
@@ -357,15 +393,25 @@ adoptFormsPage aform = do
          $maybe file <- afile 
           <a href=#{mkLink file imgpath}>#{personLastName per}, #{personFirstName per} :&nbsp;
                        #{showtime (date)}
+         <div #adbuttons>
+          <div .aButton #addNote><a href=@{NewNoteR aid}>New Action</a>
+          <div .aButton #addRab><a href=@{SelRabR aid}>Select Rabbit</a>
+          <div .aButton #delRab><a href="#">Delete Rabbit</a>
+          <div .aButton #adopt><a href="#">Adopt</a>
+        <div .afrow>
          ^{rabbitsWidget aid}
-         <div #reqId style="display:none;"> #{show aid}
-         <div .aButton #addNote><a href=@{NewNoteR aid}>New Action</a>
-         <div .aButton #addRab><a href=@{SelRabR aid}>Select Rabbit</a>
-         ^{notesWidget aid}
+        ^{notesWidget aid}
  
       |]
     toWidget [lucius|
 
+#adoptReqBlock   #adbuttons div {
+       float:right;
+   }
+
+#adoptReqBlock   #adbuttons {
+       float:right;
+   }
    .afrow {
     width:100%;
     margin-bottom:2px;

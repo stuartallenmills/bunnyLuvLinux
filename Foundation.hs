@@ -91,7 +91,6 @@ Adopt
    rab RabbitId
    date Day
    req AdoptRequestId
-   stat Text
    deriving Show
 
 
