@@ -40,3 +40,4 @@
 /newnote/#AdoptRequestId     NewNoteR GET POST
 /selRab/#AdoptRequestId  SelRabR GET POST
 /newAreq                 AdoptReqR GET POST
+/delAdRab/#AdoptRequestId DelRabR GET POST

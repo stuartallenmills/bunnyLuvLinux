@@ -5,7 +5,7 @@ module Handler.ViewAdoption where
 
 import Conduit
 import Data.Default
-import Yesod hiding ((!=.), (==.), (=.), update)
+import Yesod hiding ((!=.), (==.), (=.), update, delete)
 import Yesod.Default.Util
 import Foundation
 import Yesod.Auth
@@ -63,6 +63,159 @@ data RabAdopt = RabAdopt {
   ,rabName::Text
   ,rabAdoptDate::Day
   } deriving Show
+
+deleteRabbitForm::AdoptRequestId->Html->MForm Handler (FormResult RabAdopt, Widget)
+deleteRabbitForm arId extra = do
+  local_time <- liftIO  getLocalTime
+  let stime = showtime (localDay local_time)
+  (dateRes, dateView)<-mreq textField "nope" (Just stime)
+  (rabbitRes,rabbitView)<-mreq textField (FieldSettings "nope" (Just "nope") (Just "rabName") (Just "rabName") []) Nothing
+  let date = fmap (doparseTime.unpack) dateRes
+  let res = RabAdopt arId <$> rabbitRes <*> date 
+  let wid = do
+       $(widgetFileNoReload def "cancelButton")
+       per<- handlerToWidget ( getPerson arId) 
+       rabs<- handlerToWidget (getRabs arId)
+       let rabNames = getNames rabs
+       [whamlet| #{extra}
+          <div #anRForm>
+             $maybe person <- per
+              <div #reqPer style="float:left; width:100%;">
+               <div #perName style="float:left">
+                Remove Rabbit for  #{personFirstName person} #{personLastName person}
+               <div .blDate #anDate style="float:left; padding-left:10%;">
+                Date: ^{fvInput dateView}
+               <div #dateError style="display:none; color:#ff0000; float:left">
+                                     \<-Error
+                                             
+               <div .cancelBut #canBut, style="float:right; margin-left:20px;"> <a href=@{ViewAdoptForms}>cancel</a>
+             <div #rabList>
+               $forall Entity rId rabb <-rabs
+                  <div #arab>
+                    <div #rname style="padding-left:10px;"> #{rabbitName rabb}
+             <div  #therab>
+              <div .bllabel>
+                Enter Rabbit to remove:
+              <div #rabNameDel>
+               ^{fvInput rabbitView}
+               <div #berror>
+                \<- Not Valid!
+
+              <input .subButton  type=submit value="submit">
+            |]
+       toWidget [lucius|
+             ##{fvId rabbitView} {
+                  width:20em;
+                  display:inline;
+                  margin-left:10px;
+                  float:left;
+               }
+             ##{fvId dateView} {
+                  width:6em;
+                  display:inline;
+              }  
+             
+             #therab .bllabel {
+                  float:left;
+              }
+             #rabNameDel {
+               margin-top:10px;
+             }
+          |]
+
+       toWidget [julius|
+          $(function () {
+          $( "#rname" ).click(function () {
+            var val = $( this ).text();
+            alert("click "+val);
+          });
+         });
+         
+   function checkDelName ( inVal ) {
+         var currval = inVal;
+         var validOptions = #{rawJS (gostring rabNames)};
+         var capval = currval.charAt(0).toUpperCase()+ currval.slice(1);
+         var amember = $.inArray( capval, validOptions );
+            if ( amember > -1 ) {
+                return capval;
+            } else {
+             return ("");
+            }
+        }
+
+               $(function() { $( "#rabName" ).keydown( function( e) {
+                           $( "#rabNameDel #berror" ).hide();
+                           if (e.keyCode==13 || e.keyCode==9) {
+                            var aname = $( this ).val();
+                            var nname = checkDelName( aname );
+                            if (nname.length < 1) {
+                              e.preventDefault();
+                              $( this ).val( "" );
+                              $( this ).focus();
+                              $( "#rabNameDel #berror" ).show();
+                              } else {
+                              $( this ).val( nname );
+                              }
+
+                            }
+                   });
+                 });
+
+          
+         $(function () {
+           $( ".subButton" ).click( function (e) {
+            var theval = $( "#rabNameDel :input").val();
+            var res = checkDelName(theval);
+            $( "#rabNameDel :input" ).val(res)
+            if (res.length < 1) {
+                 e.preventDefault();
+                 $( "#rabNameDel :input" ).focus();
+                 $( "#rabNameDel #berror" ).show();
+             }
+            });
+           });
+
+   |]
+ 
+         
+  return (res, wid)
+
+deleteRabWid::AdoptRequestId->Widget
+deleteRabWid  reqId= do
+    (rabWid, r_enctype)<- handlerToWidget (generateFormPost (deleteRabbitForm  reqId))
+    [whamlet|
+     <form #delRab method=post action=@{DelRabR reqId} enctype=#{r_enctype}>
+          ^{rabWid}
+     |]
+    toWidget [lucius|
+               #delRab {
+                 width:90%;
+                 box-shadow:2px 2px 4px #7f7f7f;
+                 background:#fbfbfb;
+               }
+         |]
+      
+getDelRabR::AdoptRequestId->Handler Html
+getDelRabR reqId = adoptFormsPage (Just (deleteRabWid  reqId))
+
+postDelRabR::AdoptRequestId->Handler Html
+postDelRabR reqId = do
+  ((result, _), _) <- runFormPost (deleteRabbitForm  reqId)
+  case result of
+    FormSuccess (RabAdopt rId rName date )-> do
+      rab <- queryName rName
+      if (length rab >0)
+         then do
+          let (Entity rabId arab) = head rab
+          let adopt = Adopt rabId date rId 
+          runDB $ delete $
+            from $ \adopts -> do
+            where_ (adopts ^. AdoptRab ==. val rabId)
+          return ()
+         else
+          return ()
+      adoptFormsPage Nothing
+    _ -> defaultLayout $ [whamlet| Form Error |]
 
 
 editRabbitsForm::[Text]-> AdoptRequestId->Html->MForm Handler (FormResult RabAdopt, Widget)
@@ -396,7 +549,7 @@ adoptFormsPage aform = do
          <div #adbuttons>
           <div .aButton #addNote><a href=@{NewNoteR aid}>New Action</a>
           <div .aButton #addRab><a href=@{SelRabR aid}>Select Rabbit</a>
-          <div .aButton #delRab><a href="#">Delete Rabbit</a>
+          <div .aButton #delRab><a href=@{DelRabR aid}>Remove Rabbit</a>
           <div .aButton #adopt><a href="#">Adopt</a>
         <div .afrow>
          ^{rabbitsWidget aid}
