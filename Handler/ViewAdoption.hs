@@ -18,35 +18,41 @@ import FormUtils
 import Utils
 import Text.Julius
 
---getAdoptions::Handler [(Entity AdoptRequest, Entity Person)]
+getAdoptions::Handler [(Entity AdoptRequest, Entity Person)]
 getAdoptions = runDB $
   select $ from $ \(adopt, per) -> do
     where_ ((adopt ^. AdoptRequestPerson) ==. (per ^. PersonId))
     return (adopt, per)
 
+getPersonE::AdoptRequestId->Handler [Entity Person]
+getPersonE arId = runDB $ 
+  select $ from $ \(adr, per) -> do
+  where_ (adr ^. AdoptRequestId ==. val arId &&. adr ^. AdoptRequestPerson ==. per ^. PersonId)
+  return per
+
 getPerson arId = runDB $ do
    req<- get arId
    case req of
-     Just (AdoptRequest _ pid _ _)-> do
-                                    per <- get pid
-                                    return per
+     Just (AdoptRequest _ pid _ _)->  get pid
+              
      _->return Nothing
+ 
      
                       
 getSelectRecs reqId = runDB $
        select $ from $ \sel -> do
        where_ (sel ^. AdoptReq ==. val reqId)
-       return (sel)
+       return sel
        
 getRabs reqId = runDB $
   select $ from $ \(rabs, ad) ->do
     where_ ((ad ^. AdoptReq ==. val reqId) &&. (rabs ^. RabbitId ==. ad ^. AdoptRab))
-    return (rabs)
+    return rabs
 
 getAdoptedRabs reqId = runDB $
   select $ from $ \(rabs, ad) ->do
     where_ ((ad ^. AdoptedRabsReq ==. val reqId) &&. (rabs ^. RabbitId ==. ad ^. AdoptedRabsRab))
-    return (rabs)
+    return rabs
 
 getNotes reqId =  runDB $
    select $ from $ \notes->do
@@ -302,8 +308,22 @@ goAdopted aday (Entity selId (Adopt rab tdate req))= AdoptedRabs rab aday (Just 
 doDelete (Entity selId (Adopt rabId _ _ )) = delete $ from $ \sels -> do
   where_ (sels ^. AdoptRab ==. val rabId)
 
+--adoptStr::Maybe (Entity Person)->Text
+
+adoptStr::[Entity Person]->Text
+adoptStr ((Entity pId tper):ls) = pack ("Adopted by "++ (unpack $ personFirstName tper) ++" " ++ (unpack $ personLastName tper))
+adoptStr _ = "Adopted"
+
+--updateRab::Day->Maybe (Entity Person)->Entity Adopt->Handler ()
+
+updateRab  tdate perText (Entity aId (Adopt rabId _ _))  =        update $ \p -> do
+          set p [RabbitStatus =. val "Adopted", RabbitStatusDate =. val (showtime tdate),
+                 RabbitStatusNote =. val perText]
+          where_ (p ^. RabbitId ==. val rabId)
+          
 adoptedText::Textarea
 adoptedText = Textarea ( pack "Adopted Rabbits")
+
 
 postAdoptRabR::AdoptRequestId->Handler Html
 postAdoptRabR reqId = do
@@ -311,6 +331,8 @@ postAdoptRabR reqId = do
   case result of
     FormSuccess tdate -> do
       sels<- getSelectRecs reqId
+      aper<- getPersonE reqId
+      let perTxt = adoptStr aper
       let adrabs = fmap (goAdopted tdate) sels
       runDB $ do
         insert (AdoptNotes reqId tdate adoptedText )
@@ -318,6 +340,7 @@ postAdoptRabR reqId = do
       -- delete from adopt
         mapM doDelete sels
       -- update rabbit records
+        mapM (updateRab tdate perTxt) sels
       
 
       redirect ViewAdoptForms
