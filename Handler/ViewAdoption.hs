@@ -43,6 +43,11 @@ getRabs reqId = runDB $
     where_ ((ad ^. AdoptReq ==. val reqId) &&. (rabs ^. RabbitId ==. ad ^. AdoptRab))
     return (rabs)
 
+getAdoptedRabs reqId = runDB $
+  select $ from $ \(rabs, ad) ->do
+    where_ ((ad ^. AdoptedRabsReq ==. val reqId) &&. (rabs ^. RabbitId ==. ad ^. AdoptedRabsRab))
+    return (rabs)
+
 getNotes reqId =  runDB $
    select $ from $ \notes->do
      where_ (notes ^. AdoptNotesAdoptRequest ==. val reqId)
@@ -218,7 +223,8 @@ postDelRabR reqId = do
           return ()
          else
           return ()
-      adoptFormsPage Nothing
+      redirect ViewAdoptForms
+
     _ -> defaultLayout $ [whamlet| Form Error |]
 
 
@@ -314,7 +320,7 @@ postAdoptRabR reqId = do
       -- update rabbit records
       
 
-      adoptFormsPage Nothing
+      redirect ViewAdoptForms
     _ -> do
          msgM<-getMessage
          defaultLayout $ [whamlet|
@@ -529,6 +535,22 @@ rabbitsWidget reqId = do
         <div #none style="padding-top:5px;">
          None Selected
       |]
+
+adoptedRabbitsWidget:: AdoptRequestId->Widget
+adoptedRabbitsWidget reqId = do
+  
+  rabs <- handlerToWidget  (getAdoptedRabs (Just reqId))
+ 
+  let isaRabs = (length rabs)>0
+  [whamlet|
+    <div #RabbitBlock style="margin-left:2px; padding-left:2px;">
+      <div .bllabel style="padding-top:5px; padding-left:10px;">
+         Adopted Rabbits: #
+      $if isaRabs    
+       $forall Entity rabId rab <-rabs
+        <div #adrabname>
+         <a href=@{ViewR rabId}>#{rabbitName rab}</a>
+      |]
     
 notesWidget::AdoptRequestId->Widget
 notesWidget aid = do
@@ -576,7 +598,8 @@ postSelRabR reqId = do
           return ()
          else
           return ()
-      adoptFormsPage Nothing
+      redirect ViewAdoptForms
+
     _ -> defaultLayout $ [whamlet| Form Error |]
 
   
@@ -658,6 +681,7 @@ adoptFormsPage aform = do
           <div .aButton #adopt><a href=@{AdoptRabR aid}>Adopt</a>
         <div .afrow>
          ^{rabbitsWidget aid}
+         ^{adoptedRabbitsWidget aid}
         ^{notesWidget aid}
  
       |]
