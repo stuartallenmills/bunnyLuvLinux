@@ -41,3 +41,4 @@
 /selRab/#AdoptRequestId  SelRabR GET POST
 /newAreq                 AdoptReqR GET POST
 /delAdRab/#AdoptRequestId DelRabR GET POST
+/doAdopt/#AdoptRequestId  AdoptRabR GET POST

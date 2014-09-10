@@ -33,7 +33,11 @@ getPerson arId = runDB $ do
      _->return Nothing
      
                       
-                                      
+getSelectRecs reqId = runDB $
+       select $ from $ \sel -> do
+       where_ (sel ^. AdoptReq ==. val reqId)
+       return (sel)
+       
 getRabs reqId = runDB $
   select $ from $ \(rabs, ad) ->do
     where_ ((ad ^. AdoptReq ==. val reqId) &&. (rabs ^. RabbitId ==. ad ^. AdoptRab))
@@ -217,6 +221,107 @@ postDelRabR reqId = do
       adoptFormsPage Nothing
     _ -> defaultLayout $ [whamlet| Form Error |]
 
+
+adoptRabbitsForm::AdoptRequestId->Html->MForm Handler (FormResult Day, Widget)
+adoptRabbitsForm  arId extra = do
+  local_time <- liftIO  getLocalTime
+  let stime = showtime (localDay local_time)
+  (dateRes, dateView)<-mreq textField "nope" (Just stime)
+  let tdate = fmap (doparseTime.unpack) dateRes
+  let res = tdate
+  let wid = do
+       $(widgetFileNoReload def "cancelButton")
+       per<- handlerToWidget ( getPerson arId) 
+       rabs<- handlerToWidget (getRabs arId)
+       let rabNames = getNames rabs
+       [whamlet| #{extra}
+          <div #anRForm>
+             $maybe person <- per
+              <div #reqPer style="float:left; width:100%;">
+               <div #perName style="float:left">
+                Confirm adoption for  #{personFirstName person} #{personLastName person}
+               <div .blDate #anDate style="float:left; padding-left:10%;">
+                Date: ^{fvInput dateView}
+               <div #dateError style="display:none; color:#ff0000; float:left">
+                                     \<-Error
+                                             
+               <div .cancelBut #canBut, style="float:right; margin-left:20px;"> <a href=@{ViewAdoptForms}>cancel</a>
+             <div #rabList sytle="width:100%; float:left;">
+              <div #rabTitle style="float:left; width:100%;"> Rabbits:
+              $forall Entity rId rabb <-rabs
+                  <div #arab>
+                    <div #rname style="padding-left:10px;"> #{rabbitName rabb}
+             <input .subButton  type=submit value="confirm">
+            |]
+       toWidget [lucius|
+                    #reqPer {
+                     width:100%;
+                    }
+                   #anDate {
+                      padding-right:10%;
+                    }
+
+                    #anRForm div {
+                       float:left;
+                     }
+                    ##{fvId dateView} {
+                        width:6em;
+                        display:inline;
+                      }
+   |]
+
+  return ( res, wid)
+
+adoptRabWid::AdoptRequestId->Widget
+adoptRabWid  reqId= do
+    (rabWid, r_enctype)<- handlerToWidget (generateFormPost (adoptRabbitsForm  reqId))
+    [whamlet|
+     <form #adoptRab method=post action=@{AdoptRabR reqId} enctype=#{r_enctype}>
+          ^{rabWid}
+     |]
+    toWidget [lucius|
+               #adoptRab {
+                 width:90%;
+                 box-shadow:2px 2px 4px #7f7f7f;
+                 background:#fbfbfb;
+               }
+         |]
+
+getAdoptRabR::AdoptRequestId->Handler Html
+getAdoptRabR reqId = adoptFormsPage (Just (adoptRabWid  reqId))
+
+goAdopted::Day->Entity Adopt->AdoptedRabs
+goAdopted aday (Entity selId (Adopt rab tdate req))= AdoptedRabs rab aday (Just req)
+
+doDelete (Entity selId (Adopt rabId _ _ )) = delete $ from $ \sels -> do
+  where_ (sels ^. AdoptRab ==. val rabId)
+
+adoptedText::Textarea
+adoptedText = Textarea ( pack "Adopted Rabbits")
+
+postAdoptRabR::AdoptRequestId->Handler Html
+postAdoptRabR reqId = do
+  ((result, _), _) <- runFormPost (adoptRabbitsForm  reqId)
+  case result of
+    FormSuccess tdate -> do
+      sels<- getSelectRecs reqId
+      let adrabs = fmap (goAdopted tdate) sels
+      runDB $ do
+        insert (AdoptNotes reqId tdate adoptedText )
+        mapM_  insert adrabs
+      -- delete from adopt
+        mapM doDelete sels
+      -- update rabbit records
+      
+
+      adoptFormsPage Nothing
+    _ -> do
+         msgM<-getMessage
+         defaultLayout $ [whamlet|
+                           Message:
+                          $maybe msg<- msgM
+                           #{msg}
+                          Form Error |]
 
 editRabbitsForm::[Text]-> AdoptRequestId->Html->MForm Handler (FormResult RabAdopt, Widget)
 editRabbitsForm bnames arId extra = do
@@ -550,7 +655,7 @@ adoptFormsPage aform = do
           <div .aButton #addNote><a href=@{NewNoteR aid}>New Action</a>
           <div .aButton #addRab><a href=@{SelRabR aid}>Select Rabbit</a>
           <div .aButton #delRab><a href=@{DelRabR aid}>Remove Rabbit</a>
-          <div .aButton #adopt><a href="#">Adopt</a>
+          <div .aButton #adopt><a href=@{AdoptRabR aid}>Adopt</a>
         <div .afrow>
          ^{rabbitsWidget aid}
         ^{notesWidget aid}

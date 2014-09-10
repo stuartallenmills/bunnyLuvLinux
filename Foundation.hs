@@ -91,8 +91,14 @@ Adopt
    rab RabbitId
    date Day
    req AdoptRequestId
+   URabbit rab
    deriving Show
 
+AdoptedRabs
+    rab RabbitId
+    date Day
+    req AdoptRequestId Maybe
+    deriving Show
 
 AdoptRequest
    date Day
