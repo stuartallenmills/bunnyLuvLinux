@@ -29,6 +29,12 @@ import Data.Time.LocalTime
 import Data.Time.Calendar
 import System.FilePath
 
+getVets::Handler [Entity Vet]
+getVets = runDB $ 
+  select $ from $ \vet -> do
+  where_ (vet ^. VetDoctor !=. val "")
+  return vet
+  
 queryTreatmentB rabId = runDB $
   select $ from $ \t ->do
     where_ (t ^. TreatmentBRabbit ==. val rabId)
@@ -53,8 +59,10 @@ altered::[(Text,Text)]
 altered = [("No", "No"), ("Unknown", "Unknown"), ("Spayed", "Spayed"), ("Neutered", "Neutered")]
 status::[(Text, Text)]
 status = [ ("BunnyLuv", "BunnyLuv"), ("Adopted", "Adopted"), ("Died", "Died"), ("Euthanized", "Euthanized")]
+
 vets::[(Text, Text)]
 vets = [("Dr. Misetich", "Dr. Misetich"), ("Dr. Petritz", "Dr. Petritz"), ("Dr. Steele (C.A.R.E)", "Dr. Steele (C.A.R.E)")]
+
 procedures::[(Text,Text)]
 procedures=[("Spayed", "Spayed"), ("Neutered", "Neutered"), ("Euthanized", "Euthanized"), ("Other", "Other")]
 

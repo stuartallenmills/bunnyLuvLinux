@@ -43,6 +43,7 @@
          <li #newAdReq .last ><a href=@{AdoptReqR}>New Adoption Request</a></li>
    <li class="has-sub last" id="blAdmin"><a href="#"><span>Admin</span></a>
       <ul>
+       <li><a href=@{AddVetR}>Add Vet</a></li>
        $if mode
          <li><a href="#"><span title="Disabled for Demo">Change Password </span></a></li>
          <li><a href="#"><span  title="Disabled for Demo">Delete User</span></a></li>

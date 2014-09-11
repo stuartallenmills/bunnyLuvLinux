@@ -253,6 +253,11 @@ Rabbit
    birthday Day
    image Text Maybe
    deriving Show
+
+RabbitStory
+  story Textarea
+  deriving Show
+
 |]
 
 

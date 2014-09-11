@@ -24,5 +24,6 @@ import Handler.DailyReport
 import Handler.AdoptionForm
 import Handler.ViewAdoption
 import Handler.AdoptionReq
+import Handler.Vets
 
 mkYesodDispatch "App" resourcesApp

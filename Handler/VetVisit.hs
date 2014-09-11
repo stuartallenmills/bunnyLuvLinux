@@ -29,6 +29,7 @@ import Data.Time.LocalTime
 import FormUtils
 
 
+  
 testAltered::Rabbit->[(Text,Text)]
 testAltered rab | (((rabbitAltered rab)=="Spayed") || ((rabbitAltered rab)=="Neutered")) = []
                 | ((rabbitSex rab)=="F") = [("Spayed", "Spayed")]
@@ -53,14 +54,21 @@ parseNotes rab task
         | task == "Altered" = Just "none"
         | task == "Euth" = Just "none"
         | otherwise = Nothing
-                      
+
+vet2txtPair (Entity vId (Vet clin doc ph)) = (doc, doc)
+
+vetArr::[Entity Vet]->[(Text,Text)]
+vetArr = fmap vet2txtPair
+
 vetVisitForm::Text->Rabbit-> RabbitId->Html-> MForm Handler (FormResult VetVisit, Widget)
 vetVisitForm task rab rabid extra = do
-    local_time <- liftIO $ getLocalTime
+    local_time <- liftIO  getLocalTime
+    tvets <- lift getVets
+    let vArr = vetArr tvets
     let noteDis = if task /="Euth" then "block" else "none"::Text
     let stime = showtime (localDay local_time)
     (vvDateRes, vvDateView)<-mreq textField "nope" (Just stime)
-    (vvVetRes, vvVetView)<-mreq (selectFieldList vets) "nope" Nothing
+    (vvVetRes, vvVetView)<-mreq (selectFieldList vArr) "nope" Nothing
     (vvProblemRes, vvProblemView)<-mreq textField "nopte" (parseProb rab task)
     (vvProceduresRes, vvProceduresView)<-mreq textField "n" (parseTask rab task)
     (vvNotesRes, vvNotesView)<-mreq textField "n" (parseNotes rab task)
