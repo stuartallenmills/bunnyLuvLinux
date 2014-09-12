@@ -226,3 +226,46 @@ getEditR rabId  = do
                  |]            
     baseForm "Edit Rabbit" menu form
 
+addStoryForm::RabbitId->Html->MForm Handler (FormResult RabbitStory, Widget)
+addStoryForm rId extra = do
+  (storyRes, storyView)<-mreq textareaField "nope" Nothing
+  let res = RabbitStory rId <$> storyRes
+  let wid = do
+        [whamlet| #{extra}
+          <div #storyForm>
+             <div .bllabel>
+              Enter story/blurb :
+             <div #story> ^{fvInput storyView}
+            <input type="submit" value="save story">
+        |]
+        toWidget [lucius|
+            ##{fvId storyView} {
+                  width:98%;
+             }
+        |]
+  return(res, wid)
+
+getAddStoryR::RabbitId-> Handler Html
+getAddStoryR rId = do
+    (formWidget, enctype)<- generateFormPost (addStoryForm rId)
+    Just rab <- runDB $ get rId
+    let menu = [whamlet|
+              <div #addCance style="float:inherit; text-align:left; margin:10px;">
+                <b> Add Story for #{rabbitName rab}
+                <div .cancelBut #rabEdCan style="display:inline; float:right;">
+                   <a href=@{ViewR rId}> cancel </a>
+               |]
+    let form = [whamlet|
+              <form method=post action=@{AddStoryR rId} enctype=#{enctype}>
+                 ^{formWidget}
+                 |]            
+    baseForm "Edit Rabbit" menu form  
+
+postAddStoryR::RabbitId->Handler Html
+postAddStoryR rId = do
+  ((result, _), _) <- runFormPost (addStoryForm rId)
+  case result of
+    FormSuccess story -> do
+      runDB $ insert story
+      redirect (ViewR rId)
+    _ -> defaultLayout $ [whamlet| Form Error |]

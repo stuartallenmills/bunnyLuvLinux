@@ -50,6 +50,7 @@ getPort = readTextFile "links/port"
 
 mkLink text path=  path ++ (unpack text)
 
+
 bunnyLuvDB::Text
 bunnyLuvDB = "bunnyluv.db3"
 
@@ -255,7 +256,9 @@ Rabbit
    deriving Show
 
 RabbitStory
+  rabbit RabbitId
   story Textarea
+  URabStory rabbit
   deriving Show
 
 |]

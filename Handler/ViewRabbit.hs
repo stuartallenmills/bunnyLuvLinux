@@ -36,6 +36,8 @@ getViewR rabId  = do
  --   bnames <-  getNamesDB
     bnames <-  getNamesDB
     maid <- maybeAuthId
+    story<-queryStory rabId
+    let has_story = not (null story)
     impath <- liftIO getImagePath
     let imgpath = unpack impath
 
@@ -98,6 +100,10 @@ getViewR rabId  = do
             ^{headerLogWid imgpath maid}    
             ^{viewRabMenu showMenu not_dead not_adopted not_altered rabId}  
            ^{viewRab  imgpath rab yrs mnths bonded}
+              $if has_story
+               <div #story>
+                 $forall Entity sId (RabbitStory rid tstory)<-story
+                    #{tstory}
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}

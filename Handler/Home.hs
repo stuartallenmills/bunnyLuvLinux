@@ -223,4 +223,130 @@ getAgesR yrs = do
     let result = sortEnt ageDiffMax bday b1
     let ageTit= "Rabbits within 2 years of age "++(show yrs)
     base "Rabbit Age" (toHtml ageTit) result
+
+ffWid::RabbitId->Widget
+ffWid rId = do
+  family <- handlerToWidget (queryGetFamily rId)
+  friends <- handlerToWidget (queryGetFriends rId)
+  let hasfam = not (null family)
+  let hasfriends = not (null friends)
+  [whamlet|
+    <#bondedBlock>
+      <div #vrFriends  >
+       $if hasfriends
+         <div .bllabel> Friends: #
+          $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <-friends
+            \ <a href="##{rabbitName rabb}"> #{rabbitName rabb} &nbsp;</a>
+      <div #fam>
+        $if hasfam
+          <div .bllabel> Family: #
+           $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <- family 
+               \ <a href="##{rabbitName rabb}"> #{rabbitName rabb} (#{relation})  &nbsp; </a> 
+  |]
+  toWidget [lucius|
+       .bllabel {
+         padding-left:5px;
+         padding-right:5px;
+       }
+       #bondedBlock {
+         float:left;
+        }
+       #bondedBlock div {
+            font-size:95%;
+       }
+       #vrFriends, #fam {
+          width:97%;
+        }        
+  
+    |]
+getAdoptableR::Handler Html
+getAdoptableR = do
+     avail<-getAdoptAvailableRabs
+     impath <- liftIO getImagePath
+     let imgpath = unpack impath
+     msg <-getMessage
+     maid <- maybeAuthId
+     auth <- isAdmin
+     let mode =  (maid == Just "demo")
+     let isAuth=(auth==Authorized)
+     today<- liftIO getCurrentDay
+     defaultLayout $ do
+      [whamlet|
+     <div #thePage>
+      $forall (Entity rId rab, rabstoryM) <-avail
+        $maybe img <- rabbitImage rab
  
+          <div #rabBlock >
+           <a .rabTarget ##{rabbitName rab}>
+            <div #imgBlock style="background-image:url('#{mkLink img imgpath}');">
+           <div #story>
+             <div #nameLine style="width:100%;">
+              <div #rName>
+                <b> #{rabbitName rab}
+              <div #rAge>
+                  #{getCurrentYears today rab} yr #{getCurrentMonths today rab} mnth
+             <div #stry>
+               $maybe (Entity sId (RabbitStory rId rstory))<- rabstoryM
+                 #{rstory}
+               $nothing
+                   #{rabbitName rab} would like a good home.
+             <div #ff>
+             ^{ffWid rId}
+        |]
+      toWidget [lucius|
+     body {
+      background:#efefef;
+     }
+     #thePage div {
+          float:left;
+      }
+      #rName,#rAge {
+         margin-left:10px;
+        }
+     #rAge, #stry {
+       font-size:90%;
+      }
+     #stry {
+       margin-left:5px;
+       margin-right:5px;
+       margin-bottom:3px;
+       width:97%;
+       
+      }
+     #story {
+       width:100%;
+      }
+     
+     #thePage #rAge {
+         float:right;
+         padding-right:5px;
+      }
+
+     #thePage img {
+             width:95%;
+             float:left;
+             margin:10px;
+            }
+        #rabBlock {
+            float:left;
+            width:290px;
+            height:375px;
+            box-shadow:2px 2px 4px;
+            margin-top:15px;
+            margin-left:2%;
+            background:#fbfbfb;
+           }
+
+        #imgBlock {
+    float:left;
+    display: inline-block;
+    width: 280px;
+    height: 250px;
+    margin: 4px;
+    border: 1px solid black;
+    background-position: center center;
+    background-size: cover;
+  }
+
+           
+                |]

@@ -35,6 +35,12 @@ gbp numE alist accum | length alist<numE = accum++alist
                          
 groupByPage numEntries alist = gbp numEntries alist []
 
+queryStory rabId = runDB $
+ select $ from $ \story->do
+   where_ (story ^. RabbitStoryRabbit ==. val rabId)
+   return story
+   
+
 queryWellness rabId = runDB $ 
   select $ from $ \r ->do
      where_ (r ^. WellnessRabbit ==. val rabId)
@@ -65,6 +71,19 @@ queryGetBonded rabId = runDB $
   where_ ((bonded ^.BondedFirst ==. val rabId) &&. (rab ^. RabbitId ==. bonded ^. BondedSecond))
   return (rab, bonded)
 
+queryGetFriends rabId  = runDB $ 
+  select $
+  from $ \(rab, bonded) -> do
+  where_ ((bonded ^.BondedFirst ==. val rabId) &&. (rab ^. RabbitId ==. bonded ^. BondedSecond) &&.
+              (bonded ^. BondedRelation ==. val "Friend"))
+  return (rab, bonded)
+
+queryGetFamily rabId  = runDB $ 
+  select $
+  from $ \(rab, bonded) -> do
+  where_ ((bonded ^.BondedFirst ==. val rabId) &&. (rab ^. RabbitId ==. bonded ^. BondedSecond) &&.
+              (bonded ^. BondedRelation !=. val "Friend"))
+  return (rab, bonded)
   
 queryStatus status = runDB $ 
  select $ from $ \r ->do
@@ -119,6 +138,18 @@ getAdoptAvailable = do
                where_ (rabs ^. RabbitId ==. adopt ^. AdoptRab)))
      return rabs
   return (getNames rabs)
+
+getAdoptAvailableRabs::Handler [(Entity Rabbit, Maybe (Entity RabbitStory))]
+getAdoptAvailableRabs = 
+  runDB $
+   select $ from $ \(rabs `LeftOuterJoin` story)->do
+     on (just (rabs ^. RabbitId) ==. story ?. RabbitStoryRabbit)
+     where_  ((rabs ^. RabbitStatus ==. val "BunnyLuv") &&.
+                   (notExists $
+             from $ \adopt -> 
+               where_ (rabs ^. RabbitId ==. adopt ^. AdoptRab)))
+       
+     return (rabs, story)
   
 getNamesDB:: Handler [Text]
 getNamesDB = do

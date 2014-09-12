@@ -43,3 +43,5 @@
 /delAdRab/#AdoptRequestId DelRabR GET POST
 /doAdopt/#AdoptRequestId  AdoptRabR GET POST
 /addVet                   AddVetR GET POST
+/addStory/#RabbitId       AddStoryR GET POST
+/adoptable                AdoptableR GET

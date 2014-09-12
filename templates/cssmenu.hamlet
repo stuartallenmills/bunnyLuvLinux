@@ -4,7 +4,8 @@
 
    <li #blAdopt class="has-sub" title="Adoption"><a href='#'><span >Adoption</span></a>
     <ul>
-      <li #blAge title="Find Rabbit"><a href='#'>Find Companion Rabbit</a>
+      <li #blAge title="Find Rabbit"><a href='#'>Find Companion Rabbit</a></li>
+      <li #adoptable><a href=@{AdoptableR}>Adoptable</a></li>
       <li #adoptForm class="last"><a = href=@{AdoptionFormR}>Adoption Request Form </a></li>
 
 

@@ -25,6 +25,7 @@ $if showMenu
    <li class='has-sub last' id="blEdit"><a href='#' title="Edit Intake Information"><span>Edit</span></a>
       <ul>
          <li><a href=@{ImagesR rabId}><span>Set Image</span></a></li>
+         <li><a href=@{AddStoryR rabId}>Add Adoption Blurb</a></li>
          <li><a href=@{BondedR rabId}><span>Add Friends and Family</span></a></li>
          <li class='last'><a href=@{EditR rabId}><span>Edit Intake Information</span></a></li>
          
