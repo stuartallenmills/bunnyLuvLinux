@@ -236,12 +236,12 @@ ffWid rId = do
        $if hasfriends
          <div .bllabel> Friends: #
           $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <-friends
-            \ <a href="##{rabbitName rabb}"> #{rabbitName rabb} &nbsp;</a>
+            \ <a class="rabLink" href="##{rabbitName rabb}"> #{rabbitName rabb} &nbsp;</a>
       <div #fam>
         $if hasfam
           <div .bllabel> Family: #
            $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <- family 
-               \ <a href="##{rabbitName rabb}"> #{rabbitName rabb} (#{relation})  &nbsp; </a> 
+               \ <a class="rabLink" href="##{rabbitName rabb}"> #{rabbitName rabb} (#{relation})  &nbsp; </a> 
   |]
   toWidget [lucius|
        .bllabel {
@@ -256,9 +256,10 @@ ffWid rId = do
        }
        #vrFriends, #fam {
           width:97%;
-        }        
-  
+        }         
     |]
+
+
 getAdoptableR::Handler Html
 getAdoptableR = do
      avail<-getAdoptAvailableRabs
@@ -271,14 +272,20 @@ getAdoptableR = do
      let isAuth=(auth==Authorized)
      today<- liftIO getCurrentDay
      defaultLayout $ do
+      addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+      addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
+
       [whamlet|
      <div #thePage>
       $forall (Entity rId rab, rabstoryM) <-avail
-        $maybe img <- rabbitImage rab
- 
+  
           <div #rabBlock >
            <a .rabTarget ##{rabbitName rab}>
-            <div #imgBlock style="background-image:url('#{mkLink img imgpath}');">
+            $maybe img <- rabbitImage rab
+             <div #imgBlock style="background-image:url('#{mkLink img imgpath}');">
+            $nothing 
+             <div #imgBlock style="background-image:url('#{mkLink "bunnyluvWide.jpg" imgpath}');">
+
            <div #story>
              <div #nameLine style="width:100%;">
               <div #rName>
@@ -293,6 +300,20 @@ getAdoptableR = do
              <div #ff>
              ^{ffWid rId}
         |]
+      toWidget [julius|
+  $(function () {
+      var last="empty"
+     $( ".rabLink" ).click( function (e) {
+         var theval = $( this ).attr("href");
+         $( theval ).parent().css("border-color", "yellow");
+         if (last != "empty") {
+            $( last ).parent().css("border-color", "transparent");
+          }
+         last= theval;
+          
+      });
+     });
+ |]
       toWidget [lucius|
      body {
       background:#efefef;
@@ -335,6 +356,7 @@ getAdoptableR = do
             margin-top:15px;
             margin-left:2%;
             background:#fbfbfb;
+            border:3px solid transparent;
            }
 
         #imgBlock {
@@ -346,7 +368,9 @@ getAdoptableR = do
     border: 1px solid black;
     background-position: center center;
     background-size: cover;
+
   }
+  
 
            
                 |]
