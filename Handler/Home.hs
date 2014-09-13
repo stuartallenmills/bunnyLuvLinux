@@ -279,7 +279,7 @@ getAdoptableR = do
      <div #thePage>
       $forall (Entity rId rab, rabstoryM) <-avail
   
-          <div #rabBlock >
+          <div .rabBlock >
            <a .rabTarget ##{rabbitName rab}>
             $maybe img <- rabbitImage rab
              <div #imgBlock style="background-image:url('#{mkLink img imgpath}');">
@@ -309,10 +309,48 @@ getAdoptableR = do
          if (last != "empty") {
             $( last ).parent().css("border-color", "transparent");
           }
-         last= theval;
-          
+         last= theval;        
       });
      });
+
+  $( function () {
+     $( window ).resize( function () {
+       reSizeBlocks();
+     });
+    });
+
+  var brblock=0;
+  var imgblockH=0;
+  var rblockH=0;
+
+  function reSizeBlocks() {
+     wwidth = $( "#thePage" ).width()-10;
+     var rblock = brblock+7;
+     var tiles = wwidth/rblock;
+     var tint = Math.floor(tiles);
+     var frac = tiles - Math.floor(tiles);
+     var marg= Math.floor((frac*rblock)/tint);
+     var nblock =0;
+     var blockH= 0;
+     if (marg > 18) {
+          var nblock = marg-18;
+          blockH= Math.floor(nblock/2);
+          marg = 18; 
+      } 
+     $( ".rabBlock" ).each(function (index) {
+           $( this ).css("margin-left", (marg+"px"));
+           $( this ).css("width",(( brblock+nblock) + "px"));
+           $( this ).css("height", ((rblockH+blockH) + "px"));
+           $( this ).find( "#imgBlock" ).css("height", ((imgblockH+blockH)+"px"));
+        });    
+    }
+  $(function () {
+      brblock = $( ".rabBlock" ).width();
+      imgblockH = $( "#imgBlock" ).height();
+      rblockH = $( ".rabBlock" ).height();
+
+     reSizeBlocks();
+   });
  |]
       toWidget [lucius|
      body {
@@ -348,22 +386,21 @@ getAdoptableR = do
              float:left;
              margin:10px;
             }
-        #rabBlock {
+        .rabBlock {
             float:left;
             width:290px;
             height:375px;
             box-shadow:2px 2px 4px;
             margin-top:15px;
-            margin-left:2%;
             background:#fbfbfb;
             border:3px solid transparent;
            }
 
-        #imgBlock {
+  #imgBlock {
     float:left;
     display: inline-block;
-    width: 280px;
-    height: 250px;
+    width: 98%;
+    height:66%;
     margin: 4px;
     border: 1px solid black;
     background-position: center center;
