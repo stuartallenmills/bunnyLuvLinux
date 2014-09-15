@@ -75,11 +75,13 @@ getRabs:: [(Entity Rabbit, Maybe (Entity RabbitStory))]->[Entity Rabbit]
 getRabs  = fmap fst 
 
 getAges yrs diffMnths male female hasff noff= do
-    b1 <-queryCompanion male female hasff noff
+    bn <-queryCompanion male female hasff noff
     today <- liftIO getCurrentDay
-    let bday = addDays (yrs*(-365)) today
-    let mnthDays = 31*diffMnths
-    let result = sortEnt mnthDays bday b1
+    let result = if (yrs==0) then bn
+          else aval where
+            bday = addDays (yrs*(-365)) today
+            mnthDays = 31*diffMnths
+            aval = sortEnt mnthDays bday bn
     let ageTit= "Rabbits within " ++ (show diffMnths) ++ " months of age "++(show yrs)
     base "Companion Rabbit Results" (toHtml ageTit) (getRabs result)
 
@@ -89,7 +91,10 @@ postGetAgeR::Handler Html
 postGetAgeR  = do
   ((result, _), _) <- runFormPost (getAgeForm Nothing)
   case result of
-       FormSuccess (AgeSearch age ageDiffMnths (Just male) (Just female) (Just ff) (Just noff)) ->getAges age ageDiffMnths male female ff noff
+       FormSuccess (AgeSearch age ageDiffMnths (Just male) (Just female) (Just ff) (Just noff)) ->
+           case age of
+             Nothing->getAges 0 ageDiffMnths male female ff noff
+             Just ageV->getAges ageV ageDiffMnths male female ff noff
        _ -> redirect HomeR
   
 queryAltered value = runDB $ do
@@ -267,26 +272,59 @@ adoptSearchWid  wid enctype = do
           |]
       toWidget [lucius|
 
-        #getAgeDiv label {
+        #adoptSearchForm #agesub {
+          float:right;
+        }
+
+        #getAgeDiv div {
+          margin-bottom:0px;
+          margin-top:0px;
+          height:25px;
+        }
+
+        #adoptSearchForm {
+         background:#fafafa;
+         font-size:95%;
+         padding:0.4em;
+        }
+
+        input[type="checkbox"] {
+          transform:translateY(2px);
+        }
+
+        #getAgeDiv {
+           width:90%;
+        }
+        #ageInD label {
            width:20%;
         }
         #sex {
-          width:100%;
+          margin-left:20px;
          }
         #ageTitle {
           display:none;
         }
         #adoptSearchForm input {
                 display:inline;
+                margin-left:5px;
          }
         #adoptSearchForm div {
            float:left;
          }
 
+        #companion {
+           margin-left:20px;
+         }
+
+        #agesub {
+          float:right;
+         }
+
                 |]
 
 getYears Nothing = 0
-getYears (Just as) = agesearchAge as
+getYears (Just (AgeSearch Nothing _ _ _ _ _)) = 0
+getYears (Just (AgeSearch (Just as) _ _ _ _ _)) = as
 
 getMonths Nothing = 0
 getMonths (Just as) = agesearchDiff as
@@ -320,6 +358,7 @@ adoptablePage adoptSearch = do
       addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
 
       [whamlet|
+
      ^{adoptSearchWid formWidget enctype}
      <div #thePage>
       $forall (Entity rId rab, rabstoryM) <-result
@@ -358,6 +397,7 @@ adoptablePage adoptSearch = do
       });
      });
 
+
   $( function () {
      $( window ).resize( function () {
        reSizeBlocks();
@@ -370,6 +410,7 @@ adoptablePage adoptSearch = do
 
   function reSizeBlocks() {
      wwidth = $( "#thePage" ).width()-10;
+     cwidth = $( "#thePage" ).css("width");
      var rblock = brblock+7;
      var tiles = wwidth/rblock;
      var tint = Math.floor(tiles);

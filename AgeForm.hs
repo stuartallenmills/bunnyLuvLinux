@@ -38,7 +38,7 @@ import Control.Applicative
 ageDiffMax::Integer
 ageDiffMax = 2 * 365  -- 2 years in days
 
-data AgeSearch = AgeSearch { agesearchAge::Integer
+data AgeSearch = AgeSearch { agesearchAge::Maybe Integer
                              ,  agesearchDiff::Integer
                              ,male::Maybe Bool
                              ,female::Maybe Bool
@@ -50,15 +50,18 @@ getAsField::Maybe AgeSearch->(AgeSearch->m)->Maybe m
 getAsField Nothing _ = Nothing
 getAsField (Just af) f = Just (f af)
 
+getAsMonth Nothing = Just 12
+getAsMonth (Just as) = Just (agesearchDiff as)
+
 getAsBField::Maybe AgeSearch->(AgeSearch->Maybe Bool)->Maybe Bool
 getAsBField Nothing _ = Just True
-getAsBField (Just af) f =  (f af)
+getAsBField (Just af) f =   f af
 
 getAgeForm::Maybe AgeSearch->Html->MForm Handler (FormResult AgeSearch, Widget)
 getAgeForm asM extras= do
   let fs = FieldSettings "sNamel" (Just "Find rabbit") (Just "getAge") (Just "stName") []
-  (ageRes,ageView) <- mreq intField fs (getAsField asM agesearchAge) 
-  (ageDiffRes, ageDiffView) <-mreq intField "bbb" (getAsField asM agesearchDiff)
+  (ageRes,ageView) <- mopt intField fs  (getAsField asM agesearchAge)
+  (ageDiffRes, ageDiffView) <-mreq intField "bbb" (getAsMonth asM)
   (maleRes, maleView)<- mopt checkBoxField "bbb" (Just (getAsBField asM male))
   (femaleRes, femaleView)<-mopt checkBoxField "bbb" (Just (getAsBField asM female))
   (hasffRes, hasffView)<-mopt checkBoxField "bbb" (Just (getAsBField asM hasff))
@@ -73,16 +76,18 @@ getAgeForm asM extras= do
                 Find companion rabbits:
                <div .cancelBut #ageCan style="text-align:left; float:right;">
                                     <a href=@{HomeR}> cancel</a>
-              <div #ageInD>
-               <label for="getAge">Age: </label> ^{fvInput ageView} yrs
-              <div #ageDiffD>
-               <label for="ageDiff">Plus/Minus: </label> ^{fvInput ageDiffView} mnths
+              <div #theage>
+               <div #ageInD>
+                <label for="getAge">Age: </label> ^{fvInput ageView} yrs
+               <div #ageDiffD>
+                <label for="ageDiff">Plus/Minus: </label> ^{fvInput ageDiffView} mnths
               <div #sex>
                    Male : ^{fvInput maleView}
                   <span style="margin-left:10px;"> Female: ^{fvInput femaleView}
               <div #companion>
+               <div #cLabel>
                    Has Friends/Family:
-              <div #yn style="margin-left:10px;"> Yes: ^{fvInput hasffView} <span style="margin-left:10px;"> No: ^{fvInput noffView}
+               <div #yn style="margin-left:10px;"> Yes: ^{fvInput hasffView} <span style="margin-left:10px;"> No: ^{fvInput noffView}
              <input #agesub type=submit value="find" sytle="float:none; margin-top:10px;">
          |]
         toWidget [lucius|
