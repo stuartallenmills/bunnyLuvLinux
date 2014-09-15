@@ -21,7 +21,6 @@
 /addU                   AddUR GET POST
 /changePass             ChangePassR GET POST
 /delU                   DeleteUR GET POST
-/ages/#Integer           AgesR GET
 /getAge                 GetAgeR POST
 /name/#Text             ShowNameR GET
 /getName/#Text          NameR POST
@@ -44,4 +43,4 @@
 /doAdopt/#AdoptRequestId  AdoptRabR GET POST
 /addVet                   AddVetR GET POST
 /addStory/#RabbitId       AddStoryR GET POST
-/adoptable                AdoptableR GET
+/adoptable                AdoptableR GET POST

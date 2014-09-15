@@ -38,34 +38,41 @@ notBond rab arg = arg $
            where_  ((bonded ^. BondedFirst) ==. (rab ^. RabbitId))
 
 notSelected rab = notExists $
-           from $ \adopt -> do
+           from $ \adopt -> 
            where_ (rab ^. RabbitId ==. adopt ^. AdoptRab)
-           
+
 queryCompanion male female hasff noff = do
     let mstr=if male then "M" else "Z"
     let fstr=if female then "F" else "Z"
     case (hasff, noff) of
-      (True, True)->    runDB $ do
-                         select $ from $ \rab-> do
-                           where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
+      (True, True)->    runDB $ 
+         select $ from $ \(rab `LeftOuterJoin` story)->do
+          on (just (rab ^. RabbitId) ==. story ?. RabbitStoryRabbit)
+          where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
                              ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
                                (notSelected rab)
 
                                )
-                           return rab
-      (True, False)->    runDB $ do
-                         select $ from $ \rab-> do
-                           where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
+          return (rab,story)
+      (True, False)->    runDB $ 
+          select $ from $ \(rab `LeftOuterJoin` story)->do
+           on (just (rab ^. RabbitId) ==. story ?. RabbitStoryRabbit)
+           where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
                              ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
                                (notBond rab exists) &&. (notSelected rab))
-                           return rab
-      (False, True)->    runDB $ do
-                         select $ from $ \rab-> do
-                           where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
+           return (rab,story)
+      (False, True)->    runDB $ 
+         select $ from $ \(rab `LeftOuterJoin` story)->do
+          on (just (rab ^. RabbitId) ==. story ?. RabbitStoryRabbit)
+          where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
                              ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
                                (notBond rab notExists) &&. (notSelected rab))
-                           return rab
+          return (rab, story)
       (False, False)-> return []
+
+
+getRabs:: [(Entity Rabbit, Maybe (Entity RabbitStory))]->[Entity Rabbit]
+getRabs  = fmap fst 
 
 getAges yrs diffMnths male female hasff noff= do
     b1 <-queryCompanion male female hasff noff
@@ -74,13 +81,13 @@ getAges yrs diffMnths male female hasff noff= do
     let mnthDays = 31*diffMnths
     let result = sortEnt mnthDays bday b1
     let ageTit= "Rabbits within " ++ (show diffMnths) ++ " months of age "++(show yrs)
-    base "Companion Rabbit Results" (toHtml ageTit) result
+    base "Companion Rabbit Results" (toHtml ageTit) (getRabs result)
 
 
 
 postGetAgeR::Handler Html
 postGetAgeR  = do
-  ((result, _), _) <- runFormPost getAgeForm
+  ((result, _), _) <- runFormPost (getAgeForm Nothing)
   case result of
        FormSuccess (AgeSearch age ageDiffMnths (Just male) (Just female) (Just ff) (Just noff)) ->getAges age ageDiffMnths male female ff noff
        _ -> redirect HomeR
@@ -111,20 +118,7 @@ querySource source = runDB $ do
      return (r)
   return zipt
 
-{-
-queryName name = runDB $ do
-  let (f,s) = T.splitAt 1 name
-  let capName = append (T.toUpper f) s
-  let lowName = append (T.toLower f) s
-      
-  zipt<-select $ from $ \r ->do
-     where_ ((like  (r ^. RabbitName)  ((%) ++. val capName ++. (%)) ) ||.
-             (like  (r ^. RabbitName)  ((%) ++. val lowName ++. (%)) ) 
-             )
-     orderBy [asc (r ^. RabbitName)]
-     return r
-  return zipt
--}
+
 
 getAlteredR isAlt = do
      zinc<- queryAltered isAlt
@@ -194,13 +188,13 @@ getHomeR = do
     zinc <-queryStatus "BunnyLuv"
     base "BunnyLuv Rabbits" "BunnyLuv Rabbits" zinc
 
-ageDiff::Day->Entity Rabbit->(Integer, Entity Rabbit)
-ageDiff bday rabE@(Entity _ rab) = ( abs (diffDays bday (rabbitBirthday rab)), rabE)
+ageDiff::Day->(Entity Rabbit, Maybe (Entity RabbitStory))->(Integer,(Entity Rabbit, Maybe (Entity RabbitStory)))
+ageDiff bday rabE@((Entity _ rab, _ )) = ( abs (diffDays bday (rabbitBirthday rab)), rabE)
 
-clean::Integer->[(Integer, Entity Rabbit)]->[(Integer, Entity Rabbit)]
+clean::Integer->[(Integer,(Entity Rabbit, Maybe (Entity RabbitStory)))]->[(Integer, (Entity Rabbit, Maybe (Entity RabbitStory)))]
 clean tageDiff = filter (\(a,_)-> a <= tageDiff) 
 
-sortImp::(Integer, Entity Rabbit)->(Integer, Entity Rabbit)->Ordering
+sortImp::(Integer,(Entity Rabbit, Maybe (Entity RabbitStory)))->(Integer, (Entity Rabbit, Maybe (Entity RabbitStory)))->Ordering
 sortImp (a, r1) (b, r2)
           | a>b = GT
           | a==b = EQ
@@ -208,21 +202,13 @@ sortImp (a, r1) (b, r2)
 
 extractRabb (a, rabE) = rabE
                   
-sortEnt::Integer->Day->[Entity Rabbit]->[Entity Rabbit]
+sortEnt::Integer->Day->[(Entity Rabbit, Maybe (Entity RabbitStory))]->[(Entity Rabbit, Maybe (Entity RabbitStory))]
 sortEnt ageRange bday rabs = nrabs where
         ageDiffs = map (ageDiff bday) rabs
         cleaned = clean ageRange ageDiffs
         sorted =  sortBy sortImp cleaned
         nrabs = map extractRabb sorted
   
-getAgesR::Integer->Handler Html
-getAgesR yrs = do
-    b1 <-queryStatus "BunnyLuv"
-    today <- liftIO getCurrentDay
-    let bday = addDays (yrs*(-365)) today
-    let result = sortEnt ageDiffMax bday b1
-    let ageTit= "Rabbits within 2 years of age "++(show yrs)
-    base "Rabbit Age" (toHtml ageTit) result
 
 ffWid::RabbitId->Widget
 ffWid rId = do
@@ -260,9 +246,67 @@ ffWid rId = do
     |]
 
 
+
+
+
 getAdoptableR::Handler Html
 getAdoptableR = do
-     avail<-getAdoptAvailableRabs
+     adoptablePage Nothing
+
+postAdoptableR = do
+  ((result,_),_)<- runFormPost (getAgeForm Nothing)
+  case result of
+    FormSuccess adsearch->
+          adoptablePage (Just adsearch)
+    _ -> redirect AdoptableR
+
+adoptSearchWid  wid enctype = do
+      [whamlet|
+        <form #adoptSearchForm method=post action=@{AdoptableR} enctype=#{enctype}>
+            ^{wid}
+          |]
+      toWidget [lucius|
+
+        #getAgeDiv label {
+           width:20%;
+        }
+        #sex {
+          width:100%;
+         }
+        #ageTitle {
+          display:none;
+        }
+        #adoptSearchForm input {
+                display:inline;
+         }
+        #adoptSearchForm div {
+           float:left;
+         }
+
+                |]
+
+getYears Nothing = 0
+getYears (Just as) = agesearchAge as
+
+getMonths Nothing = 0
+getMonths (Just as) = agesearchDiff as
+
+getBool Nothing _ =  True
+getBool (Just as) f = tval where
+                 (Just tval) = f as
+
+adoptablePage adoptSearch = do
+     (formWidget, enctype)<- generateFormPost (getAgeForm adoptSearch)
+     avail<-queryCompanion (getBool adoptSearch male) (getBool adoptSearch female)
+                      (getBool adoptSearch hasff) (getBool adoptSearch noff)
+     today <- liftIO getCurrentDay
+     let yrs = getYears adoptSearch
+     let diffMnths = getMonths adoptSearch
+     let result = if (yrs==0) then avail
+                     else (sortEnt mnthDays bday avail) where
+                         bday = addDays (yrs*(-365)) today
+                         mnthDays = 31*diffMnths
+ 
      impath <- liftIO getImagePath
      let imgpath = unpack impath
      msg <-getMessage
@@ -276,8 +320,9 @@ getAdoptableR = do
       addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
 
       [whamlet|
+     ^{adoptSearchWid formWidget enctype}
      <div #thePage>
-      $forall (Entity rId rab, rabstoryM) <-avail
+      $forall (Entity rId rab, rabstoryM) <-result
   
           <div .rabBlock >
            <a .rabTarget ##{rabbitName rab}>
@@ -287,7 +332,7 @@ getAdoptableR = do
              <div #imgBlock style="background-image:url('#{mkLink "bunnyluvWide.jpg" imgpath}');">
 
            <div #story>
-             <div #nameLine style="width:100%;">
+             <div #nameLine style="width:100%; border-bottom:1px solid #6f6f6f;">
               <div #rName>
                 <b> #{rabbitName rab}
               <div #rAge>
@@ -297,7 +342,7 @@ getAdoptableR = do
                  #{rstory}
                $nothing
                    #{rabbitName rab} would like a good home.
-             <div #ff>
+             <div #ff style="width:100%; border-top:1px solid #6f6f6f;">
              ^{ffWid rId}
         |]
       toWidget [julius|

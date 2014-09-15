@@ -44,8 +44,8 @@ doRabbitRows today result = $(widgetFileNoReload def "rabbitRows")
 
 base::Html->Html->[Entity Rabbit]->Handler Html
 base wtitle atitle result  = do 
-     (formWidget, enctype) <- generateFormPost (getNameForm)
-     (ageWidget, age_enctype) <-generateFormPost getAgeForm
+     (formWidget, enctype) <- generateFormPost getNameForm
+     (ageWidget, age_enctype) <-generateFormPost (getAgeForm Nothing)
      (newWidget, well_enctype) <-generateFormPost (getNameFormB "wellForm")
      (treatWidget, treat_enctype) <-generateFormPost (getNameFormB "treatForm")
      (vvWidget, vv_enctype) <- generateFormPost (getNameFormB "vetvistForm")

@@ -46,15 +46,23 @@ data AgeSearch = AgeSearch { agesearchAge::Integer
                              ,noff::Maybe Bool
                                 }
 
-getAgeForm::Html->MForm Handler (FormResult AgeSearch, Widget)
-getAgeForm extras= do
+getAsField::Maybe AgeSearch->(AgeSearch->m)->Maybe m
+getAsField Nothing _ = Nothing
+getAsField (Just af) f = Just (f af)
+
+getAsBField::Maybe AgeSearch->(AgeSearch->Maybe Bool)->Maybe Bool
+getAsBField Nothing _ = Just True
+getAsBField (Just af) f =  (f af)
+
+getAgeForm::Maybe AgeSearch->Html->MForm Handler (FormResult AgeSearch, Widget)
+getAgeForm asM extras= do
   let fs = FieldSettings "sNamel" (Just "Find rabbit") (Just "getAge") (Just "stName") []
-  (ageRes,ageView) <- mreq intField fs  Nothing
-  (ageDiffRes, ageDiffView) <-mreq intField "bbb" (Just 12)
-  (maleRes, maleView)<- mopt checkBoxField "bbb" (Just (Just True))
-  (femaleRes, femaleView)<-mopt checkBoxField "bbb" (Just (Just True))
-  (hasffRes, hasffView)<-mopt checkBoxField "bbb" (Just (Just True))
-  (noffRes, noffView)<-mopt checkBoxField "bbb" (Just (Just True))
+  (ageRes,ageView) <- mreq intField fs (getAsField asM agesearchAge) 
+  (ageDiffRes, ageDiffView) <-mreq intField "bbb" (getAsField asM agesearchDiff)
+  (maleRes, maleView)<- mopt checkBoxField "bbb" (Just (getAsBField asM male))
+  (femaleRes, femaleView)<-mopt checkBoxField "bbb" (Just (getAsBField asM female))
+  (hasffRes, hasffView)<-mopt checkBoxField "bbb" (Just (getAsBField asM hasff))
+  (noffRes, noffView)<-mopt checkBoxField "bbb" (Just (getAsBField asM noff))
   let agesch = AgeSearch <$> ageRes <*> ageDiffRes <*> maleRes <*> femaleRes
                              <*> hasffRes <*> noffRes
   let awid = do

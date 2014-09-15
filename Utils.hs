@@ -75,14 +75,14 @@ queryGetFriends rabId  = runDB $
   select $
   from $ \(rab, bonded) -> do
   where_ ((bonded ^.BondedFirst ==. val rabId) &&. (rab ^. RabbitId ==. bonded ^. BondedSecond) &&.
-              (bonded ^. BondedRelation ==. val "Friend"))
+              (bonded ^. BondedRelation ==. val "Friend") &&. (rab ^. RabbitStatus ==. val "BunnyLuv"))
   return (rab, bonded)
 
 queryGetFamily rabId  = runDB $ 
   select $
   from $ \(rab, bonded) -> do
   where_ ((bonded ^.BondedFirst ==. val rabId) &&. (rab ^. RabbitId ==. bonded ^. BondedSecond) &&.
-              (bonded ^. BondedRelation !=. val "Friend"))
+              (bonded ^. BondedRelation !=. val "Friend") &&. (rab ^. RabbitStatus ==. val "BunnyLuv"))
   return (rab, bonded)
   
 queryStatus status = runDB $ 

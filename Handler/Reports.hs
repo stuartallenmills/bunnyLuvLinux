@@ -158,7 +158,7 @@ displayFormWidget wid enc link= do
                             
 reportbase begin end bl link atitle result = do 
      (formWidget, enctype) <- generateFormPost getNameForm
-     (ageWidget, age_enctype) <-generateFormPost getAgeForm
+     (ageWidget, age_enctype) <-generateFormPost (getAgeForm Nothing)
      (rangeWidget, range_enctype)<-generateFormPost (displayForm begin end bl)
      bnames <-  getNamesDB
      msg <-getMessage
@@ -407,7 +407,7 @@ getBondedViewR = do
   bonded<- getBonded2
   let bmap = makeMap bonded
   (formWidget, enctype) <- generateFormPost getNameForm
-  (ageWidget, age_enctype) <-generateFormPost getAgeForm
+  (ageWidget, age_enctype) <-generateFormPost (getAgeForm Nothing)
   bnames <-  getNamesDB
   msg <-getMessage
   maid <- maybeAuthId
