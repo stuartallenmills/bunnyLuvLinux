@@ -32,6 +32,7 @@ import Text.Julius
 import Utils
 import BaseForm
 import AgeForm
+import FormUtils
 
 notBond rab arg = arg $
            from $ \bonded -> 
@@ -333,6 +334,74 @@ getBool Nothing _ =  True
 getBool (Just as) f = tval where
                  (Just tval) = f as
 
+widIntro::Widget
+widIntro = do
+  [whamlet|
+      <div #intro>
+        Find  Buns to Love from BunnyLuv!
+    <div #body>
+     We have over 100 wonderful rabbits eager for a new home.  You can use the search bar to narrow your search by age, sex, or rabbits with friends or families!
+                                                                                                          
+  |]
+  toWidget [lucius|
+              #intro {
+              text-align:center;
+              font-size:250%;
+              font-weight:150%;
+              float:left;
+              width:100%;
+              background:#fefefe;
+              padding-bottom:10px;
+              font-style:italic;
+              font-family:Comic Sans MS;
+             }
+            #body {
+              padding-left:20px;
+              padding-right:20px;
+              margin-bottom:10px;
+            }
+
+   |]      
+
+aWid::Widget
+aWid =  $(widgetFileNoReload def "Adoptable")
+
+--aHWid::Widget
+aHWid formWidget enctype today imgpath result =      [whamlet|
+       ^{aWid}
+       ^{adoptSearchWid formWidget enctype}
+      <div #thePage>
+
+      $forall (Entity rId rab, rabstoryM) <-result
+  
+          <div .rabBlock >
+           <a .rabTarget ##{rabbitName rab}>
+            $maybe img <- rabbitImage rab
+             <div #imgBlock style="background-image:url('#{mkLink img imgpath}');">
+            $nothing 
+             <div #imgBlock style="background-image:url('#{mkLink "bunnyluvWide.jpg" imgpath}');">
+
+           <div #story>
+             <div #nameLine style="width:100%; border-bottom:1px solid #8f8f8f;">
+              <div #rName>
+                <b> #{rabbitName rab}
+              <div #rAge>
+                  #{getCurrentYears today rab} yr #{getCurrentMonths today rab} mnth
+             
+             $maybe (Entity sId (RabbitStory rId rstory spneed adrule))<- rabstoryM
+               <div #stry>
+                  #{rstory}
+               $maybe spn <- spneed
+                  <div #spneed>
+                   NEEDS: #{spn}
+               $nothing
+             $nothing
+              <div #nothing>
+                   #{rabbitName rab} would like a good home.
+             <div #ff style="width:100%; border-top:1px solid #6f6f6f;">
+             ^{ffWid rId}
+        |]
+
 adoptablePage adoptSearch = do
      (formWidget, enctype)<- generateFormPost (getAgeForm adoptSearch)
      avail<-queryCompanion (getBool adoptSearch male) (getBool adoptSearch female)
@@ -351,149 +420,7 @@ adoptablePage adoptSearch = do
      maid <- maybeAuthId
      auth <- isAdmin
      let mode =  (maid == Just "demo")
-     let isAuth=(auth==Authorized)
-     today<- liftIO getCurrentDay
-     defaultLayout $ do
-      addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
-      addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
+     baseAdoption "Adoptable Rabbits" widIntro (aHWid formWidget enctype today imgpath result)
+ --    defaultLayout $ [whamlet| ^{aHWid formWidget enctype today imgpath result} |]
 
-      [whamlet|
-
-     ^{adoptSearchWid formWidget enctype}
-     <div #thePage>
-      $forall (Entity rId rab, rabstoryM) <-result
-  
-          <div .rabBlock >
-           <a .rabTarget ##{rabbitName rab}>
-            $maybe img <- rabbitImage rab
-             <div #imgBlock style="background-image:url('#{mkLink img imgpath}');">
-            $nothing 
-             <div #imgBlock style="background-image:url('#{mkLink "bunnyluvWide.jpg" imgpath}');">
-
-           <div #story>
-             <div #nameLine style="width:100%; border-bottom:1px solid #6f6f6f;">
-              <div #rName>
-                <b> #{rabbitName rab}
-              <div #rAge>
-                  #{getCurrentYears today rab} yr #{getCurrentMonths today rab} mnth
-             <div #stry>
-               $maybe (Entity sId (RabbitStory rId rstory))<- rabstoryM
-                 #{rstory}
-               $nothing
-                   #{rabbitName rab} would like a good home.
-             <div #ff style="width:100%; border-top:1px solid #6f6f6f;">
-             ^{ffWid rId}
-        |]
-      toWidget [julius|
-  $(function () {
-      var last="empty"
-     $( ".rabLink" ).click( function (e) {
-         var theval = $( this ).attr("href");
-         $( theval ).parent().css("border-color", "yellow");
-         if (last != "empty") {
-            $( last ).parent().css("border-color", "transparent");
-          }
-         last= theval;        
-      });
-     });
-
-
-  $( function () {
-     $( window ).resize( function () {
-       reSizeBlocks();
-     });
-    });
-
-  var brblock=0;
-  var imgblockH=0;
-  var rblockH=0;
-
-  function reSizeBlocks() {
-     wwidth = $( "#thePage" ).width()-10;
-     cwidth = $( "#thePage" ).css("width");
-     var rblock = brblock+7;
-     var tiles = wwidth/rblock;
-     var tint = Math.floor(tiles);
-     var frac = tiles - Math.floor(tiles);
-     var marg= Math.floor((frac*rblock)/tint);
-     var nblock =0;
-     var blockH= 0;
-     if (marg > 18) {
-          var nblock = marg-18;
-          blockH= Math.floor(nblock/2);
-          marg = 18; 
-      } 
-     $( ".rabBlock" ).each(function (index) {
-           $( this ).css("margin-left", (marg+"px"));
-           $( this ).css("width",(( brblock+nblock) + "px"));
-           $( this ).css("height", ((rblockH+blockH) + "px"));
-           $( this ).find( "#imgBlock" ).css("height", ((imgblockH+blockH)+"px"));
-        });    
-    }
-  $(function () {
-      brblock = $( ".rabBlock" ).width();
-      imgblockH = $( "#imgBlock" ).height();
-      rblockH = $( ".rabBlock" ).height();
-
-     reSizeBlocks();
-   });
- |]
-      toWidget [lucius|
-     body {
-      background:#efefef;
-     }
-     #thePage div {
-          float:left;
-      }
-      #rName,#rAge {
-         margin-left:10px;
-        }
-     #rAge, #stry {
-       font-size:90%;
-      }
-     #stry {
-       margin-left:5px;
-       margin-right:5px;
-       margin-bottom:3px;
-       width:97%;
-       
-      }
-     #story {
-       width:100%;
-      }
-     
-     #thePage #rAge {
-         float:right;
-         padding-right:5px;
-      }
-
-     #thePage img {
-             width:95%;
-             float:left;
-             margin:10px;
-            }
-        .rabBlock {
-            float:left;
-            width:290px;
-            height:375px;
-            box-shadow:2px 2px 4px;
-            margin-top:15px;
-            background:#fbfbfb;
-            border:3px solid transparent;
-           }
-
-  #imgBlock {
-    float:left;
-    display: inline-block;
-    width: 98%;
-    height:66%;
-    margin: 4px;
-    border: 1px solid black;
-    background-position: center center;
-    background-size: cover;
-
-  }
-  
-
-           
-                |]
+ 

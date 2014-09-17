@@ -102,8 +102,16 @@ getViewR rabId  = do
            ^{viewRab  imgpath rab yrs mnths bonded}
               $if has_story
                <div #story>
-                 $forall Entity sId (RabbitStory rid tstory)<-story
-                    #{tstory}
+                 $forall Entity sId (RabbitStory rid tstory spneed adrule)<-story
+                   <div #thestory style="width:100%">
+                     Story:  #{tstory}
+                   $maybe spn <-spneed
+                    <div #spneed style="width:100%">
+                      Special Needs:  #{spn}
+                   $maybe ad <- adrule
+                    <div #adr style="width:100%;"> 
+                     Adoption Rules:
+                       #{ad}
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}

@@ -29,6 +29,103 @@ import Data.Time.LocalTime
 import Data.Time.Calendar
 import System.FilePath
 
+
+                 
+topWidget::Widget->Widget
+topWidget awid = do
+  [whamlet|
+   <div #banner>
+       <img #bimage src=@{StaticR bunnyluvBanner_gif} style="width:100%;">
+     <div #menu>
+       <div #bl .md>
+        <a href="http://www.bunnyluv.org">Home</a>
+       <div #adoptable .md>
+        <a  href=@{AdoptableR}><span>Adoptable Rabbits</span></a>
+       <div #adoptAp .md>
+        <a href=@{AdoptionFormR}><span>Apply for adoption online</span></a>
+       <div .md>
+        <a href="http://media.wix.com/ugd/1f3057_f99ed5e1bbcbb4910ac62c58febb82b1.doc?dn=%22BLRRC_adoption_app.doc%22"><span>Download Adoption Application<span></a>
+       <div .md>
+        <a href=@{HomeR}>Tracker</a>
+    ^{awid}
+ 
+   |]
+  toWidget [julius|
+   $(document).ready(function(){
+    $( ".md a" ).each(function(index) {
+        if ( this.href.trim() == window.location )
+            $( this ).parent().addClass( "selected" );
+     });
+  });
+ 
+  |]
+  toWidget [lucius|
+          
+            .md.selected {
+               border-top:2px solid red;
+              }
+
+             .md.selected a {
+               color:red;
+              }
+
+            #banner {
+              background:#fefefe;
+              float:left;
+              width:100%;
+           }
+             
+             
+            #menu {
+              background:#fefefe;
+              width:100%;
+              float:left;
+              border-bottom:1px solid #e0e0e0;
+              }
+
+           .md {
+             height:27px;
+             background:#FEFEFE;
+             margin-right:10px;
+             border-top:2px solid black;
+             float:left;
+             padding-top:10px;
+             text-decoration:none;
+             padding-left:10px;
+             padding-right:10px;
+             margin-bottom:5px;
+
+          }
+
+         .md a {
+           text-decoration:none;
+           color:#000000;
+          }
+
+         .md a:hover {
+           color:#8f3f3f;
+          }
+
+         .md:hover {
+           border-top: 2px solid #8f3f3f;
+           background:#fffff8;
+          }
+
+            |]
+
+baseAdoption::Text->Widget->Widget->Handler Html
+baseAdoption title blurb contentWid = 
+  defaultLayout $ do
+      addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+      addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
+      setTitle (toHtml title)
+
+      [whamlet|
+       ^{topWidget blurb}
+
+       ^{contentWid}
+     |]
+
 getVets::Handler [Entity Vet]
 getVets = runDB $ 
   select $ from $ \vet -> do

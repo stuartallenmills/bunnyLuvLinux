@@ -132,22 +132,38 @@ adoptionForm= do
   let res =AdoptTest2 <$> date <*> ainfo
   return (res, wid)
 
+adForWid masterWidget enctype = do 
+  [whamlet|      
+          <form #adoptionFormForm method=post action=@{AdoptionFormR} enctype=#{enctype}>
+                 ^{masterWidget} |]
+  toWidget [lucius|
+            #adoptAp {
+              border-top:2px solid red;
+             }
+            #adoptAp a {
+              color:red;
+             }
+           |]
+                                
+
+nullWid = [whamlet| <div #null> |]
+
 getAdoptionFormR::Handler Html
 getAdoptionFormR = do
   (masterWidget, enctype)<-generateFormPost aMaster
-  let menu = [whamlet|
-              <div #addCance style="float:inherit; text-align:left; margin:10px;">
+  baseAdoption "Adoption Application" nullWid (adForWid masterWidget enctype)
 
-                <b> Adoption Form
-                <div #vvCan style="float:right; display:inline;">
-                  <div .cancelBut #vvEdCan style="display:inline; float:right;">
-                   <a href=@{HomeR}> cancel </a>
-               |]
-  let form = [whamlet|<form #adoptionFormForm method=post action=@{AdoptionFormR} enctype=#{enctype}>
-                 ^{masterWidget}
-               |]
-  baseForm "Adoption Form" menu form
 
+thanksWid =  [whamlet|
+                                     <div> 
+                                             Thanks for applying!
+                                             <br>
+                                             We will give you call shortly to discuss your application.
+
+                                             <a href=@{AdoptableR}>Back to Adoptable Rabbits</a>
+                                             <a href="http://www.bunnyluv.org">BunnyLuv</a>
+ 
+                                              |]
 postAdoptionFormR::Handler Html
 postAdoptionFormR = do
   ((perResf, _), _)<-runFormPost aMaster
@@ -158,13 +174,7 @@ postAdoptionFormR = do
                         let areq = AdoptRequest (ad2Date atest)  personID (Just (ad2info atest)) Nothing
                         reqID<- insert areq
                         return ()
-                       defaultLayout  [whamlet|
-                                     <div> 
-                                             Thanks for applying for adoption!
-                                             <br>
-                                             We will give you call shortly to discuss your application.
- 
-                                              |]
+                       defaultLayout $ [whamlet| ^{topWidget thanksWid} |]
                          
     _ -> do
            msg<-getMessage

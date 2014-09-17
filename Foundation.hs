@@ -258,6 +258,8 @@ Rabbit
 RabbitStory
   rabbit RabbitId
   story Textarea
+  spneed Textarea Maybe
+  adoptRules Text Maybe
   URabStory rabbit
   deriving Show
 

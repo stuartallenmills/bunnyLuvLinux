@@ -229,19 +229,35 @@ getEditR rabId  = do
 addStoryForm::RabbitId->Html->MForm Handler (FormResult RabbitStory, Widget)
 addStoryForm rId extra = do
   (storyRes, storyView)<-mreq textareaField "nope" Nothing
-  let res = RabbitStory rId <$> storyRes
+  (spneedRes, spneedView)<-mopt textareaField "nope" Nothing
+  (adruleRes, adruleView)<-mopt textField "nope" Nothing
+  let res = RabbitStory rId <$> storyRes <*>spneedRes <*> adruleRes
   let wid = do
         [whamlet| #{extra}
           <div #storyForm>
              <div .bllabel>
               Enter story/blurb :
              <div #story> ^{fvInput storyView}
+             <div .bllabel>
+              Special Needs:
+             <div #spneed>
+              ^{fvInput spneedView}
+             <div #adrules>
+               <div .bllabel>
+                 Adoption Rules:
+               <div #adrin>
+                ^{fvInput adruleView}
+               
             <input type="submit" value="save story">
         |]
         toWidget [lucius|
-            ##{fvId storyView} {
+            ##{fvId storyView}, ##{fvId spneedView} {
                   width:98%;
              }
+
+            ##{fvId adruleView} {
+                 display:inline;
+            }
         |]
   return(res, wid)
 
@@ -251,7 +267,7 @@ getAddStoryR rId = do
     Just rab <- runDB $ get rId
     let menu = [whamlet|
               <div #addCance style="float:inherit; text-align:left; margin:10px;">
-                <b> Add Story for #{rabbitName rab}
+                <b> Add Adoption Info for #{rabbitName rab}
                 <div .cancelBut #rabEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rId}> cancel </a>
                |]
@@ -261,11 +277,36 @@ getAddStoryR rId = do
                  |]            
     baseForm "Edit Rabbit" menu form  
 
+updateStory::[Entity RabbitStory]->RabbitStory->Handler ()
+updateStory [] story = runDB $ do
+                        _ <- insert story
+                        return ();
+updateStory ((Entity sid _):_) story= runDB $ do
+                                                                   _<- replace sid story
+                                                                   return();
+
+{-
+                          update $ st -> do
+                          set st [ RabbitStoryRabbit =. val rid,
+                              RabbitStoryStory =. val st,
+                             RabbitStorySpneed =. val spn
+                             RabbitStoryAdoptRules =. val adr
+                            ]
+                           where_ (st ^. RabbitStoryId ==. val sid)
+-} 
+
 postAddStoryR::RabbitId->Handler Html
 postAddStoryR rId = do
   ((result, _), _) <- runFormPost (addStoryForm rId)
   case result of
-    FormSuccess story -> do
-      runDB $ insert story
+    FormSuccess story@(RabbitStory rid st spn adr ) -> do
+      res <- runDB $ 
+               select $ from $ \st -> do
+               where_ (st ^. RabbitStoryRabbit ==. val rid)
+               return st
+      _ <- updateStory res story
+                           
+                     
+                        
       redirect (ViewR rId)
     _ -> defaultLayout $ [whamlet| Form Error |]
