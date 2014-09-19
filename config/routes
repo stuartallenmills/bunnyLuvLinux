@@ -44,3 +44,5 @@
 /addVet                   AddVetR GET POST
 /addStory/#RabbitId       AddStoryR GET POST
 /adoptable                AdoptableR GET POST
+/viewpeople               ViewPeopleR GET
+/editperson/#PersonId     EditPersonR GET POST

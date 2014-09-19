@@ -198,7 +198,7 @@ postUpdateR rabId = do
   ((result, _), _) <-runFormPost (rabbitForm (Nothing,[]))
 
   case result of
-    FormSuccess rabi -> do
+    FormSuccess rabi -> 
       runDB $ do
         _ <-replace  rabId rabi
         return ()
