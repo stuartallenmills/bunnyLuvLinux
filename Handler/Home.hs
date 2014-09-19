@@ -34,13 +34,23 @@ import BaseForm
 import AgeForm
 import FormUtils
 
-notBond rab arg = arg $
+isBonded rab arg = arg $
            from $ \bonded -> 
            where_  ((bonded ^. BondedFirst) ==. (rab ^. RabbitId))
+
+family rab arg = arg $
+           from $ \bonded ->
+           where_ ((bonded ^. BondedFirst) ==. (rab ^. RabbitId) &&. (bonded ^. BondedRelation !=. val "Friend"))
+
+friends  rab arg = arg $
+           from $ \bonded ->
+           where_ ((bonded ^. BondedFirst) ==. (rab ^. RabbitId) &&. (bonded ^. BondedRelation ==. val "Friend"))
+
 
 notSelected rab = notExists $
            from $ \adopt -> 
            where_ (rab ^. RabbitId ==. adopt ^. AdoptRab)
+  
 
 queryCompanion male female hasff noff = do
     let mstr=if male then "M" else "Z"
@@ -60,14 +70,14 @@ queryCompanion male female hasff noff = do
            on (just (rab ^. RabbitId) ==. story ?. RabbitStoryRabbit)
            where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
                              ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
-                               (notBond rab exists) &&. (notSelected rab))
+                               (isBonded rab exists) &&. (notSelected rab))
            return (rab,story)
       (False, True)->    runDB $ 
          select $ from $ \(rab `LeftOuterJoin` story)->do
           on (just (rab ^. RabbitId) ==. story ?. RabbitStoryRabbit)
           where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
                              ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
-                               (notBond rab notExists) &&. (notSelected rab))
+                               (isBonded rab notExists) &&. (notSelected rab))
           return (rab, story)
       (False, False)-> return []
 
@@ -363,18 +373,9 @@ widIntro = do
 
    |]      
 
-aWid::Widget
-aWid =  $(widgetFileNoReload def "Adoptable")
-
---aHWid::Widget
-aHWid formWidget enctype today imgpath result =      [whamlet|
-       ^{aWid}
-       ^{adoptSearchWid formWidget enctype}
-      <div #thePage>
-
-      $forall (Entity rId rab, rabstoryM) <-result
-  
-          <div .rabBlock >
+--blockWid::Widget
+blockWid imgpath today rId rab rabstoryM = [whamlet|
+       <div .rabBlock >
            <a .rabTarget ##{rabbitName rab}>
             $maybe img <- rabbitImage rab
              <div #imgBlock style="background-image:url('#{mkLink img imgpath}');">
@@ -400,27 +401,64 @@ aHWid formWidget enctype today imgpath result =      [whamlet|
                    #{rabbitName rab} would like a good home.
              <div #ff style="width:100%; border-top:1px solid #6f6f6f;">
              ^{ffWid rId}
-        |]
+             |]
+            
+aWid::Widget
+aWid =  $(widgetFileNoReload def "Adoptable")
 
+--aHWid::Widget
+aHWid formWidget enctype today imgpath result ffresult=      [whamlet|
+       ^{aWid}
+       ^{adoptSearchWid formWidget enctype}
+     <div #thePage>
+        $if (not (null result))
+         <div #Header>
+          <div #headtext>
+           Single Rabbits
+          <div #blurb>
+              Our single Rabbits are very friendly and we will help you integrate them into your family.
+       $forall (Entity rId rab, rabstoryM) <-result
+        ^{blockWid imgpath today rId rab rabstoryM}
+      $if (not (null ffresult))
+       <div #Header>
+          <div #headtext>
+            Friends and Family
+          <div #blurb>
+              We like to keep our rabbits with friends or families together.  These rabbits are great if you are getting your first rabbits, or if you want to add more than one new rabbit to your rabbit family!
+       $forall (Entity rId rab, rabstoryM) <-ffresult
+          ^{blockWid imgpath today rId rab rabstoryM}
+       
+        
+  
+  
+        |]
+                                                     
+getResult today  adoptSearch avail = result where
+             yrs= getYears adoptSearch
+             result = if (yrs==0) then avail else newresult where
+                diffMnths = getMonths adoptSearch
+                bday = addDays (yrs*(-365)) today
+                mnthDays = 31*diffMnths
+                newresult = sortEnt mnthDays bday avail
+                
 adoptablePage adoptSearch = do
      (formWidget, enctype)<- generateFormPost (getAgeForm adoptSearch)
      avail<-queryCompanion (getBool adoptSearch male) (getBool adoptSearch female)
-                      (getBool adoptSearch hasff) (getBool adoptSearch noff)
+                      False (getBool adoptSearch noff)
+     let hff = getBool adoptSearch hasff
+     ff <- queryCompanion (getBool adoptSearch male) (getBool adoptSearch female)
+                      (getBool adoptSearch hasff) False
      today <- liftIO getCurrentDay
-     let yrs = getYears adoptSearch
-     let diffMnths = getMonths adoptSearch
-     let result = if (yrs==0) then avail
-                     else (sortEnt mnthDays bday avail) where
-                         bday = addDays (yrs*(-365)) today
-                         mnthDays = 31*diffMnths
- 
+     let noff = getResult today adoptSearch avail
+     let ffres = getResult today adoptSearch ff
+  
      impath <- liftIO getImagePath
      let imgpath = unpack impath
      msg <-getMessage
      maid <- maybeAuthId
      auth <- isAdmin
      let mode =  (maid == Just "demo")
-     baseAdoption "Adoptable Rabbits" widIntro (aHWid formWidget enctype today imgpath result)
+     baseAdoption "Adoptable Rabbits" widIntro (aHWid formWidget enctype today imgpath noff ff)
  --    defaultLayout $ [whamlet| ^{aHWid formWidget enctype today imgpath result} |]
 
  

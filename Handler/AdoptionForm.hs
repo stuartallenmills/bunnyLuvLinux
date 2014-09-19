@@ -65,7 +65,7 @@ data AdoptTest = AdoptTest {
 aMaster::Html->MForm Handler (FormResult (Person, AdoptTest2), Widget)
 aMaster extra = do
   (res1, p1Widget) <-  adoptionForm 
-  (res2, perWidget) <-  personForm 
+  (res2, perWidget) <-  (personForm Nothing)
   let wid = $(widgetFileNoReload def "AdoptionForm")
   let ares = (,) <$> res2 <*> res1
   return (ares, wid)
@@ -153,17 +153,12 @@ getAdoptionFormR = do
   (masterWidget, enctype)<-generateFormPost aMaster
   baseAdoption "Adoption Application" nullWid (adForWid masterWidget enctype)
 
-
 thanksWid =  [whamlet|
-                                     <div> 
-                                             Thanks for applying!
-                                             <br>
-                                             We will give you call shortly to discuss your application.
-
-                                             <a href=@{AdoptableR}>Back to Adoptable Rabbits</a>
-                                             <a href="http://www.bunnyluv.org">BunnyLuv</a>
- 
-                                              |]
+              <div> 
+              Thanks for applying!
+              <br>
+              We will give you call shortly to discuss your application.
+  |]
 postAdoptionFormR::Handler Html
 postAdoptionFormR = do
   ((perResf, _), _)<-runFormPost aMaster
@@ -171,10 +166,10 @@ postAdoptionFormR = do
     FormSuccess (person, atest) -> do
                        runDB $ do
                         personID<-insert person
-                        let areq = AdoptRequest (ad2Date atest)  personID (Just (ad2info atest)) Nothing
-                        reqID<- insert areq
+                        let tareq = AdoptRequest (ad2Date atest)  personID (Just (ad2info atest)) Nothing
+                        reqID<- insert tareq
                         return ()
-                       defaultLayout $ [whamlet| ^{topWidget thanksWid} |]
+                       baseAdoption "Thanks!" thanksWid nullWid 
                          
     _ -> do
            msg<-getMessage

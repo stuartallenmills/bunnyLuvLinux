@@ -181,9 +181,12 @@ writeToServer file = do
 imageFilePath :: Text->String -> FilePath
 imageFilePath adir f = (unpack adir) </> f
 
-personForm:: MForm Handler (FormResult Person, Widget)
-personForm   = do
-    (personFirstNameRes, personFirstNameView)<-mreq textField "nope" Nothing
+getField Nothing _  = Nothing
+getField (Just pm) f = Just (f pm)
+
+personForm::Maybe Person-> MForm Handler (FormResult Person, Widget)
+personForm  pm  = do
+    (personFirstNameRes, personFirstNameView)<-mreq textField "nope" (getField pm personFirstName)
     (personLastNameRes, personLastNameView)<-mreq textField "nope" Nothing
     (personPhoneRes, personPhoneView)<-mreq textField "nope" Nothing
     (personMobileRes, personMobileView)<-mopt textField "noop" Nothing
