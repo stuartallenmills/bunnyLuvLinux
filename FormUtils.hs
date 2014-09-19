@@ -181,21 +181,21 @@ writeToServer file = do
 imageFilePath :: Text->String -> FilePath
 imageFilePath adir f = (unpack adir) </> f
 
-getField Nothing _  = Nothing
-getField (Just pm) f = Just (f pm)
+getPField Nothing _ = Nothing
+getPField (Just per) tfield = Just (tfield per)
 
-personForm::Maybe Person-> MForm Handler (FormResult Person, Widget)
-personForm  pm  = do
-    (personFirstNameRes, personFirstNameView)<-mreq textField "nope" (getField pm personFirstName)
-    (personLastNameRes, personLastNameView)<-mreq textField "nope" Nothing
-    (personPhoneRes, personPhoneView)<-mreq textField "nope" Nothing
-    (personMobileRes, personMobileView)<-mopt textField "noop" Nothing
-    (personStreetRes, personStreetView)<-mreq textField "nope" Nothing
-    (personAptRes, personAptView)<-mopt textField "noop" Nothing
-    (personCityRes, personCityView)<-mreq textField "nope" Nothing
-    (personStateRes,personStateView)<-mreq textField "nope" Nothing
-    (personZipRes, personZipView)<-mreq textField "nope" Nothing
-    (personEmailRes, personEmailView)<-mopt textField "nope" Nothing
+personForm:: Maybe Person->MForm Handler (FormResult Person, Widget)
+personForm personM  = do
+    (personFirstNameRes, personFirstNameView)<-mreq textField "nope" (getPField personM personFirstName)
+    (personLastNameRes, personLastNameView)<-mreq textField "nope" (getPField personM personLastName)
+    (personPhoneRes, personPhoneView)<-mreq textField "nope" (getPField personM personPhone)
+    (personMobileRes, personMobileView)<-mopt textField "noop" (getPField personM personMobile)
+    (personStreetRes, personStreetView)<-mreq textField "nope" (getPField personM personStreet)
+    (personAptRes, personAptView)<-mopt textField "noop" (getPField personM personApt)
+    (personCityRes, personCityView)<-mreq textField "nope" (getPField personM personCity)
+    (personStateRes,personStateView)<-mreq textField "nope" (getPField personM personState)
+    (personZipRes, personZipView)<-mreq textField "nope" (getPField personM personZip)
+    (personEmailRes, personEmailView)<-mopt textField "nope" (getPField personM personEmail);
     let personRes = Person <$> personFirstNameRes <*>
                         personLastNameRes <*>  personPhoneRes <*>
                          personMobileRes <*> personStreetRes <*> personAptRes <*>
@@ -212,79 +212,8 @@ baseForm ti menu form = do
   defaultLayout $ do
     setTitle ti
     $(widgetFileNoReload def "cancelbutton")
-    toWidget [julius|
+    $(widgetFileNoReload def "bldate");
 
-   function checkDate( astr ) {
-      var str =astr; 
-      var pat=/^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/]((19|20)[0-9][0-9]|[0-9][0-9])$/;
-    var res = str.match(pat);
-    if (res==null) {
-      return "";
-    }
-    
-    var dtMonth=res[1];
-    var dtDay=res[2];
-    var adtYear=res[3];
-    if (adtYear.length == 2) 
-         {dtYear="20"+adtYear;} 
-    else {dtYear=adtYear;}
-
-    if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) {
-       return "";
-    }
-
-  if (dtMonth == 2)
-     {
-     var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
-     if (dtDay> 29 || (dtDay ==29 && !isleap)) {
-          return "";
-        }
-     }
-  return (dtMonth +"/"+ dtDay+"/"+dtYear);
-    
-  }
-            $(function () {
-              $( ".blDate :input" ).blur ( function(e) {
-                 var str = $( this ).val();
-                 if (str.length < 1)
-                   return;
-                 var thedate = checkDate( str );
-                 if (thedate.length < 4) {
-                   e.preventDefault();
-                   $( this ).val( "" );
-                    $( "#dateError" ).show();
-                   $( this ).focus();              
-                  } else {
-                  $( this ).val ( thedate );
-                  $( this ).change();
-                 }
-                });
-               });
-
-            $(function () {
-              $( ".blDate :input" ).keydown ( function(e) {
-                 $( "#dateError" ).hide();
-               if (e.keyCode==13 || e.keyCode==9) {
-                 var str = $( this ).val();
-                 if (str.length < 1)
-                   return;
-                 var thedate = checkDate( str );
-                 if (thedate.length < 4) {
-                   e.preventDefault();
-                   $( this ).val( "");
-                    $( "#dateError" ).show();
-                   $( this ).focus();
-                  } else {
-                 $( this ).val ( thedate );
-                 $( this ).change();
-                 }
-                }
-                });
-               });
-
-
- 
-       |]
     [whamlet|
        <div #ablank style="color:#ffffff; float:right">  
                  This is a test
