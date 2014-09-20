@@ -1,0 +1,52 @@
+  $(function () {
+      var last="empty"
+     $( ".rabLink" ).click( function (e) {
+         var theval = $( this ).attr("href");
+         $( theval ).parent().css("border-color", "yellow");
+         if (last != "empty") {
+            $( last ).parent().css("border-color", "transparent");
+          }
+         last= theval;        
+      });
+     });
+
+
+  $( function () {
+     $( window ).resize( function () {
+       reSizeBlocks();
+     });
+    });
+
+  var brblock=0;
+  var imgblockH=0;
+  var rblockH=0;
+
+  function reSizeBlocks() {
+     wwidth = $( "#thePage" ).width()-10;
+     cwidth = $( "#thePage" ).css("width");
+     var rblock = brblock+7;
+     var tiles = wwidth/rblock;
+     var tint = Math.floor(tiles);
+     var frac = tiles - Math.floor(tiles);
+     var marg= Math.floor((frac*rblock)/tint);
+     var nblock =0;
+     var blockH= 0;
+     if (marg > 18) {
+          var nblock = marg-18;
+          blockH= Math.floor(nblock/2);
+          marg = 18; 
+      } 
+     $( ".rabBlock" ).each(function (index) {
+           $( this ).css("margin-left", (marg+"px"));
+           $( this ).css("width",(( brblock+nblock) + "px"));
+           $( this ).css("height", ((rblockH-blockH) + "px"));
+           $( this ).find( "#imgBlock" ).css("height", ((imgblockH-blockH)+"px"));
+        });    
+    }
+  $(function () {
+      brblock = $( ".rabBlock" ).width();
+      imgblockH = $( "#imgBlock" ).height();
+      rblockH = $( ".rabBlock" ).height();
+
+     reSizeBlocks();
+   });

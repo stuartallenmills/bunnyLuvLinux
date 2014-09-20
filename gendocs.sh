@@ -1,0 +1,1 @@
+haddock -o dist/doc/html --optghc=-package-db=$DB -h Handler/Add.hs Handler/Home.hs Handler/Reports.hs Handler/ViewRabbit.hs Handler/AdoptionForm.hs Handler/Admin.hs Handler/Adopted.hs Handler/AdoptionReq.hs  Handler/Bonded.hs Handler/DailyReport.hs Handler/Search.hs Handler/Treatment.hs Handler/Vets.hs Handler/VetVisit.hs Handler/ViewAdoption.hs

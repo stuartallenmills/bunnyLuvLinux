@@ -1,0 +1,91 @@
+    body {
+      background:#efefef;
+     }
+     #thePage div {
+          float:left;
+      }
+
+   #Header {
+      float:left;
+      width:100%;
+      background:#fafafa;
+      border:1px solid #fefeef;
+      border-radius:5px;
+      margin-top:15px;
+      box-shadow:1px 1px 2px #7f7f7f;
+      padding-bottom:8px;
+}
+   #blurb {
+      margin-left:15px;
+      font-family:Comic Sans MS;
+      margin-right:15px;
+      
+     }
+   #headtext {
+      margin-top:10px;
+      font-size:150%;
+      width:100%;
+      font-style:bold;
+      font-family:Comic Sans MS;
+      text-decoration:underline;
+      margin-left:10px;
+   }
+      #rName,#rAge {
+         margin-left:10px;
+        }
+     #rAge, #stry, #spneed, #nothing {
+       font-size:90%;
+      }
+     #stry, #nothing {
+       margin-left:5px;
+       margin-right:5px;
+       margin-bottom:3px;
+       width:97%;
+       
+      }
+     #story {
+       float:left;
+       width:60%;
+       display:inline-block;
+      }
+     
+     #thePage #rAge {
+         float:right;
+         padding-right:5px;
+      }
+
+     #thePage img {
+             width:95%;
+             float:left;
+             margin:10px;
+            }
+        .rabBlock {
+            float:left;
+            width:520px;
+            height:256px;
+            box-shadow:2px 2px 4px;
+            margin-top:15px;
+            background:#fbfbfb;
+            border:3px solid transparent;
+           }
+   .rabTarget {
+      display:inline:block;
+      height:100%;
+      width:40%;
+  }
+
+
+  #imgBlock {
+    float:left;
+    display: inline-block;
+    width: 80%;
+    height:90%;
+    margin:4px;
+    border: 1px solid black;
+    background-position: center center;
+    background-size: cover;
+
+  }
+  
+
+           
