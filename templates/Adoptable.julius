@@ -39,8 +39,8 @@
      $( ".rabBlock" ).each(function (index) {
            $( this ).css("margin-left", (marg+"px"));
            $( this ).css("width",(( brblock+nblock) + "px"));
-           $( this ).css("height", ((rblockH-blockH) + "px"));
-           $( this ).find( "#imgBlock" ).css("height", ((imgblockH-blockH)+"px"));
+           $( this ).css("height", ((rblockH+blockH) + "px"));
+           $( this ).find( "#imgBlock" ).css("height", ((imgblockH+blockH)+"px"));
         });    
     }
   $(function () {
