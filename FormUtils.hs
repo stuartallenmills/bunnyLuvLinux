@@ -42,9 +42,9 @@ topWidget awid = do
        <div #adoptable .md>
         <a  href=@{AdoptableR}><span>Adoptable Rabbits</span></a>
        <div #adoptAp .md>
-        <a href=@{AdoptionFormR}><span>Apply for adoption online</span></a>
+        <a href=@{AdoptionFormR}><span>Apply online</span></a>
        <div .md>
-        <a href="http://media.wix.com/ugd/1f3057_f99ed5e1bbcbb4910ac62c58febb82b1.doc?dn=%22BLRRC_adoption_app.doc%22"><span>Download Adoption Application<span></a>
+        <a href="http://media.wix.com/ugd/1f3057_f99ed5e1bbcbb4910ac62c58febb82b1.doc?dn=%22BLRRC_adoption_app.doc%22"><span>Download Application<span></a> 
        <div .md>
         <a href=@{HomeR}>Tracker</a>
     ^{awid}
@@ -173,13 +173,13 @@ writeToServer file = do
         rf = reverse filename
         (ext, thead) = break (== '.') rf
         thead2 = tail thead
-        fn = (reverse thead2) ++ "_"++( date) ++ "." ++ (reverse ext)
+        fn = (reverse thead2) ++ "_" ++ date ++ "." ++ reverse ext
         path = imageFilePath uploadDir fn
     liftIO $ fileMove file path
     return fn
 
 imageFilePath :: Text->String -> FilePath
-imageFilePath adir f = (unpack adir) </> f
+imageFilePath adir f = unpack adir </> f
 
 getPField Nothing _ = Nothing
 getPField (Just per) tfield = Just (tfield per)

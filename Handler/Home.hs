@@ -350,8 +350,15 @@ widIntro = do
       <div #intro>
         Find  Buns to Love from BunnyLuv!
     <div #body>
-     We have over 100 wonderful rabbits eager for a new home.  You can use the search bar to narrow your search by age, sex, or rabbits with friends or families!
-                                                                                                          
+     We have over 100 wonderful rabbits eager for a new home.  You can use the search bar to narrow your search by age, sex, or rabbits with friends or families!  You can apply for adoption <a href=@{AdoptionFormR}>online</a> or <a href="http://media.wix.com/ugd/1f3057_f99ed5e1bbcbb4910ac62c58febb82b1.doc?dn=%22BLRRC_adoption_app.doc%22">download</a> the form as a Word document that you can email or mail to us.   To review our Adoption Policies click <a href="#policies">here</a>
+ <div>
+   By adopting a rabbit from BunnyLuv, you are giving the gift of life and creating space for us to save more!​
+​​​ <div> If that's not enough reason to adopt from BunnyLuv Rabbit Resource Center, consider these extra benefits:
+
+  <ul>
+   <li>  Our rescued rabbits are have been spayed/neutered, healthy, socialized and litter-box trained. They are ready for your home.
+   <li> With over 1700 successful "Luv Connections" to date, we specialize in facilitating the often difficult bonding process for your rabbits.
+   <li> We offer help and guidance throughout the transition of your new rabbit group at home, and we are available afterwards,  should you need our help in any area of rabbit care.                                                                                                                                                                                       
   |]
   toWidget [lucius|
               #intro {
@@ -369,6 +376,15 @@ widIntro = do
               padding-left:20px;
               padding-right:20px;
               margin-bottom:10px;
+            }
+            #policies {
+               width:100%
+               margin:5px;
+               float:left;
+              }
+            #policies div {
+               margin:5px;
+               float:left;
             }
 
    |]      
@@ -405,12 +421,39 @@ blockWid imgpath today rId rab rabstoryM = [whamlet|
             
 aWid::Widget
 aWid =  $(widgetFileNoReload def "Adoptable")
+policyWid::Widget
+policyWid = [whamlet|
+     <div #thepolicies style="width:100%; float:left;">
+       <div id="policies" sytle="width:100%; float:left;">
+           <div>  <h2> Adoption Policies </h2>
+           <div>  <b>Primary Caregiver. </b> When a rabbit is adopted from BunnyLuv Rabbit Resource Center, 
+                 the primary caregiver must be a responsible adult.  The rabbit should be treated as an integral part of the family.  
+              We do NOT adopt out rabbits as pets for children or for classrooms.
+           <div>  <b>Indoor Housing. </b> Adopters of BunnyLuv Rabbit Resource Center rabbits 
+              must understand that our rabbits are to live as household companions.  
+             This means that they must have their living space indoors, and must spend every night indoors.  
+             Additional safety precautions may be required and will be determined at the time of the home visit.
+           <div> <b>Social Requirements. </b> It is our strong belief rabbits need other rabbits 
+              in their daily lives, in addition to their humans.  
+              For this reason, BunnyLuv does not adopt rabbits to live as single animals.  
+              We specialize in rabbit introductions and will help you to expand your family.
+            <b>Returns. </b> If there are significant problems with the adopted rabbit, 
+                the adopter needs to give us advance notice.  All rabbits adopted from this agency
+                 must be returned to this agency in case of insurmountable problems that prevent the adoption from being permanent.
+           <div>  <b>Adoption fees. </b> Our adoption fee is a $95 donation per rabbit.  
+             Adoption fees are donations that cannot be refunded.
+             We are a federally recognized tax-exempt, non-profit organization, 
+            and donations made to us are no more refundable than they are to any other public charity.
+           <div> If you would like to hear more about adopting a second or third (or fourth or fifth...)
+               rabbit from BunnyLuv, please call us at (818) 988 4488 or email bunnyluv@bunnyluv.org. 
 
+
+             |]
 --aHWid::Widget
 aHWid formWidget enctype today imgpath result ffresult=      [whamlet|
        ^{aWid}
        ^{adoptSearchWid formWidget enctype}
-     <div #thePage>
+    <div #thePage>
         $if (not (null result))
          <div #Header>
           <div #headtext>
@@ -427,10 +470,8 @@ aHWid formWidget enctype today imgpath result ffresult=      [whamlet|
               We like to keep our rabbits with friends or families together.  These rabbits are great if you are getting your first rabbits, or if you want to add more than one new rabbit to your rabbit family!
        $forall (Entity rId rab, rabstoryM) <-ffresult
           ^{blockWid imgpath today rId rab rabstoryM}
-       
-        
-  
-  
+      ^{policyWid}
+ 
         |]
                                                      
 getResult today  adoptSearch avail = result where
