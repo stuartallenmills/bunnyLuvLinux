@@ -402,8 +402,12 @@ blockWid imgpath today rId rab rabstoryM = [whamlet|
              <div #nameLine style="width:100%; border-bottom:1px solid #8f8f8f;">
               <div #rName>
                 <b> #{rabbitName rab}
+              <div #rSex>
+                (#{rabbitSex rab})
+              <div #rAcq>
+               Acq: #{showtime (rabbitDateIn rab)}
               <div #rAge>
-                  #{getCurrentYears today rab} yr #{getCurrentMonths today rab} mnth
+                 Est. Age: #{getCurrentYears today rab}y #{getCurrentMonths today rab}m
              
              $maybe (Entity sId (RabbitStory rId rstory spneed adrule))<- rabstoryM
                <div #stry>
@@ -437,6 +441,7 @@ policyWid = [whamlet|
               in their daily lives, in addition to their humans.  
               For this reason, BunnyLuv does not adopt rabbits to live as single animals.  
               We specialize in rabbit introductions and will help you to expand your family.
+           <div>
             <b>Returns. </b> If there are significant problems with the adopted rabbit, 
                 the adopter needs to give us advance notice.  All rabbits adopted from this agency
                  must be returned to this agency in case of insurmountable problems that prevent the adoption from being permanent.
@@ -444,8 +449,9 @@ policyWid = [whamlet|
              Adoption fees are donations that cannot be refunded.
              We are a federally recognized tax-exempt, non-profit organization, 
             and donations made to us are no more refundable than they are to any other public charity.
-           <div> If you would like to hear more about adopting a second or third (or fourth or fifth...)
-               rabbit from BunnyLuv, please call us at (818) 988 4488 or email bunnyluv@bunnyluv.org. 
+           <div> 
+             If you would like to hear more about adopting a second or third (or fourth or fifth...)
+               rabbit from BunnyLuv, please call us at (818) 988 4488 or email <a href="mailto:bunnyluv@bunnyluv.org?Subject=Adoption%20Info">bunnyluv@bunnyluv.org</a> 
 
 
              |]

@@ -30,11 +30,18 @@
       text-decoration:underline;
       margin-left:10px;
    }
-      #rName,#rAge {
+      #rAge, #rSex, #rAcq {
          margin-left:10px;
         }
-     #rAge, #stry, #spneed, #nothing {
-       font-size:90%;
+     #rSex {
+       text-transform:lowercase;
+     }
+
+     #rName {
+        margin-left:5px;
+     }
+     #rAge, #stry, #spneed, #nothing, #rSex, #rAcq {
+       font-size:95%;
       }
      #stry, #nothing {
        margin-left:5px;

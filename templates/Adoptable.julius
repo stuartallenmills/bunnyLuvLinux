@@ -30,15 +30,17 @@
      var frac = tiles - Math.floor(tiles);
      var marg= Math.floor((frac*rblock)/tint);
      var nblock =0;
+     var rblock=0;
      var blockH= 0;
      if (marg > 18) {
-          var nblock = marg-18;
+          nblock = (marg-18);
+          rblock = Math.floor(nblock*0.75);
           blockH= Math.floor(nblock/2);
-          marg = 18; 
+          marg = 18+Math.floor((nblock*0.25)/2.0); 
       } 
      $( ".rabBlock" ).each(function (index) {
            $( this ).css("margin-left", (marg+"px"));
-           $( this ).css("width",(( brblock+nblock) + "px"));
+           $( this ).css("width",(( brblock+rblock) + "px"));
            $( this ).css("height", ((rblockH+blockH) + "px"));
            $( this ).find( "#imgBlock" ).css("height", ((imgblockH+blockH)+"px"));
         });    
