@@ -166,7 +166,8 @@ vetVisitForm task rab rabid extra = do
              <input type=submit value="submit">
             |]
     return (vetvisitRes, vwidget)
-        
+
+
 getVetVisitR ::RabbitId->Text->Handler Html
 getVetVisitR rabid task = do
     Just rab <- runDB  $ do
@@ -181,7 +182,8 @@ getVetVisitR rabid task = do
                   <div .cancelBut #vvEdCan style="display:inline; float:right;">
                    <a href=@{ViewR rabid}> cancel </a>
                |]
-    let form = [whamlet|<form method=post action=@{VetPostR   rabid} enctype=#{enctype}>
+    let form = [whamlet|
+                 <form method=post action=@{VetPostR   rabid} enctype=#{enctype}>
                  ^{formWidget}
                |]
     baseForm "Vet Visit" menu form

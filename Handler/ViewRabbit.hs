@@ -30,6 +30,7 @@ showadopted rabbit adopteds = $(widgetFileNoReload def "showadopted");
 
 showtreatments treatments = $(widgetFileNoReload def "showTreatments");
 
+
 getViewR::RabbitId->Handler Html
 getViewR rabId  = do
     (formWidget, enctype)<- generateFormPost getNameForm
@@ -72,6 +73,7 @@ getViewR rabId  = do
          addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
          addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" 
          toWidget [julius|
+ 
            $(function() {
             $("#vetvisits").click(function() {
                 $("#showvv").toggle();
@@ -95,7 +97,7 @@ getViewR rabId  = do
             });           
           |] 
          [whamlet|
-           <div #blHeaderD>
+             <div #blHeaderD>
             ^{getNameWidget bnames formWidget enctype}
             ^{headerLogWid imgpath maid}    
             ^{viewRabMenu showMenu not_dead not_adopted not_altered rabId}  

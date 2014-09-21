@@ -213,7 +213,9 @@ baseForm ti menu form = do
     setTitle ti
     $(widgetFileNoReload def "cancelbutton")
     $(widgetFileNoReload def "bldate");
-
+    addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+    addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
+    addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" 
     [whamlet|
        <div #ablank style="color:#ffffff; float:right">  
                  This is a test

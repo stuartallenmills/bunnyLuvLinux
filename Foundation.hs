@@ -349,12 +349,52 @@ nameWidget::Widget
 nameWidget = $(widgetFileNoReload def "nameC")
 
 -- header
+
+logoutDialog::Widget
+logoutDialog = do
+  [whamlet|
+              < div #logout title="Logout" style="display:none;"  >
+                   Hey! You still there?
+                   |]
+  toWidget [julius|
+           function stillthere() {
+                 setTimeout(function () {
+                       var tOut = setTimeout( function () {
+                         window.location.assign("/auth/logout");
+                        }, 60000);
+                       $( "#logout" ).dialog({
+                                    modal:true,
+                                    buttons: {
+                                    "Continue": function () {
+                                     clearTimeout(tOut);
+                                     stillthere(); 
+                                     $( this ).dialog( "close" );
+                                    }   
+                                   } 
+                  });                      
+
+                 }, 600000);
+           }
+
+           $(function() {
+
+                stillthere();
+            });
+
+     
+  |]        
+
+
         
 headerLogWid imgpath maid = do
          addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
          addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
          addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
          $(widgetFileNoReload def "headerLog")
+         [whamlet|
+          $maybe usr<-maid
+           ^{logoutDialog}
+            |]
 headerwidget imgpath = $(widgetFileNoReload def "header")
 
 
