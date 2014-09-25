@@ -184,7 +184,7 @@ getVetVisitR rabid task = do
                |]
     let form = [whamlet|
                  <form method=post action=@{VetPostR   rabid} enctype=#{enctype}>
-                 ^{formWidget}
+                   ^{formWidget}
                |]
     baseForm "Vet Visit" menu form
 

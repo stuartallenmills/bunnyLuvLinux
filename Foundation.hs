@@ -471,17 +471,36 @@ instance YesodAuth App where
 
     maybeAuthId = lookupSession "_ID"
 
+    onLogout = do
+        maid<-maybeAuthId
+        let str= case maid of
+                 Nothing->"no one"
+                 Just md->md
+        ctime<- liftIO getLocalTime
+        let todayStr= (unpack (showtime (localDay ctime)))
+        let timeStr = todayStr ++ (getTimeStr ctime)
+        let logonStr = "Logout: "++(unpack str) ++ " " ++  timeStr++"\n"
+        liftIO $ appendTextFile "logins.txt" (pack logonStr)
+       
+getTimeStr::LocalTime->String
+getTimeStr (LocalTime _ (TimeOfDay hr tmin sec))= " "++ show hr ++ ":" ++ show tmin ++ ":" ++ show sec
+
 authBunnyluv :: YesodAuth m => AuthPlugin m
 authBunnyluv =
     AuthPlugin "bunnyluv" dispatch login
   where
     dispatch "POST" [] = do
+        ctime<- liftIO getLocalTime
+        let todayStr= (unpack (showtime (localDay ctime)))
+        let timeStr = todayStr ++ (getTimeStr ctime)
         ident <- lift $ runInputPost $ ireq textField "ident"
+        let logonStr = "Login: "++(unpack ident) ++ " " ++  timeStr ++ "\n"
         usrsMap <-  liftIO  getUsrs
         let isOnFile = Map.member ident usrsMap
         let upass = if isOnFile then usrsMap Map.! ident else "guest"
         pass <-lift $ runInputPost $ ireq passwordField "pass"
-        if (pass == upass)   then
+        if (pass == upass)   then do
+         liftIO $ appendTextFile "logins.txt" (pack logonStr)
          lift $ setCredsRedirect $ Creds "bunnyluv" ident []
         else loginErrorMessageI  LoginR PassMismatch
 

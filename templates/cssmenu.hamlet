@@ -2,26 +2,28 @@
   <ul>
    <li class='active'><a href=@{HomeR}><span>Home</span></a></li>
 
-   <li #blAdopt class="has-sub" title="Adoption"><a href='#'><span >Adoption</span></a>
+   <li #blAdopt class="has-sub" title="Adopt"><a href='#'><span >Adoption</span></a>
     <ul>
+      <li #track title="Adopt Requests"><a href=@{ViewAdoptForms}>Track Adoption Requests</a></li>
+      <li #adoptRep><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
       <li #blAge title="Find Rabbit"><a href='#'>Find Companion Rabbit</a></li>
       <li #adoptable><a href=@{AdoptableR}>Adoptable</a></li>
-      <li #adoptForm class="last"><a = href=@{AdoptionFormR}>Adoption Request Form </a></li>
-
+      <li #adoptForm class="last"><a href=@{AdoptionFormR}>Adoption Request Form </a></li>
+     
+   <li #blHealth class="has-sub"><a href="#">Health</a>
+     <ul>
+         <li><a href=@{TreatmentReportR}>Track Treatments</a></li>
+         <li><a href=@{VVViewR}><span>Vet Visits Report</span></a></li>
+         <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>
+         <li .has-sub .last><a href="#"><span>Altered Status </span></a>
+           <ul>
+            <li><a href=@{AlteredR "No"}><span>Not Altered</span></a></li>           
+            <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
 
    <li #blReports class="has-sub"><a href="#"><span>Reports</span></a>
       <ul>
          <li><a href=@{DailyViewR}><span>Daily Reports</span></a></li>
-         <li><a href=@{TreatmentReportR}>Treatments Report</a></li>
-         <li><a href=@{VVViewR}><span>Vet Visits Report</span></a></li>
-         <li><a href=@{WellViewR}><span>Wellness Report</span></a></li>
          <li><a href=@{BondedViewR}>Bonded/Family Report</a></li>
-         <li><a href=@{ViewAdoptForms}>Adoption Requests</a></li>
-         <li><a href=@{AdoptedViewR}><span>Adopted Report</span></a></li>
-         <li .has-sub><a href="#"><span>Altered Status </span></a>
-           <ul>
-            <li><a href=@{AlteredR "No"}><span>Not Altered</span></a></li>           
-            <li><a href=@{AlteredR "Yes"}><span>Altered</span></a></li>
          <li><a href=@{SearchR}><span>Advanced Search</span></a></li>
          <li #blStatus .has-sub .last title="Find Rabbits by status "><a href="#"><span >Status/Source  </span></a>
            <ul>

@@ -74,14 +74,20 @@ base wtitle atitle result  = do
                               $( "#rAddM" ).show();   
                               $( "#blAdmin" ).show(); 
                               $( "#blNew" ).show();
+                              $( "#track" ).show();
+                              $( "#adoptRep" ).show();
+                              $( "#blHealth" ).show();
                              }
                              else {
+                              $( "#track" ).hide();
+                              $( "#adoptRep" ).hide();
                               $( "#blReports" ).hide(); 
                               $( "#blStatus" ).hide();
                               $( "#blSource" ).hide();      
                               $( "#rAddM" ).hide(); 
                               $( "#blNew" ).hide();
                               $( "#blAdmin" ).hide(); 
+                              $( "#blHealth" ).hide();
                              }
                            });
 
