@@ -1,0 +1,60 @@
+@CHARSET "ISO-8859-1";
+
+.menu-left a {
+	text-decoration:none;
+	color:#000000;
+}
+
+a::selection {
+	background-color:transparent;
+}
+
+a::-moz-selection {
+	background-color:transparent;
+}
+.menu-left {
+	position:fixed;
+	background:#f9f9f9;
+	box-shadow:1px 1px 2px;
+	padding-right:10px;
+	display:none;
+}
+
+#content {
+	margin-left:30px;
+}
+
+ul {
+	padding-left:25px;
+}
+
+ul ul {
+	padding-left:15px;
+}
+nav a:hover {
+	color:red;
+}
+.head {
+	position:fixed;
+	top:0;
+	left:0;
+}
+
+.has-sub {
+	list-style-type:square;
+	list-style-image:url("triangle16.jpg");
+	color:red;
+	
+}
+
+li:not(.has-sub){
+	list-style-type:none;
+	list-style-image:none;
+}
+li .has-sub ul {
+	display:none;
+}
+
+li .has-sub:hover{
+	color:red;
+}
