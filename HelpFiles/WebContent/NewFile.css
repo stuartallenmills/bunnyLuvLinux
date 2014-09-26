@@ -1,5 +1,29 @@
 @CHARSET "ISO-8859-1";
 
+h2, h3, h4, h5, h6 {
+	margin-bottom: 1px;
+}
+
+h4 {
+	font-style:bold;
+	font-size:100%;
+	margin-bottom:1px;
+}
+
+p {
+	margin-top:4px;
+}
+
+h5 {
+	font-size:90%;
+	text-decoration:underline;
+}
+
+h6 {
+	font-style:none;
+	text-decoration:underline;
+	font-size:90%;
+}
 .menu-left a {
 	text-decoration:none;
 	color:#000000;
@@ -15,9 +39,10 @@ a::-moz-selection {
 .menu-left {
 	position:fixed;
 	background:#f9f9f9;
-	box-shadow:1px 1px 2px;
+	box-shadow:2px 2px 4px;
 	padding-right:10px;
 	display:none;
+	padding-top:10px;
 }
 
 #content {
