@@ -4,6 +4,9 @@ h2, h3, h4, h5, h6 {
 	margin-bottom: 1px;
 }
 
+#content div {
+	display:none;
+}
 h4 {
 	font-style:bold;
 	font-size:100%;
@@ -66,20 +69,27 @@ nav a:hover {
 }
 
 .has-sub {
-	list-style-type:square;
-	list-style-image:url("triangle16.jpg");
-	color:red;
+	list-style-image:url("triangleR16B.png");
 	
 }
+
+.active {
+	list-style-image:url("triangleD16R.png");
+}
+
+
+
+li a:hover {
+	list-style-image:url("triangleR16B.png");
+}
+
 
 li:not(.has-sub){
 	list-style-type:none;
 	list-style-image:none;
 }
-li .has-sub ul {
+
+.has-sub ul {
 	display:none;
 }
 
-li .has-sub:hover{
-	color:red;
-}
