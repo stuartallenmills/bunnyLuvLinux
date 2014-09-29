@@ -44,7 +44,7 @@
          <li #newTreat><a href="#"><span>New Treatment</span></a></li>
          <li #newVetVisit><a href="#"><span>New Vet Vist</span></a></li>
          <li #newAdReq .last ><a href=@{AdoptReqR}>New Adoption Request</a></li>
-   <li class="has-sub last" id="blAdmin"><a href="#"><span>Admin</span></a>
+   <li class="has-sub" id="blAdmin"><a href="#"><span>Admin</span></a>
       <ul>
        <li><a href=@{ViewPeopleR}>List People on file</a>
        <li><a href=@{AddVetR}>Add Vet</a></li>
@@ -56,5 +56,6 @@
          <li><a href=@{ChangePassR}><span>Change Password</span></a></li>
          <li><a href=@{DeleteUR}><span>Delete User</span></a></li>
          <li class="last"><a href=@{AddUR}><span>Add User</span></a></li>
+   <li id="blHelp" class="last"><a id="helpFile" href="#">Help</a>
          
       

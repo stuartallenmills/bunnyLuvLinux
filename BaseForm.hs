@@ -77,6 +77,7 @@ base wtitle atitle result  = do
                               $( "#track" ).show();
                               $( "#adoptRep" ).show();
                               $( "#blHealth" ).show();
+                              $( "#blHealth" ).show();
                              }
                              else {
                               $( "#track" ).hide();
@@ -88,6 +89,7 @@ base wtitle atitle result  = do
                               $( "#blNew" ).hide();
                               $( "#blAdmin" ).hide(); 
                               $( "#blHealth" ).hide();
+                              $( "#blHelp" ).hide();
                              }
                            });
 
