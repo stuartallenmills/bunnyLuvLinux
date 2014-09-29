@@ -4,13 +4,37 @@ h2, h3, h4, h5, h6 {
 	margin-bottom: 1px;
 }
 
+#bann {
+	position:fixed;
+	width:100%;
+	background:#fefefe;
+	top:0;
+	text-align:center;
+	border-bottom:1px solid #7f7f7f;
+}
+
+#bann h1{
+	margin-top:8px;
+	margin-bottom:0;
+}
+
+#leftD {
+	float:left;
+}
+
+#rightD {
+	float:right;
+	margin-right:20px;
+}
+
 #content div {
 	display:none;
+	padding-top:50px;
+	
 }
 h4 {
 	font-style:bold;
 	font-size:100%;
-	margin-bottom:1px;
 }
 
 p {
@@ -41,11 +65,13 @@ a::-moz-selection {
 }
 .menu-left {
 	position:fixed;
+	top:100px;
 	background:#f9f9f9;
 	box-shadow:2px 2px 4px;
 	padding-right:10px;
 	display:none;
 	padding-top:10px;
+	top:60px;
 }
 
 #content {
@@ -64,8 +90,9 @@ nav a:hover {
 }
 .head {
 	position:fixed;
-	top:0;
+	top:10px;
 	left:0;
+	float:left;
 }
 
 .has-sub {

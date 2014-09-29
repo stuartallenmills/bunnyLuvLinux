@@ -8,9 +8,6 @@
         <script src="help.js"> </script> 
 </head>
 <body>
-<div class="head">
-  <img class="menuB" src="triangle16.jpg">
-</div>
 
 <nav class="menu-left">
 <a href="#_Toc399390514"><b>Rabbit Tracker</b></a>
@@ -101,18 +98,27 @@
 		<li><a href="#_Toc399390564">New Rabbit</a></li>
 		<li><a href="#_Toc399390565">Vet Visit Form</a></li>
                 <li><a href="#_Toc399390566">Wellness Form</a></li>
-		<li><a href="#_Toc399390567">Died Form</a></li>
+		<li><a href="_Died_Form">Died Form</a></li>
 		<li><a href="#_Toc399390568">Euthanized Form</a></li>
-		<li><a href="#_Toc399390569">Treatment</a></li>
+		<li><a href="_Injury/Illness_Treatment">Treatment</a></li>
 		<li><a href="#_Toc399390570">Adoption Process</a></li>
  
  </ul>
 </nav>
 
+<div id="bann">
+<div class="head">
+  menu   <img class="menuB" src="triangle16.jpg">
+</div>
+
+  <h1>Rabbit Tracker Help</h1>
+<div id="leftD"></div>
+<div id="rightD"></div>
+
+</div>
 
 <div class="adiv" id="content">
- <div  class="adiv" id="monkey">
-  <div  class="adiv" id="tracker">
+  <div #intro style="display:block;">
     <h1><a name="_Toc399390514">Rabbit Tracker</a></h1>
 
     <p class="MsoNormal">The Rabbit Tracker tracks all aspects of a rabbit in the shelter, including intake information, current estimated age, <span class="GramE">Wellness</span>, Treatments, Vet Visits, Friends and Family, and adoption status.<span style="mso-spacerun: yes;">&nbsp; </span><span style="mso-spacerun: yes;">&nbsp;</span></p>
@@ -121,7 +127,6 @@
 
     <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
   </div>
- </div>
 
  <div id="mainPage">
    <h2><a name="_Toc399390515"><u><span style="line-height: 115%; font-size: 14pt;">Main Screen</span></u></a><u><span style="line-height: 115%; font-size: 14pt;"><o:p></o:p></span></u></h2>
@@ -130,7 +135,8 @@
    <p class="MsoNormal">The Main Screen displays current BunnyLuv rabbits.<span style="mso-spacerun: yes;">&nbsp; </span>The menu display depends on whether the user is logged in or not.</p>
  </div>
  <div id="nlog">
-   <h3><a name="_Toc399390516"><u>Main Screen Not Logged In</u></a><u><o:p></o:p></u></h3>
+   <h3><a name="_Toc399390516"></a><u><o:p>Main Screen Not Logged In</o:p></u></h3>
+
 
    <p class="MsoNormal">The Initial Screen has a menu with Home and Adoption, and displays all the rabbits currently on file at BunnyLuv.<span style="mso-spacerun: yes;">&nbsp;&nbsp; </span>Clicking on a Rabbits name will bring up more information on that bunny.<span style="mso-spacerun: yes;">&nbsp; </span>The Main page also has a Name Search Field and Login button, as well as a Print button.</p>
 
@@ -217,16 +223,13 @@
    <h5><a name="_Toc399390536">Advanced Search</a></h5>
 
    <p class="MsoNormal">The &ldquo;Advanced Search&rdquo; allows the user to define multiple search parameters, such as intake start and stop dates, and Status Notes contents (such as a location: &ldquo;Jody&rdquo; or &ldquo;North Herd&rdquo;).</p>
-
+ </div>
+ <div>
    <h4><a name="_Toc399390537">New</a></h4>
 
    <p class="MsoNormal">New allows adding <a href="#_New_Rabbit_Form">new rabbits</a> , daily reports, vet visits, treatments, wellness reports, or adoption requests.<span style="mso-spacerun: yes;">&nbsp; </span>For vet visits, treatments, wellness, and adoption requests a pop-up window requires that you provide a rabbit name.<span style="mso-spacerun: yes;">&nbsp; </span>Only rabbits on file will be accepted.</p>
 
-   <h4><a name="_Toc399390538">Admin</a></h4>
 
-   <p class="MsoNormal">Admin allows you to list people on file (people that have adopted or are trying to adopt)<span class="GramE">, <span style="mso-spacerun: yes;">&nbsp;</span>add</span> vets, add new users, change your password, or delete a user.</p>
-
-   <p class="MsoNormal"><o:p>&nbsp;</o:p><o:p>&nbsp;</o:p></p>
 
    <h4><a name="_Toc399390539"></a><a name="_View_Rabbit"></a><a name="_New_Rabbit_Form"></a><span style="mso-bookmark: _Toc399390539;">New Rabbit Form</span></h4>
 
@@ -253,6 +256,13 @@
    <p class="MsoNormal" style="line-height: normal;">The New Adoption Request allows creating an Adoption Request using a computer file,, such as a scanned document, or Word document, &nbsp;that contains the Adoption Application.<span style="mso-spacerun: yes;">&nbsp; </span>Information about the person must be entered manually, and the adoption application selected and uploaded to the server.</p>
 
    <p class="MsoNormal" style="line-height: normal;">Adoption requests allow tracking the adoption process.<span style="mso-spacerun: yes;">&nbsp; </span>See <a href="#_Adoption_Request">&ldquo;Adoption Requests&rdquo;</a></p>
+ </div>
+  <div>
+   <h4><a name="_Toc399390538">Admin</a></h4>
+
+   <p class="MsoNormal">Admin allows you to list people on file (people that have adopted or are trying to adopt)<span class="GramE">, <span style="mso-spacerun: yes;">&nbsp;</span>add</span> vets, add new users, change your password, or delete a user.</p>
+
+   <p class="MsoNormal"><o:p>&nbsp;</o:p><o:p>&nbsp;</o:p></p>
  </div>
 
  <div>
@@ -334,52 +344,63 @@
    <h6><a name="_Toc399390563">Status Notes</a></h6>
 
    <p class="MsoNormal">When the Status Note changes the user must enter the date of the change in the Status Note Date field which is displayed whenever the Note is changed.</p>
+  </div>
 
-   <h2><a name="_Toc399390564"></a><a name="_New_Rabbit"></a><span style="mso-bookmark: _Toc399390564;">New Rabbit</span></h2>
+   <div>
+     <h2><a name="_Toc399390564"></a><a name="_New_Rabbit"></a><span style="mso-bookmark: _Toc399390564;">New Rabbit</span></h2>
+     
+     <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;">The New Rabbit form is used to enter new rabbits into the system.<span style="mso-spacerun: yes;">&nbsp; </span>Rabbit names must be unique &ndash; there cannot be a rabbit with the same name on file.<span style="mso-spacerun: yes;">&nbsp; </span>An error is generated if a rabbit with the same name is found.</p>
 
-   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;">The New Rabbit form is used to enter new rabbits into the system.<span style="mso-spacerun: yes;">&nbsp; </span>Rabbit names must be unique &ndash; there cannot be a rabbit with the same name on file.<span style="mso-spacerun: yes;">&nbsp; </span>An error is generated if a rabbit with the same name is found.</p>
+     <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>The Source Type is &ldquo;Shelter&rdquo; or &ldquo;Other&rdquo;.<span style="mso-spacerun: yes;">&nbsp;&nbsp; </span>The Source can be anything (such as &ldquo;Found by Merle in Safeway Parking lot&rdquo;), but should correspond to the source type.</p>
 
-   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>The Source Type is &ldquo;Shelter&rdquo; or &ldquo;Other&rdquo;.<span style="mso-spacerun: yes;">&nbsp;&nbsp; </span>The Source can be anything (such as &ldquo;Found by Merle in Safeway Parking lot&rdquo;), but should correspond to the source type.</p>
+     <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>The estimated Age at intake is used by the system to calculate the estimated age of the rabbit based on current date.</p>
 
-   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>The estimated Age at intake is used by the system to calculate the estimated age of the rabbit based on current date.</p>
+     <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>The &ldquo;<span class="SpellE">Desc</span>&rdquo; field should be a simple physical description useful in identifying the rabbit</p>
 
-   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>The &ldquo;<span class="SpellE">Desc</span>&rdquo; field should be a simple physical description useful in identifying the rabbit</p>
+     <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>The &ldquo;Altered&rdquo; pull down automatically configures itself based on the rabbit sex selected in the &ldquo;Sex&rdquo; field.<span style="mso-spacerun: yes;">&nbsp; </span>The Altered Date is optional</p>
 
-   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>The &ldquo;Altered&rdquo; pull down automatically configures itself based on the rabbit sex selected in the &ldquo;Sex&rdquo; field.<span style="mso-spacerun: yes;">&nbsp; </span>The Altered Date is optional</p>
+     <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>&ldquo;Status&rdquo; is &ldquo;BunnyLuv&rdquo; (meaning at BunnyLuv), Died, Euthanized, or Adopted.<span style="mso-spacerun: yes;">&nbsp; </span>If the status is not BunnyLuv then a Status/Notes change date field is display and the date of the status change must be entered.</p>
 
-   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>&ldquo;Status&rdquo; is &ldquo;BunnyLuv&rdquo; (meaning at BunnyLuv), Died, Euthanized, or Adopted.<span style="mso-spacerun: yes;">&nbsp; </span>If the status is not BunnyLuv then a Status/Notes change date field is display and the date of the status change must be entered.</p>
+     <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>Status Notes is required and can be anything &ldquo;healthy&rdquo;, &ldquo;put in Herd&rdquo; &ndash; whatever might be interesting.<span style="mso-spacerun: yes;">&nbsp; </span>If there is nothing interesting you can put &ldquo;none&rdquo;.</p>
 
-   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>Status Notes is required and can be anything &ldquo;healthy&rdquo;, &ldquo;put in Herd&rdquo; &ndash; whatever might be interesting.<span style="mso-spacerun: yes;">&nbsp; </span>If there is nothing interesting you can put &ldquo;none&rdquo;.</p>
+     <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>Once the information is entered hit submit.</p>
 
-   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>Once the information is entered hit submit.</p>
+     <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>Once the rabbit is entered into the system additional information (picture, friends and family, adoption info) can be entered using the View Rabbit <a href="#_Edit">Edit</a> option.</p>
 
-   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p>Once the rabbit is entered into the system additional information (picture, friends and family, adoption info) can be entered using the View Rabbit <a href="#_Edit">Edit</a> option.</p>
-</div>
-<p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p><a name="_Vet_Visit_Form"></a><span style="mso-bookmark: _Toc399390565;">Vet Visit Form</span></p>
+ </div>
+ <div>
+   <p class="MsoNormal" style="line-height: normal; margin-bottom: 5pt;"><o:p>&nbsp;</o:p><a name="_Vet_Visit_Form"></a><span style="mso-bookmark: _Toc399390565;">Vet Visit Form</span></p>
 
-<p class="MsoNormal">The Vet Visit form allows you to enter veterinarian treatment for a rabbit.<span style="mso-spacerun: yes;">&nbsp; </span>It requires the date, the vet, the procedure, the reason, procedures and notes (which can be &ldquo;none&rdquo;).<span style="mso-spacerun: yes;">&nbsp;&nbsp;&nbsp; </span>You must select one of the three options provided in the Altered/Euthanized drop down menu which provides two pre-defined procedures &ldquo;Euthanized&rdquo; and &ldquo;Spayed&rdquo; or &ldquo;Neutered&rdquo; as well as an option for &ldquo;Other&rdquo;.<span style="mso-spacerun: yes;">&nbsp; </span>If the rabbit has been altered then &ldquo;Spayed&rdquo; or &ldquo;Neutered&rdquo; is not displayed.<span style="mso-spacerun: yes;">&nbsp; </span>&ldquo;Spayed&rdquo; or &ldquo;Neutered&rdquo; is displayed depending on the rabbit&rsquo;s sex.</p>
+   <p class="MsoNormal">The Vet Visit form allows you to enter veterinarian treatment for a rabbit.<span style="mso-spacerun: yes;">&nbsp; </span>It requires the date, the vet, the procedure, the reason, procedures and notes (which can be &ldquo;none&rdquo;).<span style="mso-spacerun: yes;">&nbsp;&nbsp;&nbsp; </span>You must select one of the three options provided in the Altered/Euthanized drop down menu which provides two pre-defined procedures &ldquo;Euthanized&rdquo; and &ldquo;Spayed&rdquo; or &ldquo;Neutered&rdquo; as well as an option for &ldquo;Other&rdquo;.<span style="mso-spacerun: yes;">&nbsp; </span>If the rabbit has been altered then &ldquo;Spayed&rdquo; or &ldquo;Neutered&rdquo; is not displayed.<span style="mso-spacerun: yes;">&nbsp; </span>&ldquo;Spayed&rdquo; or &ldquo;Neutered&rdquo; is displayed depending on the rabbit&rsquo;s sex.</p>
 
-<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+   <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+ </div>
+ <div>
+   <h2><a name="_Toc399390566"></a><a name="_Wellness_Form"></a><span style="mso-bookmark: _Toc399390566;">Wellness Form</span></h2>
 
-<h2><a name="_Toc399390566"></a><a name="_Wellness_Form"></a><span style="mso-bookmark: _Toc399390566;">Wellness Form</span></h2>
+   <p class="MsoNormal">The Wellness form is for documenting check-ups and grooming.<span style="mso-spacerun: yes;">&nbsp; </span>It requires the reporting person, date, weight, problems (which can be &ldquo;none&rdquo; or &ldquo;needed grooming<span class="GramE">&rdquo; )</span>.<span style="mso-spacerun: yes;">&nbsp;&nbsp; </span>Treatment and temperature are optional fields.</p>
 
-<p class="MsoNormal">The Wellness form is for documenting check-ups and grooming.<span style="mso-spacerun: yes;">&nbsp; </span>It requires the reporting person, date, weight, problems (which can be &ldquo;none&rdquo; or &ldquo;needed grooming<span class="GramE">&rdquo; )</span>.<span style="mso-spacerun: yes;">&nbsp;&nbsp; </span>Treatment and temperature are optional fields.</p>
+   <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+ </div>
+ <div>
+   <h2<a name="_Died_Form"></a><span style="mso-bookmark: _Toc399390567;">Died Form</span></h2>
 
-<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+   <p class="MsoNormal">Requires a date and notes.<span style="mso-spacerun: yes;">&nbsp; </span>Notes can be anything of interest (reason for death, &ldquo;none&rdquo;).</p>
 
-<h2><a name="_Toc399390567"></a><a name="_Died_Form"></a><span style="mso-bookmark: _Toc399390567;">Died Form</span></h2>
+ </div>
+ <div>
+   <h2><a name="_Toc399390568"></a><a name="_Euthanized_Form"></a><span style="mso-bookmark: _Toc399390568;">Euthanized Form</span></h2>
 
-<p class="MsoNormal">Requires a date and notes.<span style="mso-spacerun: yes;">&nbsp; </span>Notes can be anything of interest (reason for death, &ldquo;none&rdquo;).</p>
+   <p class="MsoNormal">This is a Vet Visit form with Euthanized pre-selected as the procedure.<span style="mso-spacerun: yes;">&nbsp; </span>It requires that you select a Vet and provide a reason.</p>
+ </div>
+ <div>
+   <h2><a name="_Injury/Illness_Treatment"></a><span style="mso-bookmark: _Toc399390569;">Injury/Illness Treatment</span></h2>
 
-<h2><a name="_Toc399390568"></a><a name="_Euthanized_Form"></a><span style="mso-bookmark: _Toc399390568;">Euthanized Form</span></h2>
-
-<p class="MsoNormal">This is a Vet Visit form with Euthanized pre-selected as the procedure.<span style="mso-spacerun: yes;">&nbsp; </span>It requires that you select a Vet and provide a reason.</p>
-
-<h2><a name="_Toc399390569"></a><a name="_Injury/Illness_Treatment"></a><span style="mso-bookmark: _Toc399390569;">Injury/Illness Treatment</span></h2>
-
-<p class="MsoNormal">This requires a date, a reason, and a treatment.<span style="mso-spacerun: yes;">&nbsp; </span>The treatment field can be of any length and height.<span style="mso-spacerun: yes;">&nbsp;&nbsp; </span>Treatments are active until a stop date is entered, and can be tracked and updated using the <a href="#_Illness/Injury_Treatments">Injury/Illness Tracking Report</a>.</p>
-
-<h2><a name="_Toc399390570">Adoption Process</a></h2>
+   <p class="MsoNormal">This requires a date, a reason, and a treatment.<span style="mso-spacerun: yes;">&nbsp; </span>The treatment field can be of any length and height.<span style="mso-spacerun: yes;">&nbsp;&nbsp; </span>Treatments are active until a stop date is entered, and can be tracked and updated using the <a href="#_Illness/Injury_Treatments">Injury/Illness Tracking Report</a>.</p>
+ </div>
+ <div>
+   <h2><a name="_Toc399390570">Adoption Process</a></h2>
+ </div>
 </div>
 </body>
 </html>
