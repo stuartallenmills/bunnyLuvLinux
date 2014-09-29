@@ -30,6 +30,15 @@ $(function(){
 		var targ = $( "a[name='"+hr+"']" );
 		var p= targ.parents('div');
 		var f= p.first();
+		var l = $(this).parents('div').last();
+		var pdev;
+		var ln = l.attr("id");
+		   if (ln=="content") {
+			    pdev = $(this).parents("div").first();
+			    
+		   } else {
+			   pdev = f.prev('div');
+		   }
 		var sib = f.siblings('div');
 		var ndev = f.next( 'div');
 		var na = ndev.find( 'a');
@@ -38,7 +47,6 @@ $(function(){
 		$( "#rightD a").attr('href', "#"+nn);
 		$( "#rightD a" ).text(nm);
 		
-		var pdev =f.prev('div');
 		var pa = pdev.find('a');
 		var pam=pa.first().text();
 		var pan=pa.first().attr("name");

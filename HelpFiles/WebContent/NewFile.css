@@ -72,6 +72,7 @@ a::-moz-selection {
 	display:none;
 	padding-top:10px;
 	top:60px;
+	z-index:100;
 }
 
 #content {
