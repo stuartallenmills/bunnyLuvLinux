@@ -236,7 +236,7 @@ addStoryForm rId extra = do
         [whamlet| #{extra}
           <div #storyForm>
              <div .bllabel>
-              Enter story/blurb :
+              Enter Adoption Description:
              <div #story> ^{fvInput storyView}
              <div .bllabel>
               Special Needs:

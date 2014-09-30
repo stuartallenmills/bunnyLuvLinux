@@ -77,7 +77,7 @@ base wtitle atitle result  = do
                               $( "#track" ).show();
                               $( "#adoptRep" ).show();
                               $( "#blHealth" ).show();
-                              $( "#blHealth" ).show();
+                              $( "#blHelp" ).show();
                              }
                              else {
                               $( "#track" ).hide();

@@ -92,6 +92,21 @@
          <div .bllabel> Family: #
          $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <-bonded 
              $if relation /= "Friend"
-              \  <a href=@{ViewR rabId}>#{rabbitName rabb}</a> (#{relation})  &nbsp;          
+              \  <a href=@{ViewR rabId}>#{rabbitName rabb}</a> (#{relation})  &nbsp;   
+     $if (not (null story))
+         <div #story style="width:100%;">
+                 $forall Entity sId (RabbitStory rid tstory spneed adrule)<-story
+                  <div .vrRow>
+                   <div #thestory style="width:100%">
+                     Adoption Description:  #{tstory}
+                  $maybe spn <-spneed
+                   <div .vrRow>
+                     <div #spneed style="width:100%">
+                      Adoption Special Needs:  #{spn}
+                  $maybe ad <- adrule
+                   <div .vrRow>
+                    <div #adr style="width:100%;"> 
+                     Adoption Rules:
+                       #{ad}     
   
        

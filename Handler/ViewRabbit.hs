@@ -18,7 +18,7 @@ import FormUtils
 import Utils
 
 
-viewRab imgpath rab yrs mnths bonded = $(widgetFileNoReload def "viewRabbit")
+viewRab imgpath rab yrs mnths bonded story = $(widgetFileNoReload def "viewRabbit")
 
 showWellness wellness =   $(widgetFileNoReload def "showwellness")
 
@@ -38,7 +38,6 @@ getViewR rabId  = do
     bnames <-  getNamesDB
     maid <- maybeAuthId
     story<-queryStory rabId
-    let has_story = not (null story)
     impath <- liftIO getImagePath
     let imgpath = unpack impath
 
@@ -101,19 +100,7 @@ getViewR rabId  = do
             ^{getNameWidget bnames formWidget enctype}
             ^{headerLogWid imgpath maid}    
             ^{viewRabMenu showMenu not_dead not_adopted not_altered rabId}  
-           ^{viewRab  imgpath rab yrs mnths bonded}
-              $if has_story
-               <div #story>
-                 $forall Entity sId (RabbitStory rid tstory spneed adrule)<-story
-                   <div #thestory style="width:100%">
-                     Story:  #{tstory}
-                   $maybe spn <-spneed
-                    <div #spneed style="width:100%">
-                      Special Needs:  #{spn}
-                   $maybe ad <- adrule
-                    <div #adr style="width:100%;"> 
-                     Adoption Rules:
-                       #{ad}
+           ^{viewRab  imgpath rab yrs mnths bonded story}
               $if showMenu
                $if was_adopted
                    ^{showadopted rab adopteds}
