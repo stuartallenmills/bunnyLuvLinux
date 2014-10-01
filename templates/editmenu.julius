@@ -13,7 +13,7 @@ $('#editmenu').prepend('<div id="menu-button">Menu</div>');
 
 $(function () {
  $( "#helpFile" ).click( function() {
-    window.open("/static/HelpFiles/WebContent/RabbitTrackerHelp3.html","Help",
+    window.open("http://192.168.1.128:3040/static/HelpFiles/WebContent/RabbitTrackerHelp3.html","Help",
          "width=512, height=512, menubar=no, toolbar=no, scrollbars=yes");
      });
    });

@@ -139,7 +139,7 @@ The Rabbit Tracker also automatically generates an "Adoptables" page for the pub
 <p> Track <u>adoption applications</u>.  The Rabbit Tracker provides an online Adoption Form, or can be used with Word, PDF, or other format, Adoption Applications.  Adoption Requests allow you to add or remove rabbits to an application, and to add "actions" that take place during the adoption process such as "talked to client", "scheduled home check for 10/22/", "Home check passed".  Each action is dated and logged to the database. </p>
 
 <b> Navigating </b>
-    <p> By using the Menu Bar above (<img src="menuBars16.png" height="16px" width="16px" style="transform:translateY(3px);"></img> ) you can go directly to a topic.  Clicking on a black right arrow in the menu (<img src="triangleR16B.png" style="transform:translateY(3px);"></img>)  will open the sub-menu for that topic.  Clicking on the words will take you to the topic. </p>
+    <p> By using the Menu Bar above (<img src="menuBars16.png" height="16px" width="16px" style="transform:translateY(3px);"></img> ) you can go directly to a topic.  Clicking on a black right arrow in the menu (<img src="triangleR16B.png" style="transform:translateY(3px);"></img>)  will open the sub-menu for that topic.  Clicking on the topic itself will take you to the topic. There are also links to the previous and next topic in the header</p>
 
     <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
   </div>
@@ -148,7 +148,7 @@ The Rabbit Tracker also automatically generates an "Adoptables" page for the pub
    <h2><a name="_Toc399390515"><u><span style="line-height: 115%; font-size: 14pt;">Main Screen</span></u></a><u><span style="line-height: 115%; font-size: 14pt;"><o:p></o:p></span></u></h2>
 
 
-   <p class="MsoNormal">The Main Screen displays current BunnyLuv rabbits.<span style="mso-spacerun: yes;">&nbsp; </span>The menu display depends on whether the user is logged in or not.</p>
+   <p class="MsoNormal">The Main Screen displays current BunnyLuv rabbits.<span style="mso-spacerun: yes;">&nbsp; </span>The menu display depends on whether the user is logged in or not.  Only authorized users that have logged in can view all the information and make changes to the database. Otherwise only the basic information about the rabbits, including the Adoptables page, can be viewed.</p> 
  </div>
 
  <div id="nlog">
@@ -189,7 +189,7 @@ The Rabbit Tracker also automatically generates an "Adoptables" page for the pub
 
    <p class="MsoNormal"><span style="mso-spacerun: yes;">&nbsp;</span>For each rabbit the rabbit&rsquo;s name, description, status, date in, altered status, and estimated age is displayed.<span style="mso-spacerun: yes;">&nbsp; </span>The estimated age is calculated using the current date and the estimated age of the rabbit at intake.</p>
 
-   <p class="MsoNormal">Clicking on a rabbit&rsquo;s name takes you to the detailed &ldquo;<a href="#_View_Rabbit">View Rabbit</a>&rdquo; page.</p>
+   <p class="MsoNormal">Clicking on a rabbit&rsquo;s name takes you to the detailed &ldquo;<a href="#_View_Rabbit_1">View Rabbit</a>&rdquo; page.</p>
 
    <h5><o:p>&nbsp;</o:p></h5>
 
@@ -197,7 +197,7 @@ The Rabbit Tracker also automatically generates an "Adoptables" page for the pub
  <div>
    <h3><a name="_Toc399390524"><u>Main Screen Logged In</u></a><u><o:p></o:p></u></h3>
 
-   <p class="MsoNormal">If logged in as an authorized user the Main Screen has additional menu items and the users name is displayed along with the log out button.&nbsp; Adoption has additional options.&nbsp; There are new top level menu items including Health, Reports, and Admin</p>
+   <p class="MsoNormal">If logged in as an authorized user the Main Screen has additional menu items and the users name is displayed along with the log out button.&nbsp; Adoption has additional options.&nbsp; There are new top level menu items including Health, Reports, and Admin.</p>  If you are logged in, and inactive for 5 minutes, a pop-up window will ask if you are still three.  If you do not respond you will be automatically logged out and taken to the Home screen.
 
    <h4><a name="_Toc399390525">Adoption</a></h4>
 
@@ -217,18 +217,18 @@ The Rabbit Tracker also automatically generates an "Adoptables" page for the pub
 
    <h5><a name="_Illness/Injury_Treatments"></a><span style="mso-bookmark: _Toc399390529;">Illness/Injury Treatments</span></h5>
 
-   <p class="MsoNormal">Each Treatment in the report can be edited to change the treatment, or to stop the treatment.<span style="mso-spacerun: yes;">&nbsp; </span>Treatments are &ldquo;stopped&rdquo; by entering a stopped date.<span style="mso-spacerun: yes;">&nbsp; </span>If a Stop date is not entered then the treatment remains &ldquo;Active&rdquo;.</p>
+   <p class="MsoNormal">Each Treatment in the report can be edited to change the treatment, or to stop the treatment.<span style="mso-spacerun: yes;">&nbsp; </span>Treatments are &ldquo;stopped&rdquo; by entering a stopped date.<span style="mso-spacerun: yes;">&nbsp; </span>If a Stop date is not entered then the treatment remains &ldquo;Active&rdquo;.</p>  This report can be used to generate daily medication needs for the shelter.  The default is to only display treatments for rabbits at BunnyLuv.
 
    <h5><a name="_Toc399390530">Wellness Reports</a></h5>
 
   <p>Wellness Reports shows all the Wellness Reports.  The default is to only display rabbits whose status is at "BunnyLuv".  You can filter the reports by start and end dates.</p>
 
    <h5><a name="_Toc399390531">Vet Visit Reports</a></h5>
- <p>Shows all Vet Visits. The default is to only display rabbits whose status is at "BunnyLuv".  You can filter the reports by start and end dates.</p>
+ <p>Shows all Vet Visits. The default is to only display rabbits at BunnyLuv.  You can filter the reports by start and end dates.</p>
 
 
    <h5><a name="_Toc399390532">Altered Status</a></h5>
-   <p> Displays rabbits that have been altered, or where the status is not altered or unknown.
+   <p> Displays rabbits that have been altered, or where the status is "not altered" or "unknown".</p>
 
    <h4><a name="_Toc399390533">Reports</a></h4>
 
@@ -275,14 +275,48 @@ The Rabbit Tracker also automatically generates an "Adoptables" page for the pub
 
    <h4><a name="_Toc399390544">New Adoption Request</a></h4>
 
-   <p class="MsoNormal" style="line-height: normal;">The New Adoption Request allows creating an Adoption Request using a computer file,, such as a scanned document, or Word document, &nbsp;that contains the Adoption Application.<span style="mso-spacerun: yes;">&nbsp; </span>Information about the person must be entered manually, and the adoption application selected and uploaded to the server.</p>
+   <p class="MsoNormal" style="line-height: normal;">The New Adoption Request allows creating an Adoption Request using a computer file, such as a scanned document, or Word document, &nbsp;that contains the Adoption Application.<span style="mso-spacerun: yes;">&nbsp; </span>Information about the person must be entered manually, and the adoption application selected and uploaded to the server.</p>
 
    <p class="MsoNormal" style="line-height: normal;">Adoption requests allow tracking the adoption process.<span style="mso-spacerun: yes;">&nbsp; </span>See <a href="#_Adoption_Request">&ldquo;Adoption Requests&rdquo;</a></p>
  </div>
   <div>
    <h4><a name="_Toc399390538">Admin</a></h4>
 
-   <p class="MsoNormal">Admin allows you to list people on file (people that have adopted or are trying to adopt)<span class="GramE">, <span style="mso-spacerun: yes;">&nbsp;</span>add</span> vets, add new users, change your password, or delete a user.</p>
+   <p class="MsoNormal">Admin allows you to:
+          <ul>
+           <li> List people on file (people that have adopted or are trying to adopt). 
+             <ul>
+               <li>When the list is displayed you can edit an individual's data by clicking on the name </li>
+             </ul>
+             </li>
+           <li> Add Veternarians for Vet Visits.  
+            <ul> 
+              <li>Only Vets entered into the system are available to the Vet Visits form</li> 
+            </ul>
+            </li>
+           <li> Add new authorized users. 
+            <ul>
+            <li> Any authorized user can add another authorized user.</li>
+            </ul>
+            </li>
+           <li> Change your password</li>
+           <li> Delete an authorized user.  
+            <ul>
+            <li> Any authorized user can add another authorized user.</li>
+            </ul>
+            </li>
+          </ul>
+</p>
+<p>
+There are no resrictions on usernames or passwords. BOTH usernames AND passwords are case-sensitive.
+</p>
+
+<p>If you are logged in a dialog box is displayed after 5 minutes of inactivity.  If "continue" is not selected you will be automatically logged out andreturned to the home screen. </p>
+
+<p>There is a predefined user, "demo", that has the password  "demo".  The "demo" user only has access to a "demo" database, which allows you to use the full capabilities of the Rabbit Tracker without changing the real database.  This capability can be useful for training, testing, and capabilities demonstration purposes.
+
+</p>
+
 
    <p class="MsoNormal"><o:p>&nbsp;</o:p><o:p>&nbsp;</o:p></p>
  </div>
@@ -291,7 +325,28 @@ The Rabbit Tracker also automatically generates an "Adoptables" page for the pub
    <h2><a name="_View_Rabbit_1"><span style="mso-bookmark: _Toc399390545;">View Rabbit</span></a></h2>
 
 
-   <p class="MsoNormal">View Rabbit displays the detailed rabbit information.<span style="mso-spacerun: yes;">&nbsp; </span>If you are logged in then adoption information, Wellness, Treatments, and Vet Visits are displayed as well.&nbsp; The View Rabbit page also has a new menu to allow you to enter new information, such as a new Wellness Report, a new Vet Visit, and so on.</p>
+   <p class="MsoNormal">View Rabbit displays the detailed rabbit information.  If you are not logged in only the basic information on rabbits at BunnyLuv are displayed, which includes the following:
+              <ul>
+               <li> Rabbit picture if one has been uploaded using "Edit->Set Image" </li>
+               <li> Rabbit name </li>
+               <li> Date In </li>
+               <li> Sex </li>
+               <li> Altered Status (which can be "unknown") </li>
+               <li> Altered Date (if known) </li>
+               <li> Estimated current age, calculated using the current date and the estimated age at intake  </li>
+               <li> Source - where the rabbit came from  </li>
+               <li> Status - either "BunnyLuv", "Adopted", "Died", or "Euthanized".  If not logged in then only "BunnyLuv" rabbits can be displayed.  </li>
+               <li> Status Date - the date of a status, or status notes change  </li>
+               <li> Status Notes - can be anything of interest, such as "at Jody's".  Status Notes can be searched using Advanced Search.  </li>
+               <li> Friends - list of friends
+               <li> Family - list of family indicating relationships (parent, offspring, or sibling)
+               <li> Story - this is the text that is displayed on the Adoptables page 
+               <li> Special Needs - this is the "Special Needs" text displayed on the Adoptables page.
+            </ul>
+
+<span style="mso-spacerun: yes;">&nbsp; </span>If you are logged in then adoption information, Wellness Reports, Injury/Illness Treatments, and Vet Visits are also available and can be viewed by clicking on the appropriate banner. </p>
+
+<p> When logged int the View Rabbit page  has a new menu to allow you to enter new information, such as a new Wellness Report, a new Vet Visit, and so on.</p>
    
  </div>
  <div>
@@ -316,6 +371,7 @@ The Rabbit Tracker also automatically generates an "Adoptables" page for the pub
    <p>A date and Notes field are both required.&nbsp; Notes can be &quot;none&quot;</p>
 
    <h5><a name="_Toc399390551">Adopted</a></h5>
+This can be used to set the status to adopted without needing an Adoption Application or all the information for the adopter.  This is useful for documenting old adoptions where finding and adding all the adoption information is impractical.
 
    <p>&nbsp;</p>
 
@@ -349,7 +405,7 @@ The Rabbit Tracker also automatically generates an "Adoptables" page for the pub
 
    <h5><a name="_Toc399390559">Set Image</a></h5>
 
-   <p class="MsoNormal">Set image allows you to upload an image of the rabbit.<span style="mso-spacerun: yes;">&nbsp; </span>If there is already an image it is replaced with the new image.</p>
+   <p class="MsoNormal">Set image allows you to upload an image of the rabbit.<span style="mso-spacerun: yes;">&nbsp; </span>If there is already an image it is replaced with the new image.  To ensure fast load times for the Adoptables page images should be no larger than 512x512, and should be in jpeg format.  You can use a tool such as Microsoft Paint (available on all Windows computers) to resize images and save in jpg format.</p>
 
    <h5><a name="_Toc399390560">Add Adoption Info</a></h5>
 

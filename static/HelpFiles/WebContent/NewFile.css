@@ -115,6 +115,10 @@ nav li a:hover {
 	list-style-type:square;
 }
 
+#content li li {
+	 list-style:disk;
+	 font-size:90%;
+}
 
 nav li:not(.has-sub){
 	list-style-type:none;
