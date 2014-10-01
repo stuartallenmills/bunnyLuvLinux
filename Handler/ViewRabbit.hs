@@ -68,9 +68,9 @@ getViewR rabId  = do
     defaultLayout $ do
          setTitle "View Rabbit"
          $(widgetFileNoReload def "cancelbutton")
-         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
-         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
-         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" 
+         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+         addScriptRemote "https://code.jquery.com/ui/1.11.0/jquery-ui.js"
+         addStylesheetRemote "https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" 
          toWidget [julius|
  
            $(function() {

@@ -105,7 +105,7 @@ changePassForm uname extra = do
   let usrRes = Usr <$> usrNameRes <*> usrPassRes
   
   let usrW=do
-        addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
         toWidget [julius| $( function () {
                           $( "#pass2" ).keyup (function(){
                               if ( $( "#pass2" ).val() == $( "#pass1" ).val() ) {

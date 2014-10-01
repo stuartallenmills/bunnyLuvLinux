@@ -170,7 +170,7 @@ reportbase begin end bl link atitle result = do
      let isAuth=(auth==Authorized)
      defaultLayout $ do
         setTitle atitle
-        addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
         $(widgetFileNoReload def "bldate")
         toWidget [julius| $( document ).ready(function(){
                              if (#{isAuth}) { 

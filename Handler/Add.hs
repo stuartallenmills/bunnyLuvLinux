@@ -158,8 +158,8 @@ rabbitForm (mrab, names) extra = do
  --   let rabbitRes = rabbitRes1 <*> (FormResult (Just True)) <*> (FormResult Nothing) Nothing
     let awid= do
          $(widgetFileNoReload def "add")
-         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
-         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
+         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+         addStylesheetRemote "https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
     return (rabbitUpdateRes, awid)
 
 

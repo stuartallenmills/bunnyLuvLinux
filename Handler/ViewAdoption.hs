@@ -675,9 +675,9 @@ adoptFormsPage aform = do
     setTitle "Adoption Requests"
     $(widgetFileNoReload def "cancelbutton")
     $(widgetFileNoReload def "bldate")
-    addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
-    addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
-    addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
+    addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+    addScriptRemote "https://code.jquery.com/ui/1.11.0/jquery-ui.js"
+    addStylesheetRemote "https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"
     
     [whamlet|
      <div #blHeaderD>
@@ -789,9 +789,9 @@ getViewAdoptForm  id = do
   defaultLayout $ do
     setTitle "Adoption Request"
     $(widgetFileNoReload def "cancelbutton")
---         addScriptRemote "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
---         addScriptRemote "//code.jquery.com/ui/1.11.0/jquery-ui.js"
---         addStylesheetRemote "//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"     
+--         addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+--         addScriptRemote "https://code.jquery.com/ui/1.11.0/jquery-ui.js"
+--         addStylesheetRemote "https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"     
     [whamlet|
      <div #blHeaderD>
      ^{getNameWidget bnames formWidget enctype}
