@@ -9,6 +9,8 @@ templates/*~
 *.exe
 *.hi
 *.o
+.metadata
+static/Images
 /=dist/doc/html/AgeForm.html
 /=dist/doc/html/BaseForm.html
 /=dist/doc/html/FormUtils.html
