@@ -37,6 +37,7 @@ import Data.Time.LocalTime
 import System.Locale
 import qualified Data.Map.Strict as Map
 import Filesystem
+import Text.Julius
 
 
 -- CONFIGURATION
@@ -47,6 +48,7 @@ getImagePath = readTextFile "links/imagepath"
 getUploadDir = readTextFile "links/uploaddir"
 getBackup = readTextFile "links/backup"
 getPort = readTextFile "links/port"
+getHelp = readTextFile "links/helpfiles.conf"
 
 mkLink text path=  path ++ (unpack text)
 
@@ -338,12 +340,14 @@ isAdmin = do
 
 --  HTML  CSS ELEMENTS
 cssmenuWidget::Bool->Widget
-cssmenuWidget mode = $(widgetFileNoReload def "cssmenu")
+cssmenuWidget mode = do
+  help <- handlerToWidget (liftIO getHelp)
+  $(widgetFileNoReload def "cssmenu")
 
 mainMenu::Bool->Widget
-mainMenu mode= do
+mainMenu mode = do
           addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
-          cssmenuWidget mode
+          cssmenuWidget mode 
 
 nameWidget::Widget
 nameWidget = $(widgetFileNoReload def "nameC")
