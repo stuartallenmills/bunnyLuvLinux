@@ -16,13 +16,16 @@ import Data.Time.LocalTime
 import Data.Time.Calendar
 import FormUtils
 import Utils
+import Text.Julius
 
 
 viewRab imgpath rab yrs mnths bonded story = $(widgetFileNoReload def "viewRabbit")
 
 showWellness wellness =   $(widgetFileNoReload def "showwellness")
 
-viewRabMenu showMenu not_dead not_adopted not_altered rabId = $(widgetFileNoReload def "editmenu")
+viewRabMenu showMenu not_dead not_adopted not_altered rabId = do
+  help <- handlerToWidget (liftIO getHelp)
+  $(widgetFileNoReload def "editmenu")
 
 showvetvisit rabbit vetVisits = $(widgetFileNoReload def "showvetvisit");
 
