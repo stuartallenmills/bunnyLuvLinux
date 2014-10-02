@@ -11,6 +11,10 @@ templates/*~
 *.o
 .metadata
 static/Images
+*~
+*_org
+*#
+*.db3
 /=dist/doc/html/AgeForm.html
 /=dist/doc/html/BaseForm.html
 /=dist/doc/html/FormUtils.html
