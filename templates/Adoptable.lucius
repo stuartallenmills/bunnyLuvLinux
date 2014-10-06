@@ -30,18 +30,11 @@
       text-decoration:underline;
       margin-left:10px;
    }
-      #rAge, #rSex, #rAcq {
+      #rName,#rAge {
          margin-left:10px;
         }
-     #rSex {
-       text-transform:lowercase;
-     }
-
-     #rName {
-        margin-left:5px;
-     }
-     #rAge, #stry, #spneed, #nothing, #rSex, #rAcq {
-       font-size:95%;
+     #rAge, #stry, #spneed, #nothing {
+       font-size:90%;
       }
      #stry, #nothing {
        margin-left:5px;
@@ -56,6 +49,15 @@
        display:inline-block;
       }
      
+      #rSex {
+        padding-left:5px;
+        font-size:90%;
+       }
+
+      #rAcq {padding-left:5px;
+        font-size:90%;
+      }
+     
      #thePage #rAge {
          float:right;
          padding-right:5px;
@@ -66,15 +68,8 @@
              float:left;
              margin:10px;
             }
-        .rabBlock {
-            float:left;
-            width:400px;
-            height:530px;
-            box-shadow:2px 2px 4px;
-            margin-top:15px;
-            background:#fbfbfb;
-            border:3px solid transparent;
-           }
+
+ 
    .rabTarget {
       display:inline:block;
       height:100%;
@@ -86,14 +81,22 @@
     float:left;
     display: inline-block;
     width: 98%;
-    height:62%;
+    height:50%;
     margin:4px;
     border: 1px solid black;
-    box-shadow:inset 3px 3px 9px;
     background-position: center center;
     background-size: cover;
 
   }
   
 
-           
+        .rabBlock {
+            float:left;
+            width:300px;
+            height:520px;
+            box-shadow:2px 2px 4px;
+            margin-top:15px;
+            background:#fbfbfb;
+            border:3px solid transparent;
+           }
+          
