@@ -4,6 +4,7 @@
                        window.print();
                        });
 
+ 
   $(function() {
     $( document ).tooltip({
       position: {

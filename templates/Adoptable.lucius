@@ -1,6 +1,8 @@
+@media screen {
     body {
       background:#efefef;
      }
+
      #thePage div {
           float:left;
       }
@@ -17,36 +19,37 @@
 }
    #blurb {
       margin-left:15px;
-      font-family:Comic Sans MS;
       margin-right:15px;
       
      }
    #headtext {
       margin-top:10px;
-      font-size:150%;
-      width:100%;
-      font-style:bold;
-      font-family:Comic Sans MS;
-      text-decoration:underline;
       margin-left:10px;
+      width:95%;
+      font-size:18pt;
    }
       #rName,#rAge {
          margin-left:10px;
         }
      #rAge, #stry, #spneed, #nothing {
-       font-size:90%;
+       font-size:11pt;
       }
-     #stry, #nothing {
+     #spneed, #stry, #nothing {
        margin-left:5px;
        margin-right:5px;
        margin-bottom:3px;
        width:97%;
        
       }
+
+     #spneed {
+        border-top:1px solid #d0d0d0;
+      }
      #story {
        float:left;
        width:100%;
        display:inline-block;
+       border-bottom:1px solid #fafafa;
       }
      
       #rSex {
@@ -81,22 +84,52 @@
     float:left;
     display: inline-block;
     width: 98%;
-    height:50%;
+    height:51%;
     margin:4px;
     border: 1px solid black;
     background-position: center center;
     background-size: cover;
 
   }
-  
 
+       .bllabel {
+         padding-left:5px;
+         padding-right:5px;
+       }
+       #bondedBlock {
+         float:left;
+        }
+       #bondedBlock div {
+            font-size:95%;
+       }
+       #vrFriends, #fam {
+          width:97%;
+        }   
+  
+}
+
+@media screen  {
         .rabBlock {
             float:left;
-            width:300px;
-            height:520px;
+            width:23em;
+            height:37.214em;
             box-shadow:2px 2px 4px;
             margin-top:15px;
             background:#fbfbfb;
             border:3px solid transparent;
            }
+
+}
+
+@media screen and (min-resolution: 401dpi)  {
+          .rabBlock {
+            float:left;
+            width:600px;
+            height:1020px;
+            box-shadow:2px 2px 4px;
+            margin-top:15px;
+            background:#fbfbfb;
+            border:3px solid transparent;
+           }
+}
           

@@ -1,10 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE QuasiQuotes, TemplateHaskell, TypeFamilies #-}
 {-# LANGUAGE OverloadedStrings, GADTs, FlexibleContexts #-}
 
-module Handler.Home where
+module Handler.Adoptable where
 
 --this is a test 
 
@@ -34,197 +31,6 @@ import BaseForm
 import AgeForm
 import FormUtils
 
-isBonded rab arg = arg $
-           from $ \bonded -> 
-           where_  ((bonded ^. BondedFirst) ==. (rab ^. RabbitId))
-
-family rab arg = arg $
-           from $ \bonded ->
-           where_ ((bonded ^. BondedFirst) ==. (rab ^. RabbitId) &&. (bonded ^. BondedRelation !=. val "Friend"))
-
-friends  rab arg = arg $
-           from $ \bonded ->
-           where_ ((bonded ^. BondedFirst) ==. (rab ^. RabbitId) &&. (bonded ^. BondedRelation ==. val "Friend"))
-
-
-notSelected rab = notExists $
-           from $ \adopt -> 
-           where_ (rab ^. RabbitId ==. adopt ^. AdoptRab)
-  
-
-queryCompanion male female hasff noff = do
-    let mstr=if male then "M" else "Z"
-    let fstr=if female then "F" else "Z"
-    case (hasff, noff) of
-      (True, True)->    runDB $ 
-         select $ from $ \(rab `LeftOuterJoin` story)->do
-          on (just (rab ^. RabbitId) ==. story ?. RabbitStoryRabbit)
-          where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
-                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
-                               (notSelected rab)
-
-                               )
-          return (rab,story)
-      (True, False)->    runDB $ 
-          select $ from $ \(rab `LeftOuterJoin` story)->do
-           on (just (rab ^. RabbitId) ==. story ?. RabbitStoryRabbit)
-           where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
-                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
-                               (isBonded rab exists) &&. (notSelected rab))
-           return (rab,story)
-      (False, True)->    runDB $ 
-         select $ from $ \(rab `LeftOuterJoin` story)->do
-          on (just (rab ^. RabbitId) ==. story ?. RabbitStoryRabbit)
-          where_ ((rab ^. RabbitStatus ==. val "BunnyLuv") &&.
-                             ((rab ^. RabbitSex ==. val mstr) ||. (rab ^. RabbitSex ==. val fstr)) &&.
-                               (isBonded rab notExists) &&. (notSelected rab))
-          return (rab, story)
-      (False, False)-> return []
-
-
-getRabs:: [(Entity Rabbit, Maybe (Entity RabbitStory))]->[Entity Rabbit]
-getRabs  = fmap fst 
-
-getAges yrs diffMnths male female hasff noff= do
-    bn <-queryCompanion male female hasff noff
-    today <- liftIO getCurrentDay
-    let result = if (yrs==0) then bn
-          else aval where
-            bday = addDays (yrs*(-365)) today
-            mnthDays = 31*diffMnths
-            aval = sortEnt mnthDays bday bn
-    let ageTit= "Rabbits within " ++ (show diffMnths) ++ " months of age "++(show yrs)
-    base "Companion Rabbit Results" (toHtml ageTit) (getRabs result)
-
-
-
-postGetAgeR::Handler Html
-postGetAgeR  = do
-  ((result, _), _) <- runFormPost (getAgeForm Nothing)
-  case result of
-       FormSuccess (AgeSearch age ageDiffMnths (Just male) (Just female) (Just ff) (Just noff)) ->
-           case age of
-             Nothing->getAges 0 ageDiffMnths male female ff noff
-             Just ageV->getAges ageV ageDiffMnths male female ff noff
-       _ -> redirect HomeR
-  
-queryAltered value = runDB $ do
-  zipt<-select $ from $ \r->do
-    if value=="No" then
-     where_ ((r ^. RabbitAltered ==. val "No") ||. (r^. RabbitAltered ==. val "Unknown"))
-     else
-      where_ ((r ^. RabbitAltered ==. val "Spayed") ||. (r^. RabbitAltered ==. val "Neutered"))
-    orderBy [asc (r ^. RabbitAltered), asc (r ^. RabbitName)]
-    return r
-  return zipt
-
-  
-query field value= runDB $ do
-  zipt<-select $ from $ \r->do
-    where_ (r ^. field ==. val value)
-    orderBy [asc (r ^. RabbitName)]
-    return r
-  return zipt
-
-
-querySource source = runDB $ do
-  zipt<-select $ from $ \r ->do
-     where_ (r ^. RabbitSourceType ==. val source)
-     orderBy [asc (r ^. RabbitName)]
-     return (r)
-  return zipt
-
-
-
-getAlteredR isAlt = do
-     zinc<- queryAltered isAlt
-     let ti = if (isAlt=="No") then "Not Altered" else "Altered"
-     base "Altered" ti  zinc
-
-getAllR = do
-    bl <-queryStatus "BunnyLuv"
-    ad <-queryStatus "Adopted"
-    di <-queryStatus "Died"
-    eu <-queryStatus "Euthanized"
-    let zinc = bl++ad++di++eu
-    base "All Rabbits" "All Rabbits" zinc
-  
-getQueryR status  = do
-     zinc<- queryStatus status
-     let ti = append "Status: " status
-     base (toHtml ti) (toHtml ti) zinc
-     
-getSourceR source  = do
-    zinc<- querySource source
-    let ti = append "Source: " source
-    base (toHtml ti) (toHtml ti)  zinc
-
-doRabbitRow::Day->RabbitId->Rabbit->Widget
-doRabbitRow today rabbitid rabbit = $(widgetFileNoReload def "rabRow") 
-
-goEdit (Entity rabid rabbit) =
-  redirect (ViewR rabid)
-  
-getShowNameR::Text->Handler Html
-getShowNameR name = do
-  zinc<-queryName name
-  page<- if (length zinc)== 1 then
-           goEdit (Prelude.head zinc)
-         else do        
-    let ti = append "Name: " name
-    base (toHtml ti)(toHtml ti) zinc
-  return page
-   
-
-postNameR::Text->Handler Html 
-postNameR task= do
-  ((result,_), _) <- runFormPost getNameForm
-  case result of
-    FormSuccess name -> case task of
-                             "Wellness"->do
-                                      names<-queryName name
-                                      let id = getrabId (Prelude.head names)
-                                      redirect (WellnessR id)
-                             "Treatment"->do
-                                      names<-queryName name
-                                      let id = getrabId (Prelude.head names)
-                                      redirect (TreatmentR id)
-                             "Vet_Visit"->do
-                                      names<-queryName name
-                                      let id = getrabId (Prelude.head names)
-                                      redirect (VetVisitR id "Other")
-                             _  -> redirect (ShowNameR name)
-                                      
-    _ -> redirect HomeR
-
-
-
-getHomeR :: Handler Html
-getHomeR = do
-    zinc <-queryStatus "BunnyLuv"
-    base "BunnyLuv Rabbits" "BunnyLuv Rabbits" zinc
-
-ageDiff::Day->(Entity Rabbit, Maybe (Entity RabbitStory))->(Integer,(Entity Rabbit, Maybe (Entity RabbitStory)))
-ageDiff bday rabE@((Entity _ rab, _ )) = ( abs (diffDays bday (rabbitBirthday rab)), rabE)
-
-clean::Integer->[(Integer,(Entity Rabbit, Maybe (Entity RabbitStory)))]->[(Integer, (Entity Rabbit, Maybe (Entity RabbitStory)))]
-clean tageDiff = filter (\(a,_)-> a <= tageDiff) 
-
-sortImp::(Integer,(Entity Rabbit, Maybe (Entity RabbitStory)))->(Integer, (Entity Rabbit, Maybe (Entity RabbitStory)))->Ordering
-sortImp (a, r1) (b, r2)
-          | a>b = GT
-          | a==b = EQ
-          | a<b = LT
-
-extractRabb (a, rabE) = rabE
-                  
-sortEnt::Integer->Day->[(Entity Rabbit, Maybe (Entity RabbitStory))]->[(Entity Rabbit, Maybe (Entity RabbitStory))]
-sortEnt ageRange bday rabs = nrabs where
-        ageDiffs = map (ageDiff bday) rabs
-        cleaned = clean ageRange ageDiffs
-        sorted =  sortBy sortImp cleaned
-        nrabs = map extractRabb sorted
-  
 
 ffWid::RabbitId->Widget
 ffWid rId = do
@@ -237,16 +43,28 @@ ffWid rId = do
       <div #vrFriends  >
        $if hasfriends
          <div .bllabel> Friends: #
-         $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <-friends
-          <a class="rabLink" href="##{rabbitName rabb}"> #{rabbitName rabb} &nbsp;</a>
+          $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <-friends
+            \ <a class="rabLink" href="##{rabbitName rabb}"> #{rabbitName rabb} &nbsp;</a>
       <div #fam>
         $if hasfam
           <div .bllabel> Family: #
-         $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <- family 
-            <a class="rabLink" href="##{rabbitName rabb}"> #{rabbitName rabb} (#{relation})&nbsp; </a> 
+           $forall (Entity rabId rabb, Entity bId (Bonded r1 r2 relation)) <- family 
+               \ <a class="rabLink" href="##{rabbitName rabb}"> #{rabbitName rabb} (#{relation})  &nbsp; </a> 
   |]
   toWidget [lucius|
-      
+       .bllabel {
+         padding-left:5px;
+         padding-right:5px;
+       }
+       #bondedBlock {
+         float:left;
+        }
+       #bondedBlock div {
+            font-size:95%;
+       }
+       #vrFriends, #fam {
+          width:97%;
+        }         
     |]
 
 
@@ -283,10 +101,8 @@ adoptSearchWid  wid enctype = do
 
         #adoptSearchForm {
          background:#fafafa;
+         font-size:95%;
          padding:0.4em;
-         float:left:
-         width:99%;
-         font-size:12pt;
         }
 
         input[type="checkbox"] {
@@ -337,26 +153,23 @@ getBool (Just as) f = tval where
 widIntro::Widget
 widIntro = do
   [whamlet|
-   <div id="dpi" style="height: 1in; width: 1in; left: 100%; position: fixed; top: 100%;"></div>
       <div #intro>
         Find  Buns to Love from BunnyLuv!
- <div #body>
-     We have over 100 wonderful rabbits eager for a new home.  You can use the search bar to narrow your search by age, sex, or rabbits with friends or families!  
-  <p> You can apply for adoption <a href=@{AdoptionFormR}>online</a> or <a href="http://media.wix.com/ugd/1f3057_f99ed5e1bbcbb4910ac62c58febb82b1.doc?dn=%22BLRRC_adoption_app.doc%22">download</a> the form as a Word document that you can email or mail to us.   To review our Adoption Policies click <a href="#policies">here</a>
-  <p>
+    <div #body>
+     We have over 100 wonderful rabbits eager for a new home.  You can use the search bar to narrow your search by age, sex, or rabbits with friends or families!  You can apply for adoption <a href=@{AdoptionFormR}>online</a> or <a href="http://media.wix.com/ugd/1f3057_f99ed5e1bbcbb4910ac62c58febb82b1.doc?dn=%22BLRRC_adoption_app.doc%22">download</a> the form as a Word document that you can email or mail to us.   To review our Adoption Policies click <a href="#policies">here</a>
+ <div>
    By adopting a rabbit from BunnyLuv, you are giving the gift of life and creating space for us to save more!​
-​​​ <div id="body">
-      If that's not enough reason to adopt from BunnyLuv Rabbit Resource Center, consider these extra benefits:
+​​​ <div> If that's not enough reason to adopt from BunnyLuv Rabbit Resource Center, consider these extra benefits:
 
-   <ul>
-    <li>  Our rescued rabbits are have been spayed/neutered, healthy, socialized and litter-box trained. They are ready for your home.
-    <li> With over 1700 successful "Luv Connections" to date, we specialize in facilitating the often difficult bonding process for your rabbits.
-    <li> We offer help and guidance throughout the transition of your new rabbit group at home, and we are available afterwards,  should you need our help in any area of rabbit care.                                                                                                                                                                                       
+  <ul>
+   <li>  Our rescued rabbits are have been spayed/neutered, healthy, socialized and litter-box trained. They are ready for your home.
+   <li> With over 1700 successful "Luv Connections" to date, we specialize in facilitating the often difficult bonding process for your rabbits.
+   <li> We offer help and guidance throughout the transition of your new rabbit group at home, and we are available afterwards,  should you need our help in any area of rabbit care.                                                                                                                                                                                       
   |]
   toWidget [lucius|
               #intro {
               text-align:center;
-              font-size:3em;
+              font-size:250%;
               font-weight:150%;
               float:left;
               width:100%;
@@ -368,8 +181,7 @@ widIntro = do
             #body {
               padding-left:20px;
               padding-right:20px;
-               float:left;
-              background:#fefefe;
+              margin-bottom:10px;
             }
             #policies {
                width:100%
@@ -413,7 +225,7 @@ blockWid imgpath today rId rab rabstoryM = [whamlet|
              $nothing
               <div #nothing>
                    #{rabbitName rab} would like a good home.
-          <div #ff style="width:100%; border-top:1px solid #6f6f6f;">
+             <div #ff style="width:100%; border-top:1px solid #6f6f6f;">
              ^{ffWid rId}
              |]
             
@@ -457,7 +269,7 @@ aHWid formWidget enctype today imgpath result ffresult=      [whamlet|
         $if (not (null result))
          <div #Header>
           <div #headtext>
-           <b> <u>Single Rabbits </u> </b>
+           Single Rabbits
           <div #blurb>
               Our single Rabbits are very friendly and we will help you integrate them into your family.
        $forall (Entity rId rab, rabstoryM) <-result
@@ -465,7 +277,7 @@ aHWid formWidget enctype today imgpath result ffresult=      [whamlet|
       $if (not (null ffresult))
        <div #Header>
           <div #headtext>
-            <b> <u> Friends and Family </u></b>
+            Friends and Family
           <div #blurb>
               We like to keep our rabbits with friends or families together.  These rabbits are great if you are getting your first rabbits, or if you want to add more than one new rabbit to your rabbit family!
        $forall (Entity rId rab, rabstoryM) <-ffresult

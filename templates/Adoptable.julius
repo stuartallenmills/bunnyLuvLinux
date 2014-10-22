@@ -20,6 +20,8 @@
   var brblock=0;
   var imgblockH=0;
   var rblockH=0;
+  var dpi_x=0;
+  var dpi_y=0;
 
   function reSizeBlocks() {
      wwidth = $( "#thePage" ).width()-10;
@@ -44,7 +46,9 @@
         });    
     }
   $(function () {
-      brblock = $( ".rabBlock" ).width();
+     dpi_x= $( "#dpi" ).outerWidth();
+     dpi_y= $( "#dpi" ).outerHeight();
+       brblock = $( ".rabBlock" ).width();
       imgblockH = $( "#imgBlock" ).height();
       rblockH = $( ".rabBlock" ).height();
 
