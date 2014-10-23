@@ -61,7 +61,8 @@ getAgeForm::Maybe AgeSearch->Html->MForm Handler (FormResult AgeSearch, Widget)
 getAgeForm asM extras= do
   let fs = FieldSettings "sNamel" (Just "Find rabbit") (Just "getAge") (Just "stName") []
   (ageRes,ageView) <- mopt intField fs  (getAsField asM agesearchAge)
-  (ageDiffRes, ageDiffView) <-mreq intField "bbb" (getAsMonth asM)
+  let fsDiff = FieldSettings "sname2" (Just "AgeDiff") (Just "diffAge") (Just "diffSt") []
+  (ageDiffRes, ageDiffView) <-mreq intField fsDiff (getAsMonth asM)
   (maleRes, maleView)<- mopt checkBoxField "bbb" (Just (getAsBField asM male))
   (femaleRes, femaleView)<-mopt checkBoxField "bbb" (Just (getAsBField asM female))
   (hasffRes, hasffView)<-mopt checkBoxField "bbb" (Just (getAsBField asM hasff))
@@ -69,8 +70,10 @@ getAgeForm asM extras= do
   let agesch = AgeSearch <$> ageRes <*> ageDiffRes <*> maleRes <*> femaleRes
                              <*> hasffRes <*> noffRes
   let awid = do
+        addStylesheetRemote "http://192.168.1.120:3040/static/css/AgeForm.css"
         $(widgetFileNoReload def "cancelButton")
         [whamlet| #{extras}
+           <div #doAge>
              <div #getAgeDiv>
               <div #ageTitle style="margin-bottom:8px;">
                 Find companion rabbits:
@@ -97,22 +100,7 @@ getAgeForm asM extras= do
                     ##{fvId ageDiffView} {
                          width:4em;
                       }
-                    #getAgeDiv div {
-                         margin-top:2px;
-                         margin-bottom:2px;
-                      }
-                    #getAgeDiv label {
-                             display:inline-block;
-                             width:40%;
-                      }
-                    #getAgeDiv .cancelBut {
-                           height:1.5em;
-                           width:3em;
-                           padding-left:1px;
-                     }
-                    #agesub {
-                       height: 1.7em;
-                      }
+  
                   |]
   return(agesch, awid)
 

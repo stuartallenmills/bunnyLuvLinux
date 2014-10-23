@@ -1,0 +1,86 @@
+@media screen { 
+        #adoptSearchForm #agesub {
+          float:right;
+        }
+
+        #ageDiffD {
+          margin-left:3%;
+        }
+
+        #adoptSearchForm {
+         padding:0.4em;
+         float:left;
+         width:99%;
+        }
+
+        input[type="checkbox"] {
+          transform:translateY(2px);
+        }
+
+        #getAgeDiv {
+           width:90%;
+        }
+        #ageInD label {
+           width:30%;
+        }
+        #sex {
+          margin-left:20px;
+         }
+        #ageTitle {
+          display:none;
+        }
+        #adoptSearchForm input {
+                display:inline;
+                margin-left:5px;
+         }
+        #adoptSearchForm div {
+           float:left;
+         }
+
+        #companion {
+           margin-left:20px;
+         }
+
+        #agesub {
+          float:right;
+         }
+
+}
+
+@media screen and (max-resolution: 1dppx) {
+     #adoptSearchForm {
+        background:#fffafa;
+        font-size:16px;
+      }
+    }
+
+        #getAgeDiv div {
+          margin-bottom:0px;
+          margin-top:0px;
+          height:25px;
+        }
+
+@media screen and (min-resolution: 2dppx) {
+     #adoptSearchForm {
+       background:#fafffa;
+       font-size:40px;
+      }
+     
+      #adoptSearchForm input {
+         font-size:100%;
+       }
+
+      #adoptSearchForm input[type="checkbox"] {
+        height:50px;
+        width:50px;
+      }
+        #theage {
+           width:95%;
+         }
+        #getAgeDiv div {
+          margin-bottom:0px;
+          margin-top:10px;
+          height:60px;
+        }
+
+     }

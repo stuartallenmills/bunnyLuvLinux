@@ -1,0 +1,74 @@
+@media all {          
+            .md.selected {
+               border-top:2px solid red;
+              }
+
+             .md.selected a {
+               color:red;
+              }
+
+            #banner {
+              background:#fefefe;
+              float:left;
+              width:100%;
+           }
+             
+             
+            #menu {
+              background:#fefefe;
+              width:100%;
+              float:left;
+              border-bottom:1px solid #e0e0e0;
+              }
+
+           .md {
+             background:#FEFEFE;
+             margin-right:10px;
+             border-top:2px solid black;
+             float:left;
+             padding-top:10px;
+             text-decoration:none;
+             padding-left:10px;
+             padding-right:10px;
+             margin-bottom:5px;
+
+          }
+
+         .md a {
+           text-decoration:none;
+           color:#000000;
+          }
+
+         .md a:hover {
+           color:#8f3f3f;
+          }
+
+         .md:hover {
+           border-top: 2px solid #8f3f3f;
+           background:#fffff8;
+          }
+
+}
+
+@media screen and (max-resolution: 1dppx) {
+   .md {
+    height:27px;
+    margin-bottom:5px;
+  }
+}
+  
+@media screen and (min-resolution: 1.5dppx) {
+         .md a {
+         font-size:32px;
+         height:60px;
+ 
+        }
+
+        .md {
+        height:40px;
+ }
+   #menu {
+     margin-bottom:20px;
+ }
+}
+
