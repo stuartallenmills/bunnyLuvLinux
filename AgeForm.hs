@@ -81,9 +81,11 @@ getAgeForm asM extras= do
                                     <a href=@{HomeR}> cancel</a>
               <div #theage>
                <div #ageInD>
-                <label for="getAge">Age: </label> ^{fvInput ageView} yrs
+                <label for="getAge">Age: </label> ^{fvInput ageView}
+                <div #yrs> yrs 
                <div #ageDiffD>
-                <label for="ageDiff">Plus/Minus: </label> ^{fvInput ageDiffView} mnths
+                <label for="ageDiff">Plus/Minus: </label> ^{fvInput ageDiffView}
+                <div #mnths> mnths
               <div #sex>
                    Male : ^{fvInput maleView}
                   <span style="margin-left:10px;"> Female: ^{fvInput femaleView}

@@ -265,61 +265,12 @@ postAdoptableR = do
     _ -> redirect AdoptableR
 
 adoptSearchWid  wid enctype = do
+      addStylesheetRemote "http://192.168.1.120:3040/static/css/adoptSearchForm.css"
       [whamlet|
         <form #adoptSearchForm method=post action=@{AdoptableR} enctype=#{enctype}>
             ^{wid}
           |]
       toWidget [lucius|
-
-        #adoptSearchForm #agesub {
-          float:right;
-        }
-
-        #getAgeDiv div {
-          margin-bottom:0px;
-          margin-top:0px;
-          height:25px;
-        }
-
-        #adoptSearchForm {
-         background:#fafafa;
-         padding:0.4em;
-         float:left:
-         width:99%;
-         font-size:12pt;
-        }
-
-        input[type="checkbox"] {
-          transform:translateY(2px);
-        }
-
-        #getAgeDiv {
-           width:90%;
-        }
-        #ageInD label {
-           width:20%;
-        }
-        #sex {
-          margin-left:20px;
-         }
-        #ageTitle {
-          display:none;
-        }
-        #adoptSearchForm input {
-                display:inline;
-                margin-left:5px;
-         }
-        #adoptSearchForm div {
-           float:left;
-         }
-
-        #companion {
-           margin-left:20px;
-         }
-
-        #agesub {
-          float:right;
-         }
 
                 |]
 
@@ -398,10 +349,11 @@ blockWid imgpath today rId rab rabstoryM = [whamlet|
                 <b> #{rabbitName rab}
               <div #rSex>
                 (#{rabbitSex rab})
+             <div #ac style="width:100%; border-bottom:1px solid #8f8f8f;">
               <div #rAcq>
-               Acq: #{showtime (rabbitDateIn rab)}
+               Acquired: #{showtime (rabbitDateIn rab)}
               <div #rAge>
-                 Est. Age: #{getCurrentYears today rab}y #{getCurrentMonths today rab}m
+                 Age: #{getCurrentYears today rab}y #{getCurrentMonths today rab}m
              
              $maybe (Entity sId (RabbitStory rId rstory spneed adrule))<- rabstoryM
                <div #stry>
@@ -418,7 +370,9 @@ blockWid imgpath today rId rab rabstoryM = [whamlet|
              |]
             
 aWid::Widget
-aWid =  $(widgetFileNoReload def "Adoptable")
+aWid =  do
+  addStylesheetRemote "http://192.168.1.120:3040/static/css/Adoptable.css"
+  $(widgetFileNoReload def "Adoptable")
 policyWid::Widget
 policyWid = [whamlet|
      <div #thepolicies style="width:100%; float:left;">

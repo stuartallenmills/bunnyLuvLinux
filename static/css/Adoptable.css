@@ -128,11 +128,12 @@
           .rabBlock {
             float:left;
             width:98%;
-            height:1200px;
+            height:1300px;
             box-shadow:2px 2px 4px;
             margin-top:15px;
             background:#fbfbfb;
             border:3px solid transparent;
+            margin-left:1%;
            }
 
    #blurb {
@@ -144,14 +145,35 @@
 
 
   #nameLine {
-     font-size:275%;
-     margin-bottom:30px;
+     font-size:300%;
+     margin-bottom:20px;
     
   }
 
+  #rSex {
+  margin-left:40px;
+ }
+
+  #nothing, #stry {
+   margin-top:20px;
+ }
+
+  #rAcq {
+    font-size:245%;
+    margin-bottom:10px;
+  }
+
   #rAge {
-    font-size:95%;
+    font-size:245%;
   }
   
+  #bondedBlock {
+    padding-top:10px;
+    font-size:245%;
+ }
+
+  #thepolicies {
+    font-size:245%;
+ }
 }
           

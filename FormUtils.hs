@@ -33,6 +33,7 @@ import System.FilePath
                  
 topWidget::Widget->Widget
 topWidget awid = do
+  addStylesheetRemote "http://192.168.1.120:3040/static/css/baseAdoption.css"
   [whamlet|
    <div #banner>
        <img #bimage src=@{StaticR bunnyluvBanner_gif} style="width:100%;">
@@ -42,9 +43,7 @@ topWidget awid = do
        <div #adoptable .md>
         <a  href=@{AdoptableR}><span>Adoptable Rabbits</span></a>
        <div #adoptAp .md>
-        <a href=@{AdoptionFormR}><span>Apply online</span></a>
-       <div .md>
-        <a href="http://media.wix.com/ugd/1f3057_f99ed5e1bbcbb4910ac62c58febb82b1.doc?dn=%22BLRRC_adoption_app.doc%22"><span>Download Application<span></a> 
+        <a href="http://www.bunnyluv.com">Shop (Non-Profit)</a>
        <div .md>
         <a href=@{HomeR}>Tracker</a>
     ^{awid}
@@ -59,8 +58,10 @@ topWidget awid = do
   });
  
   |]
+{-
   toWidget [lucius|
-          
+
+@media all {          
             .md.selected {
                border-top:2px solid red;
               }
@@ -111,8 +112,16 @@ topWidget awid = do
            background:#fffff8;
           }
 
-            |]
+}
+@media screen and (min-resolution: 1.5dppx} {
+         .md a {
+         font-size:24px;
+        }
+}
 
+
+            |]
+-}
 baseAdoption::Text->Widget->Widget->Handler Html
 baseAdoption title blurb contentWid = 
   defaultLayout $ do

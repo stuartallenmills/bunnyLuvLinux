@@ -22,8 +22,10 @@
   var rblockH=0;
   var dpi_x=0;
   var dpi_y=0;
+  var pixel_resolution;
 
   function reSizeBlocks() {
+     if (pixel_resolution < 2) {
      wwidth = $( "#thePage" ).width()-10;
      cwidth = $( "#thePage" ).css("width");
      var rblock = brblock+7;
@@ -45,12 +47,14 @@
            $( this ).find( "#imgBlock" ).css("height", ((imgblockH+2*blockH)+"px"));
         });    
     }
+    }
   $(function () {
      dpi_x= $( "#dpi" ).outerWidth();
      dpi_y= $( "#dpi" ).outerHeight();
        brblock = $( ".rabBlock" ).width();
       imgblockH = $( "#imgBlock" ).height();
       rblockH = $( ".rabBlock" ).height();
+      pixel_resolution = window.devicePixelRatio;
 
      reSizeBlocks();
    });

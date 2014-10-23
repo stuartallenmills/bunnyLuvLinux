@@ -4,7 +4,8 @@
         }
 
         #ageDiffD {
-          margin-left:3%;
+          margin-left:5%;
+          display:inline-flex;
         }
 
         #adoptSearchForm {
@@ -17,14 +18,25 @@
           transform:translateY(2px);
         }
 
+        #theage {
+         display:inline-flex;
+         margin-right:25px;
+         margin-left:5px;
+        }
         #getAgeDiv {
            width:90%;
         }
-        #ageInD label {
-           width:30%;
+
+        #getAgeDiv label {
+           margin-top:2px;
+         }
+        #ageInD  {
+           display:inline-flex;
         }
-        #sex {
-          margin-left:20px;
+#getAgeDiv   #sex {
+          margin-top:7px;
+          margin-right:25px;
+          margin-left:5px;
          }
         #ageTitle {
           display:none;
@@ -32,13 +44,15 @@
         #adoptSearchForm input {
                 display:inline;
                 margin-left:5px;
+                margin-right:5px;
+                text-align:center;
          }
         #adoptSearchForm div {
            float:left;
          }
 
         #companion {
-           margin-left:20px;
+           margin-left:5px;
          }
 
         #agesub {
@@ -50,7 +64,7 @@
 @media screen and (max-resolution: 1dppx) {
      #adoptSearchForm {
         background:#fffafa;
-        font-size:16px;
+        font-size:14px;
       }
     }
 
@@ -65,14 +79,19 @@
        background:#fafffa;
        font-size:40px;
       }
+
+      #cLabel {
+        padding-top:10px;
+      }
      
       #adoptSearchForm input {
          font-size:100%;
+         width:100px;
        }
 
       #adoptSearchForm input[type="checkbox"] {
-        height:50px;
-        width:50px;
+        height:45px;
+        width:45px;
       }
         #theage {
            width:95%;
