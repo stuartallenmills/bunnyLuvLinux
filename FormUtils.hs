@@ -33,7 +33,7 @@ import System.FilePath
                  
 topWidget::Widget->Widget
 topWidget awid = do
-  addStylesheetRemote "http://192.168.1.120:3040/static/css/baseAdoption.css"
+  addStylesheetRemote "/static/css/baseAdoption.css"
   [whamlet|
    <div #banner>
        <img #bimage src=@{StaticR bunnyluvBanner_gif} style="width:100%;">

@@ -265,7 +265,7 @@ postAdoptableR = do
     _ -> redirect AdoptableR
 
 adoptSearchWid  wid enctype = do
-      addStylesheetRemote "http://192.168.1.120:3040/static/css/adoptSearchForm.css"
+      addStylesheetRemote "/static/css/adoptSearchForm.css"
       [whamlet|
         <form #adoptSearchForm method=post action=@{AdoptableR} enctype=#{enctype}>
             ^{wid}
@@ -371,7 +371,7 @@ blockWid imgpath today rId rab rabstoryM = [whamlet|
             
 aWid::Widget
 aWid =  do
-  addStylesheetRemote "http://192.168.1.120:3040/static/css/Adoptable.css"
+  addStylesheetRemote "/static/css/Adoptable.css"
   $(widgetFileNoReload def "Adoptable")
 policyWid::Widget
 policyWid = [whamlet|

@@ -1,9 +1,0 @@
-Registering email-validate-2.0.1...
-64\home\smills\Hask\bunnyluv\.cabal-sandbox\x86_64-windows-ghc-7.8.3\email-validate-2.0.1
-\Email\Parser.hs, dist\dist-sandbox-abbcc9d7\build\Text\Email\Parser.o )
-[2 of 2] Compiling Text.Email.Validate ( src\Text\Email\Validate.hs, dist\dist-sandbox-abbcc9d7\build\Text\Email\Validate.o )
-
-src\Text\Email\Validate.hs:14:1: Warning:
-    Module `Data.Attoparsec' is deprecated:
-      This module will be removed in the next major release.
-In-place registering email-validate-2.0.1...

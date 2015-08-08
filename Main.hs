@@ -15,6 +15,7 @@ import Foundation
 import Data.Text (unpack)
 import Database.Persist
 import Database.Persist.Sqlite
+import Control.Monad.Logger 
 
 makeusers = do
    runSqlite usrsDB $ do
@@ -30,15 +31,15 @@ main = do
     fe<-doesFileExist (unpack bunnyLuvDB)
     tport <- getPort
     let prt = read (unpack tport) :: Int
-    when (not fe) initDB
+  {-}  when (not fe) initDB -}
     areusrs <- doesFileExist (unpack usrsDB)
     unless areusrs makeusers
     
     manager <- newManager conduitManagerSettings
-    pool1 <- createSqlitePool bunnyLuvDB 10
-    pool2 <- createSqlitePool demoDB 10
-    withSqlitePool bunnyLuvDB 10 $ \pool-> do
+    pool1 <-  runStderrLoggingT $ createSqlitePool bunnyLuvDB 10
+    pool2 <-  runStderrLoggingT $  createSqlitePool demoDB 10
+    runStderrLoggingT $ withSqlitePool bunnyLuvDB 10 $ \pool-> liftIO $ do
       runSqlPersistMPool (runMigration migrateAll) pool
-    withSqlitePool demoDB 10 $ \pool2-> do
+    runStderrLoggingT $ withSqlitePool demoDB 10 $ \pool2->  liftIO $ do
       runSqlPersistMPool (runMigration migrateAll) pool2
     warp  prt $ App  manager pool1 pool2 static

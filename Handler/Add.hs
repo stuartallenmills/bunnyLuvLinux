@@ -146,7 +146,7 @@ rabbitForm (mrab, names) extra = do
     (sourceTypeRes, sourceTypeView) <- mreq (selectFieldList sourceType) "zip" (test mrab rabbitSourceType)
     (statusDateRes, statusDateView) <- mreq textField " nope" (testStatusDate stime  mrab)
     (statusNoteRes, statusNoteView) <- mreq textField "nope" (opttest mrab rabbitStatusNote)
-    (imgNoteRes, imgNoteView)<- mopt textField "nopt" Nothing
+    (imgNoteRes, imgNoteView) <- mopt textField "nopt" Nothing
     let yrdays = (365*) <$> yrsIntakeRes
     let mndays = (30*) <$> mnthsIntakeRes
     let daysTot = (+) <$> yrdays <*> mndays
@@ -166,7 +166,7 @@ rabbitForm (mrab, names) extra = do
 getAddR::Handler Html
 getAddR = do
   names <- getNamesDB
-  (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing,names))
+  (formWidget, enctype) <- generateFormPost (rabbitForm (Nothing, names))
   let menu = 
            [whamlet|
               <div #addCance style="float:inherit; text-align:left; margin:10px;">
@@ -183,11 +183,11 @@ getAddR = do
 
 postPostR::Handler Html
 postPostR = do
-  ((result, _), _) <-runFormPost (rabbitForm (Nothing, []))
-  link<- case result of
+  ((result, _), _) <- runFormPost (rabbitForm (Nothing, []))
+  link <- case result of
     FormSuccess  rabi -> 
      runDB $ do
-        rabId<-insert  rabi
+        rabId <- insert  rabi
         return (ViewR rabId)
     _ -> return HomeR
   redirect link
@@ -195,7 +195,7 @@ postPostR = do
 -- update a rabbit 
 postUpdateR::RabbitId->Handler Html
 postUpdateR rabId = do
-  ((result, _), _) <-runFormPost (rabbitForm (Nothing,[]))
+  ((result, _), _) <-runFormPost (rabbitForm (Nothing, []))
 
   case result of
     FormSuccess rabi -> 

@@ -70,7 +70,7 @@ getAgeForm asM extras= do
   let agesch = AgeSearch <$> ageRes <*> ageDiffRes <*> maleRes <*> femaleRes
                              <*> hasffRes <*> noffRes
   let awid = do
-        addStylesheetRemote "http://192.168.1.120:3040/static/css/AgeForm.css"
+        addStylesheetRemote "/static/css/AgeForm.css"
         $(widgetFileNoReload def "cancelButton")
         [whamlet| #{extras}
            <div #doAge>

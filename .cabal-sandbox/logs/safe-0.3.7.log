@@ -1,7 +1,0 @@
-Registering safe-0.3.7...
-hared\msys64\home\smills\Hask\bunnyluv\.cabal-sandbox\x86_64-windows-ghc-7.8.3\safe-0.3.7
-dist-sandbox-abbcc9d7\build\Safe\Util.o )
-[2 of 4] Compiling Safe.Exact       ( Safe\Exact.hs, dist\dist-sandbox-abbcc9d7\build\Safe\Exact.o )
-[3 of 4] Compiling Safe.Foldable    ( Safe\Foldable.hs, dist\dist-sandbox-abbcc9d7\build\Safe\Foldable.o )
-[4 of 4] Compiling Safe             ( Safe.hs, dist\dist-sandbox-abbcc9d7\build\Safe.o )
-In-place registering safe-0.3.7...

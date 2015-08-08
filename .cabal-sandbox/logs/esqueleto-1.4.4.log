@@ -1,7 +1,0 @@
-Registering esqueleto-1.4.4...
-\msys64\home\smills\Hask\bunnyluv\.cabal-sandbox\x86_64-windows-ghc-7.8.3\esqueleto-1.4.4
-stentImport ( src\Database\Esqueleto\Internal\PersistentImport.hs, dist\dist-sandbox-abbcc9d7\build\Database\Esqueleto\Internal\PersistentImport.o )
-[2 of 4] Compiling Database.Esqueleto.Internal.Language ( src\Database\Esqueleto\Internal\Language.hs, dist\dist-sandbox-abbcc9d7\build\Database\Esqueleto\Internal\Language.o )
-[3 of 4] Compiling Database.Esqueleto.Internal.Sql ( src\Database\Esqueleto\Internal\Sql.hs, dist\dist-sandbox-abbcc9d7\build\Database\Esqueleto\Internal\Sql.o )
-[4 of 4] Compiling Database.Esqueleto ( src\Database\Esqueleto.hs, dist\dist-sandbox-abbcc9d7\build\Database\Esqueleto.o )
-In-place registering esqueleto-1.4.4...

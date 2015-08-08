@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell, ViewPatterns #-}
+{-# LANGUAGE TypeFamilies, GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE QuasiQuotes, GADTs, FlexibleContexts #-}
 
 module Foundation where
@@ -29,7 +29,7 @@ import Database.Persist.Sqlite --(runSqlite, runMigrationSilent, withSqlitePool)
 --import Control.Monad (liftM)
 --import Text.Printf
 --import Control.Monad.Trans.Resource (runResourceT)
-import Control.Monad.Logger (runStderrLoggingT)
+import Control.Monad.Logger 
 import Data.Time
 import Data.Time.Format
 import Data.Time.Calendar
@@ -317,7 +317,7 @@ instance RenderMessage App FormMessage where
 
 
 instance YesodPersist App where
-  type YesodPersistBackend App = SqlPersistT
+  type YesodPersistBackend App = SqlBackend
   runDB db = do
     mname <- maybeAuthId
     App manager pool pool2 static <- getYesod
@@ -568,14 +568,10 @@ openConnectionCount = 10
 
 
 initDB::IO ()
-initDB = do
-  ct<-getCurrentTime
-  tz<-getCurrentTimeZone
-  let local_time = utcToLocalTime tz ct
-  withSqlitePool bunnyLuvDB openConnectionCount $ \pool -> do
-   runResourceT $ runStderrLoggingT $ flip runSqlPool pool $ do
+initDB =  runNoLoggingT $ withSqlitePool bunnyLuvDB 
+ openConnectionCount $ \pool -> liftIO $ do
+  runResourceT $ flip runSqlPool pool $ do
         runMigration migrateAll
-
         insert $ Usr "sharon" "bunnyluv"
         insert $ Usr "stuart" "jrr1jrr1"
         
