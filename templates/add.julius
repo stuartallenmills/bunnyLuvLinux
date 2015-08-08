@@ -1,5 +1,5 @@
                       $(function () {
-                               alert("Add JULIUS");
+                             
                                if ( $( "#hident6" ).val() == "2") {
                                  $( "#hident7 option[value='3']" ).remove();
                                  }
@@ -30,20 +30,20 @@
 
                    $(function () {
                        $( "#hident2" ).change (function() {
-                           alert("change");
+                          
                            var currval = $( "#hident2" ).val();
                            var onfile = #{rawJS (gostring names)};
                            var capval = currval.charAt(0).toUpperCase()+ currval.slice(1);
                             var amember = $.inArray( capval, onfile );
-                            alert("Onfile length = " + onfile.length);
+                          
                            if (amember >= 0) {
-                              alert("ON RECORD");
+                           
                               $( "#NameError" ).text( "<- " + capval + " already exists!" );
                               $( "#NameError" ).show();
                               $( "#hident2" ).val("");
                               $( "#hident2" ).focus();
                             } else {
-                                 alert("name ok");
+                                
                                  $( "#hident2" ).val(capval);
                               }
  
